@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name | Data Analytics Portfolio</title>
+<meta name="description" content="Portfolio of Your Name — BCA student and aspiring Data Analyst.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- progress bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <a href="#home" class="nav-logo">YN<span>.</span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#education">Education</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact" class="nav-cta">Let's Connect</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <svg class="pulse-line" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
+      <path id="pulsePath" d="M0,150 L200,150 L230,60 L260,240 L290,150 L500,150 L530,90 L560,210 L590,150 L800,150 L830,40 L860,260 L890,150 L1200,150" />
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">// Data Analytics · BCA Final Year</p>
+    <h1 class="hero-title">Your Name</h1>
+    <p class="hero-role">Aspiring Data Analyst / Data Scientist</p>
+    <p class="hero-desc">
+      I turn raw, messy data into decisions — using Python, SQL, and visualization
+      to find the story hidden in the numbers. Currently sharpening my craft through
+      projects, certifications, and a lot of curiosity.
+    </p>
+    <div class="hero-links">
+      <a href="mailto:your.email@example.com">your.email@example.com</a>
+      <a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/your-github" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="hero-actions">
+      <a href="./resume.pdf" class="btn btn-primary" download>Download Resume</a>
+      <a href="#projects" class="btn btn-ghost">View Projects</a>
+    </div>
+  </div>
+  <a href="#about" class="scroll-cue" aria-label="Scroll down"><span></span></a>
+</section>
+
+<!-- ABOUT -->
+<section class="section about" id="about">
+  <div class="section-head">
+    <p class="section-eyebrow">01 · About</p>
+    <h2>Learning the language data speaks.</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-photo">
+      <div class="photo-frame">
+        <img src="./assets/profile.jpg" alt="Your Name" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="photo-fallback">Add your photo:<br>assets/profile.jpg</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <p>
+        I'm <strong>Your Name</strong>, a final-year BCA student who fell in love with the moment
+        a spreadsheet full of numbers turns into a chart that actually means something.
+        I'm building my foundation in statistics, SQL, and Python, and applying it to
+        real datasets instead of just tutorials.
+      </p>
+      <p>
+        Right now I'm focused on strengthening my SQL querying, learning Power BI /
+        Tableau for storytelling, and working through applied statistics — while
+        building a portfolio of projects that show how I think, not just what tools I know.
+      </p>
+      <div class="about-stack">
+        <p class="stack-label">Currently learning / using</p>
+        <div class="chip-row">
+          <span class="chip">Python</span>
+          <span class="chip">SQL</span>
+          <span class="chip">Excel</span>
+          <span class="chip">Power BI</span>
+          <span class="chip">Pandas</span>
+          <span class="chip">Statistics</span>
+        </div>
+      </div>
+      <div class="about-actions">
+        <a href="#contact" class="btn btn-primary">Contact Me</a>
+        <a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="section-head">
+    <p class="section-eyebrow">02 · Experience</p>
+    <h2>Where I've applied what I'm learning.</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2025 – Present</p>
+        <h3>Data Analytics Intern</h3>
+        <p class="timeline-org">Company / Organization Name</p>
+        <p class="timeline-desc">
+          One line on what you actually do here — e.g. cleaning datasets, building
+          dashboards, or supporting a reporting workflow.
+        </p>
+        <div class="chip-row small">
+          <span class="chip">Excel</span>
+          <span class="chip">SQL</span>
+          <span class="chip">Power BI</span>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2024</p>
+        <h3>Freelance / College Project Work</h3>
+        <p class="timeline-org">Self-directed</p>
+        <p class="timeline-desc">
+          Placeholder — swap this for a real internship, part-time role, freelance
+          gig, or a significant academic project with measurable outcomes.
+        </p>
+        <div class="chip-row small">
+          <span class="chip">Python</span>
+          <span class="chip">Pandas</span>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2023 – 2024</p>
+        <h3>Add another role or leave this as "seeking my first opportunity"</h3>
+        <p class="timeline-org">—</p>
+        <p class="timeline-desc">
+          If you don't have work experience yet, that's completely fine — you can
+          replace this whole section with "Currently seeking my first Data Analytics
+          internship" and let Projects carry the weight instead.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="section alt" id="education">
+  <div class="section-head">
+    <p class="section-eyebrow">03 · Education</p>
+    <h2>Academic foundation.</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2023 – 2026</p>
+        <h3>Bachelor of Computer Applications (BCA)</h3>
+        <p class="timeline-org">Your College / University Name</p>
+        <p class="timeline-desc">
+          Relevant coursework: Database Management Systems, Statistics, Data
+          Structures, Python Programming, Data Analytics fundamentals.
+        </p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2022 – 2023</p>
+        <h3>Class XII (Higher Secondary)</h3>
+        <p class="timeline-org">Your School Name</p>
+        <p class="timeline-desc">Commerce / Science — with Mathematics/Computer Science.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects">
+  <div class="section-head">
+    <p class="section-eyebrow">04 · Projects</p>
+    <h2>Things I've actually built.</h2>
+  </div>
+  <div class="project-grid">
+    <article class="project-card">
+      <div class="project-thumb" data-tag="EDA"></div>
+      <h3>Retail Sales Data Analysis</h3>
+      <p>Cleaned and analyzed a retail sales dataset in Python to uncover trends by
+        region, category, and season, presenting findings in a short report.</p>
+      <div class="chip-row small">
+        <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">Matplotlib</span>
+      </div>
+      <a href="https://github.com/your-github/project-1" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+    <article class="project-card">
+      <div class="project-thumb" data-tag="SQL"></div>
+      <h3>SQL Business Query Case Study</h3>
+      <p>Wrote a set of SQL queries against a sample business database to answer
+        realistic stakeholder questions — top customers, churn, monthly revenue.</p>
+      <div class="chip-row small">
+        <span class="chip">SQL</span><span class="chip">PostgreSQL</span>
+      </div>
+      <a href="https://github.com/your-github/project-2" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+    <article class="project-card">
+      <div class="project-thumb" data-tag="Dash"></div>
+      <h3>Interactive Sales Dashboard</h3>
+      <p>Built an interactive dashboard to track KPIs like revenue, growth, and
+        top products, letting a manager filter by date and region.</p>
+      <div class="chip-row small">
+        <span class="chip">Power BI</span><span class="chip">DAX</span>
+      </div>
+      <a href="https://github.com/your-github/project-3" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+    <article class="project-card">
+      <div class="project-thumb" data-tag="ML"></div>
+      <h3>Prediction Model (Beginner ML)</h3>
+      <p>Trained a simple regression/classification model — e.g. predicting house
+        prices or customer churn — and evaluated it against baseline accuracy.</p>
+      <div class="chip-row small">
+        <span class="chip">Python</span><span class="chip">Scikit-learn</span>
+      </div>
+      <a href="https://github.com/your-github/project-4" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+  </div>
+  <p class="projects-note">Replace these four with your real projects as you build
+    them — start simple (EDA, SQL, dashboard) and add a machine learning project once
+    you're comfortable.</p>
+</section>
+
+<!-- SKILLS -->
+<section class="section alt" id="skills">
+  <div class="section-head">
+    <p class="section-eyebrow">05 · Skills</p>
+    <h2>What I bring to the table.</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <h3>Programming</h3>
+      <ul><li>Python</li><li>SQL</li><li>C / Java (BCA coursework)</li></ul>
+    </div>
+    <div class="skill-group">
+      <h3>Data Analysis</h3>
+      <ul><li>Pandas / NumPy</li><li>Statistics</li><li>Data Cleaning</li></ul>
+    </div>
+    <div class="skill-group">
+      <h3>Visualization</h3>
+      <ul><li>Power BI</li><li>Excel</li><li>Matplotlib / Seaborn</li></ul>
+    </div>
+    <div class="skill-group">
+      <h3>Tools</h3>
+      <ul><li>Git / GitHub</li><li>Jupyter Notebook</li><li>MySQL</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="section-head">
+    <p class="section-eyebrow">06 · Contact</p>
+    <h2>Let's connect.</h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p><span>Email</span><a href="mailto:your.email@example.com">your.email@example.com</a></p>
+      <p><span>Phone</span><a href="tel:+910000000000">+91 00000 00000</a></p>
+      <p><span>Location</span>Your City, India</p>
+      <p><span>LinkedIn</span><a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noopener">linkedin.com/in/your-linkedin</a></p>
+      <p><span>GitHub</span><a href="https://github.com/your-github" target="_blank" rel="noopener">github.com/your-github</a></p>
+    </div>
+    <form class="contact-form" id="contactForm">
+      <label>Name<input type="text" name="name" required></label>
+      <label>Email<input type="email" name="email" required></label>
+      <label>Message<textarea name="message" rows="4" required></textarea></label>
+      <button type="submit" class="btn btn-primary">Send</button>
+      <p class="form-note">Hooked up to nothing yet — see the setup guide to wire this
+        to Formspree or mailto.</p>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© <span id="year"></span> Your Name. Built with HTML, CSS &amp; a lot of coffee.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
