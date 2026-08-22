@@ -89,6 +89,20 @@ if (window.matchMedia('(hover: hover)').matches) {
   });
 }
 
+// Carousel arrow scrolling (home page previews)
+document.querySelectorAll('.carousel-arrow').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const trackId = btn.dataset.target;
+    const track = document.getElementById(trackId);
+    if (!track) return;
+    const scrollAmount = track.clientWidth * 0.8;
+    track.scrollBy({
+      left: btn.classList.contains('next') ? scrollAmount : -scrollAmount,
+      behavior: 'smooth'
+    });
+  });
+});
+
 // Contact form placeholder handler (no backend wired yet)
 const form = document.getElementById('contactForm');
 if (form) {

@@ -30,32 +30,38 @@
   </button>
 </header>
 
-<section class="hero" id="home">
+<section class="hero hero-split" id="home">
   <div class="hero-bg">
-    <svg class="pulse-line" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0,150 L200,150 L230,60 L260,240 L290,150 L500,150 L530,90 L560,210 L590,150 L800,150 L830,40 L860,260 L890,150 L1200,150" />
-    </svg>
     <div class="grid-overlay"></div>
   </div>
-  <div class="hero-inner">
-    <p class="hero-eyebrow reveal-up" style="--d:0s">// Data Analytics · BCA Final Year</p>
-    <h1 class="hero-title reveal-up" style="--d:.1s">
-      <span class="line">Hi, I'm <span class="accent-text">Your Name</span></span>
-    </h1>
-    <p class="hero-role reveal-up" style="--d:.2s">Aspiring Data Analyst / Data Scientist</p>
-    <p class="hero-desc reveal-up" style="--d:.3s">
-      I turn raw, messy data into decisions — using Python, SQL, and visualization
-      to find the story hidden in the numbers. Currently sharpening my craft through
-      projects, certifications, and a lot of curiosity.
-    </p>
-    <div class="hero-links reveal-up" style="--d:.4s">
-      <a href="mailto:your.email@example.com">your.email@example.com</a>
-      <a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/your-github" target="_blank" rel="noopener">GitHub</a>
+  <div class="hero-split-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow reveal-up" style="--d:0s">// Data Analytics · BCA Final Year</p>
+      <h1 class="hero-title reveal-up" style="--d:.1s">
+        Your Name
+      </h1>
+      <p class="hero-role reveal-up" style="--d:.2s">Aspiring Data Analyst / Data Scientist</p>
+      <p class="hero-desc reveal-up" style="--d:.3s">
+        I turn raw, messy data into decisions — using Python, SQL, and visualization
+        to find the story hidden in the numbers. Currently sharpening my craft through
+        projects, certifications, and a lot of curiosity.
+      </p>
+      <div class="hero-social reveal-up" style="--d:.4s">
+        <a href="mailto:your.email@example.com" class="social-btn" aria-label="Email">✉</a>
+        <a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noopener" class="social-btn" aria-label="LinkedIn">in</a>
+        <a href="https://github.com/your-github" target="_blank" rel="noopener" class="social-btn" aria-label="GitHub">⌥</a>
+      </div>
+      <div class="hero-actions reveal-up" style="--d:.5s">
+        <a href="index.html#contact" class="btn btn-primary btn-big">Hire Me</a>
+        <a href="./resume.pdf" class="btn btn-ghost" download>Download Resume</a>
+      </div>
     </div>
-    <div class="hero-actions reveal-up" style="--d:.5s">
-      <a href="./resume.pdf" class="btn btn-primary" download>Download Resume</a>
-      <a href="projects.html" class="btn btn-ghost">View Projects</a>
+    <div class="hero-photo reveal-up" style="--d:.2s">
+      <div class="hero-photo-frame">
+        <img src="./assets/profile.jpeg" alt="Your Name" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="photo-fallback">Add your photo:<br>assets/profile.jpeg</div>
+      </div>
+      <div class="hero-photo-glow"></div>
     </div>
   </div>
   <a href="#about" class="scroll-cue" aria-label="Scroll down"><span></span></a>
@@ -104,36 +110,116 @@
   </div>
 </section>
 
-<section class="section alt highlights">
-  <div class="section-head reveal">
-    <p class="section-eyebrow">A quick look</p>
-    <h2>What's on this site.</h2>
+<section class="section carousel-section" id="experience">
+  <div class="carousel-head reveal">
+    <h2>Experience</h2>
+    <a href="experience.html" class="see-all">See All →</a>
   </div>
-  <div class="highlight-grid">
-    <a href="experience.html" class="highlight-card reveal" style="--d:0s">
-      <span class="highlight-num">01</span>
-      <h3>Experience</h3>
-      <p>Internships and hands-on work — what I've actually applied so far.</p>
-      <span class="highlight-arrow">→</span>
-    </a>
-    <a href="education.html" class="highlight-card reveal" style="--d:.1s">
-      <span class="highlight-num">02</span>
-      <h3>Education</h3>
-      <p>My BCA coursework and the academic foundation behind it.</p>
-      <span class="highlight-arrow">→</span>
-    </a>
-    <a href="projects.html" class="highlight-card reveal" style="--d:.2s">
-      <span class="highlight-num">03</span>
-      <h3>Projects</h3>
-      <p>EDA, SQL, dashboards, and beginner ML — things I've actually built.</p>
-      <span class="highlight-arrow">→</span>
-    </a>
-    <a href="skills.html" class="highlight-card reveal" style="--d:.3s">
-      <span class="highlight-num">04</span>
-      <h3>Skills</h3>
-      <p>The tools and languages I use, and how comfortable I am with each.</p>
-      <span class="highlight-arrow">→</span>
-    </a>
+  <div class="carousel-wrap">
+    <button class="carousel-arrow prev" data-target="exp-track" aria-label="Scroll left">‹</button>
+    <div class="carousel-track" id="exp-track">
+      <a href="experience.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="Now"></div>
+        <h3>Data Analytics Intern</h3>
+        <p>Company Name • 2025–Present</p>
+      </a>
+      <a href="experience.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="2024"></div>
+        <h3>Freelance / College Projects</h3>
+        <p>Self-directed • 2024</p>
+      </a>
+      <a href="experience.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="Goal"></div>
+        <h3>Seeking First Opportunity</h3>
+        <p>Open to internships • 2023–2024</p>
+      </a>
+    </div>
+    <button class="carousel-arrow next" data-target="exp-track" aria-label="Scroll right">›</button>
+  </div>
+</section>
+
+<section class="section alt carousel-section" id="education">
+  <div class="carousel-head reveal">
+    <h2>Education</h2>
+    <a href="education.html" class="see-all">See All →</a>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-arrow prev" data-target="edu-track" aria-label="Scroll left">‹</button>
+    <div class="carousel-track" id="edu-track">
+      <a href="education.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="BCA"></div>
+        <h3>Bachelor of Computer Applications</h3>
+        <p>Your College • 2023–2026</p>
+      </a>
+      <a href="education.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="XII"></div>
+        <h3>Class XII, Higher Secondary</h3>
+        <p>Your School • 2022–2023</p>
+      </a>
+    </div>
+    <button class="carousel-arrow next" data-target="edu-track" aria-label="Scroll right">›</button>
+  </div>
+</section>
+
+<section class="section carousel-section" id="projects">
+  <div class="carousel-head reveal">
+    <h2>Projects</h2>
+    <a href="projects.html" class="see-all">See All →</a>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-arrow prev" data-target="proj-track" aria-label="Scroll left">‹</button>
+    <div class="carousel-track" id="proj-track">
+      <a href="projects.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="EDA"></div>
+        <h3>Retail Sales Data Analysis</h3>
+        <p>Python • Pandas • Matplotlib</p>
+      </a>
+      <a href="projects.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="SQL"></div>
+        <h3>SQL Business Case Study</h3>
+        <p>SQL • PostgreSQL</p>
+      </a>
+      <a href="projects.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="Dash"></div>
+        <h3>Interactive Sales Dashboard</h3>
+        <p>Power BI • DAX</p>
+      </a>
+      <a href="projects.html" class="carousel-card reveal">
+        <div class="carousel-thumb" data-tag="ML"></div>
+        <h3>Prediction Model</h3>
+        <p>Python • Scikit-learn</p>
+      </a>
+    </div>
+    <button class="carousel-arrow next" data-target="proj-track" aria-label="Scroll right">›</button>
+  </div>
+</section>
+
+<section class="section alt carousel-section" id="skills">
+  <div class="carousel-head reveal">
+    <h2>Skills</h2>
+    <a href="skills.html" class="see-all">See All →</a>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-arrow prev" data-target="skill-track" aria-label="Scroll left">‹</button>
+    <div class="carousel-track" id="skill-track">
+      <a href="skills.html" class="carousel-card carousel-card-text reveal">
+        <h3>Programming Languages</h3>
+        <p>Python, SQL, Java/C</p>
+      </a>
+      <a href="skills.html" class="carousel-card carousel-card-text reveal">
+        <h3>Data Analysis</h3>
+        <p>Pandas, Statistics, Data Cleaning</p>
+      </a>
+      <a href="skills.html" class="carousel-card carousel-card-text reveal">
+        <h3>Visualization</h3>
+        <p>Power BI, Excel, Matplotlib</p>
+      </a>
+      <a href="skills.html" class="carousel-card carousel-card-text reveal">
+        <h3>Tools</h3>
+        <p>Git, Jupyter, MySQL</p>
+      </a>
+    </div>
+    <button class="carousel-arrow next" data-target="skill-track" aria-label="Scroll right">›</button>
   </div>
 </section>
 
