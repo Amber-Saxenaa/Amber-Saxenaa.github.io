@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience | Your Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-loading">
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header class="nav" id="nav">
+  <a href="index.html" class="nav-logo">YN<span>.</span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="experience.html" class="active">Experience</a>
+    <a href="education.html">Education</a>
+    <a href="skills.html">Skills</a>
+    <a href="projects.html">Projects</a>
+    <a href="index.html#contact" class="nav-cta">Let's Connect</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="page-hero">
+  <p class="section-eyebrow reveal-up" style="--d:0s">Where I've applied what I'm learning</p>
+  <h1 class="reveal-up" style="--d:.1s">Experience</h1>
+  <p class="page-hero-desc reveal-up" style="--d:.2s">
+    Internships, freelance work, and hands-on projects that took me past tutorials
+    and into real data.
+  </p>
+</section>
+
+<section class="section">
+  <div class="timeline">
+    <div class="timeline-item reveal from-left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2025 – Present</p>
+        <h3>Data Analytics Intern</h3>
+        <p class="timeline-org">Company / Organization Name</p>
+        <p class="timeline-desc">
+          Replace this with what you actually do — cleaning datasets, building
+          dashboards, writing SQL reports, or supporting a data pipeline.
+        </p>
+        <ul class="timeline-points">
+          <li>Cleaned and validated raw datasets before analysis</li>
+          <li>Built recurring reports used by the team</li>
+          <li>Assisted with dashboard maintenance in Power BI</li>
+        </ul>
+        <div class="chip-row small">
+          <span class="chip">Excel</span>
+          <span class="chip">SQL</span>
+          <span class="chip">Power BI</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal from-left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2024</p>
+        <h3>Freelance / College Project Work</h3>
+        <p class="timeline-org">Self-directed</p>
+        <p class="timeline-desc">
+          Swap this for a real internship, part-time role, freelance gig, or a
+          significant academic project with a measurable outcome.
+        </p>
+        <ul class="timeline-points">
+          <li>Describe the problem you solved</li>
+          <li>Describe the approach or tools used</li>
+          <li>Describe the outcome, ideally with a number</li>
+        </ul>
+        <div class="chip-row small">
+          <span class="chip">Python</span>
+          <span class="chip">Pandas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal from-left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <p class="timeline-date">2023 – 2024</p>
+        <h3>Seeking my first Data Analytics opportunity</h3>
+        <p class="timeline-org">—</p>
+        <p class="timeline-desc">
+          If you don't have work experience yet, this is a fine way to frame it —
+          just delete the rest and let your Projects page carry the weight instead.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-nav-footer reveal">
+  <a href="education.html" class="btn btn-ghost">← Education</a>
+  <a href="projects.html" class="btn btn-primary">Projects →</a>
+</section>
+
+<footer class="footer">
+  <p>© <span id="year"></span> Your Name. Built with HTML, CSS &amp; a lot of coffee.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

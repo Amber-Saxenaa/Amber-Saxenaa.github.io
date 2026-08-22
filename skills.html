@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills | Your Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-loading">
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header class="nav" id="nav">
+  <a href="index.html" class="nav-logo">YN<span>.</span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="experience.html">Experience</a>
+    <a href="education.html">Education</a>
+    <a href="skills.html" class="active">Skills</a>
+    <a href="projects.html">Projects</a>
+    <a href="index.html#contact" class="nav-cta">Let's Connect</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="page-hero">
+  <p class="section-eyebrow reveal-up" style="--d:0s">What I bring to the table</p>
+  <h1 class="reveal-up" style="--d:.1s">Skills</h1>
+  <p class="page-hero-desc reveal-up" style="--d:.2s">
+    Honest levels, not inflated ones — bars fill based on how comfortable I
+    actually am with each tool, so update the data-level values as you grow.
+  </p>
+</section>
+
+<section class="section skills-page">
+  <div class="skill-block reveal">
+    <h3>Programming</h3>
+    <div class="skill-bar" data-level="70"><div class="skill-bar-label"><span>Python</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="65"><div class="skill-bar-label"><span>SQL</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="45"><div class="skill-bar-label"><span>Java / C</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
+
+  <div class="skill-block reveal">
+    <h3>Data Analysis</h3>
+    <div class="skill-bar" data-level="60"><div class="skill-bar-label"><span>Pandas / NumPy</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="55"><div class="skill-bar-label"><span>Statistics</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="50"><div class="skill-bar-label"><span>Data Cleaning</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
+
+  <div class="skill-block reveal">
+    <h3>Visualization</h3>
+    <div class="skill-bar" data-level="55"><div class="skill-bar-label"><span>Power BI</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="70"><div class="skill-bar-label"><span>Excel</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="40"><div class="skill-bar-label"><span>Matplotlib / Seaborn</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
+
+  <div class="skill-block reveal">
+    <h3>Tools</h3>
+    <div class="skill-bar" data-level="60"><div class="skill-bar-label"><span>Git / GitHub</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="55"><div class="skill-bar-label"><span>Jupyter Notebook</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="45"><div class="skill-bar-label"><span>MySQL</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
+</section>
+
+<section class="page-nav-footer reveal">
+  <a href="education.html" class="btn btn-ghost">← Education</a>
+  <a href="projects.html" class="btn btn-primary">Projects →</a>
+</section>
+
+<footer class="footer">
+  <p>© <span id="year"></span> Your Name. Built with HTML, CSS &amp; a lot of coffee.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

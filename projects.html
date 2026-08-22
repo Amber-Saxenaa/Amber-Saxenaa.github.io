@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects | Your Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-loading">
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header class="nav" id="nav">
+  <a href="index.html" class="nav-logo">YN<span>.</span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="experience.html">Experience</a>
+    <a href="education.html">Education</a>
+    <a href="skills.html">Skills</a>
+    <a href="projects.html" class="active">Projects</a>
+    <a href="index.html#contact" class="nav-cta">Let's Connect</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="page-hero">
+  <p class="section-eyebrow reveal-up" style="--d:0s">Things I've actually built</p>
+  <h1 class="reveal-up" style="--d:.1s">Projects</h1>
+  <p class="page-hero-desc reveal-up" style="--d:.2s">
+    Start simple, add complexity as you grow — an EDA project, a SQL case study,
+    a dashboard, and eventually a beginner ML model.
+  </p>
+</section>
+
+<section class="section">
+  <div class="project-grid">
+    <article class="project-card tilt reveal" style="--d:0s">
+      <div class="project-thumb" data-tag="EDA"></div>
+      <h3>Retail Sales Data Analysis</h3>
+      <p>Cleaned and analyzed a retail sales dataset in Python to uncover trends by
+        region, category, and season, presenting findings in a short report.</p>
+      <div class="chip-row small">
+        <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">Matplotlib</span>
+      </div>
+      <a href="https://github.com/your-github/project-1" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+
+    <article class="project-card tilt reveal" style="--d:.1s">
+      <div class="project-thumb" data-tag="SQL"></div>
+      <h3>SQL Business Query Case Study</h3>
+      <p>Wrote a set of SQL queries against a sample business database to answer
+        realistic stakeholder questions — top customers, churn, monthly revenue.</p>
+      <div class="chip-row small">
+        <span class="chip">SQL</span><span class="chip">PostgreSQL</span>
+      </div>
+      <a href="https://github.com/your-github/project-2" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+
+    <article class="project-card tilt reveal" style="--d:.2s">
+      <div class="project-thumb" data-tag="Dash"></div>
+      <h3>Interactive Sales Dashboard</h3>
+      <p>Built an interactive dashboard to track KPIs like revenue, growth, and
+        top products, letting a manager filter by date and region.</p>
+      <div class="chip-row small">
+        <span class="chip">Power BI</span><span class="chip">DAX</span>
+      </div>
+      <a href="https://github.com/your-github/project-3" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+
+    <article class="project-card tilt reveal" style="--d:.3s">
+      <div class="project-thumb" data-tag="ML"></div>
+      <h3>Prediction Model (Beginner ML)</h3>
+      <p>Trained a simple regression/classification model — e.g. predicting house
+        prices or customer churn — and evaluated it against baseline accuracy.</p>
+      <div class="chip-row small">
+        <span class="chip">Python</span><span class="chip">Scikit-learn</span>
+      </div>
+      <a href="https://github.com/your-github/project-4" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+    </article>
+  </div>
+  <p class="projects-note reveal">Replace these four with your real projects as you build
+    them, and add more cards the same way as your portfolio grows.</p>
+</section>
+
+<section class="page-nav-footer reveal">
+  <a href="skills.html" class="btn btn-ghost">← Skills</a>
+  <a href="index.html#contact" class="btn btn-primary">Contact Me →</a>
+</section>
+
+<footer class="footer">
+  <p>© <span id="year"></span> Your Name. Built with HTML, CSS &amp; a lot of coffee.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
