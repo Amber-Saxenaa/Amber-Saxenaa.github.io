@@ -533,6 +533,9 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 }
 .contact-info--full .contact-value{font-size:1.05rem;}
 .contact-form{display:flex; flex-direction:column; gap:16px;}
+.contact-form--full{max-width:640px;}
+.contact-form--full textarea{min-height:140px;}
+.contact-form--full button{align-self:flex-start; padding:14px 34px;}
 .contact-form label{display:flex; flex-direction:column; gap:6px; font-size:.85rem; color:var(--text-dim);}
 .contact-form input, .contact-form textarea{
   background:var(--surface); border:1px solid var(--border); border-radius:8px;

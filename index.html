@@ -244,14 +244,14 @@
     <p class="section-eyebrow">Contact</p>
     <h2>Let's connect.</h2>
   </div>
-  <div class="contact-info contact-info--full reveal">
-    <a href="mailto:ambersaxenaa@gmail.com" class="contact-row"><span>Email</span><span class="contact-value">ambersaxenaa@gmail.com</span></a>
-    <a href="tel:+916392905853" class="contact-row"><span>Phone</span><span class="contact-value">+91 63929 05853</span></a>
-    <a href="https://wa.me/916392905853" target="_blank" rel="noopener" class="contact-row"><span>WhatsApp</span><span class="contact-value">+91 63929 05853</span></a>
-    <p><span>Location</span>Lucknow, Uttar Pradesh, India</p>
-    <a href="https://www.linkedin.com/in/amber--saxena" target="_blank" rel="noopener" class="contact-row"><span>LinkedIn</span><span class="contact-value">linkedin.com/in/amber--saxena</span></a>
-    <a href="https://github.com/Amber-Saxenaa" target="_blank" rel="noopener" class="contact-row"><span>GitHub</span><span class="contact-value">github.com/Amber-Saxenaa</span></a>
-  </div>
+  <form class="contact-form contact-form--full reveal" id="contactForm">
+    <label>Name<input type="text" name="name" required></label>
+    <label>Email<input type="email" name="email" required></label>
+    <label>Message<textarea name="message" rows="6" required></textarea></label>
+    <button type="submit" class="btn btn-primary">Send</button>
+    <p class="form-note">Hooked up to nothing yet — see the setup guide to wire this
+      to Formspree or mailto.</p>
+  </form>
 </section>
 
 <footer class="footer">
