@@ -105,12 +105,10 @@ if (window.matchMedia('(hover: hover)').matches) {
   });
 }
 
-// Experience detail modal
+// Detail modal — shared by Experience, Education, and Projects cards
 const expData = {
   exp1: {
-    title: 'Data Analytics Intern',
-    org: 'Company / Organization Name',
-    date: '2025 – Present',
+    tag: 'Now', title: 'Data Analytics Intern', org: 'Company / Organization Name', date: '2025 – Present',
     bullets: [
       'Cleaned and validated raw datasets before analysis',
       'Built recurring reports used by the team',
@@ -119,9 +117,7 @@ const expData = {
     tech: ['Excel', 'SQL', 'Power BI']
   },
   exp2: {
-    title: 'Freelance / College Project Work',
-    org: 'Self-directed',
-    date: '2024',
+    tag: '2024', title: 'Freelance / College Project Work', org: 'Self-directed', date: '2024',
     bullets: [
       'Describe the problem you solved here',
       'Describe the approach or tools you used',
@@ -130,9 +126,7 @@ const expData = {
     tech: ['Python', 'Pandas']
   },
   exp3: {
-    title: 'Seeking My First Data Analytics Opportunity',
-    org: '—',
-    date: '2023 – 2024',
+    tag: 'Goal', title: 'Seeking My First Data Analytics Opportunity', org: '—', date: '2023 – 2024',
     bullets: [
       'Open to internships and entry-level roles in data analytics',
       'Currently strengthening SQL, Python, and Power BI skills',
@@ -142,20 +136,112 @@ const expData = {
   }
 };
 
+const eduData = {
+  edu1: {
+    tag: 'BCA', title: 'Bachelor of Computer Applications', org: 'Your College / University Name', date: '2023 – 2026',
+    bullets: [
+      'Key coursework: Database Management Systems, Statistics, Data Structures',
+      'Key coursework: Python Programming, Data Analytics Fundamentals',
+      'Add any academic projects, honors, or relevant activities here'
+    ],
+    tech: []
+  },
+  edu2: {
+    tag: 'XII', title: 'Class XII, Higher Secondary', org: 'Your School Name', date: '2022 – 2023',
+    bullets: [
+      'Commerce / Science stream with Mathematics or Computer Science',
+      'Add your percentage/grade or notable achievements here'
+    ],
+    tech: []
+  }
+};
+
+const projData = {
+  proj1: {
+    tag: 'EDA', title: 'Retail Sales Data Analysis', org: 'Personal Project', date: '2025',
+    bullets: [
+      'Cleaned and analyzed a retail sales dataset in Python',
+      'Uncovered trends by region, category, and season',
+      'Presented findings in a short written report'
+    ],
+    tech: ['Python', 'Pandas', 'Matplotlib']
+  },
+  proj2: {
+    tag: 'SQL', title: 'SQL Business Query Case Study', org: 'Personal Project', date: '2025',
+    bullets: [
+      'Wrote SQL queries against a sample business database',
+      'Answered realistic stakeholder questions — top customers, churn, revenue',
+      'Add your specific findings or query highlights here'
+    ],
+    tech: ['SQL', 'PostgreSQL']
+  },
+  proj3: {
+    tag: 'Dash', title: 'Interactive Sales Dashboard', org: 'Personal Project', date: '2025',
+    bullets: [
+      'Built an interactive dashboard tracking KPIs like revenue and growth',
+      'Let a manager filter by date and region',
+      'Add specific metrics or design decisions here'
+    ],
+    tech: ['Power BI', 'DAX']
+  },
+  proj4: {
+    tag: 'ML', title: 'Prediction Model (Beginner ML)', org: 'Personal Project', date: '2025',
+    bullets: [
+      'Trained a regression/classification model on a real dataset',
+      'Evaluated performance against a baseline',
+      'Add your accuracy/metric results here'
+    ],
+    tech: ['Python', 'Scikit-learn']
+  },
+  proj5: {
+    tag: 'TS', title: 'Time Series Forecasting', org: 'Add project details', date: 'Add date',
+    bullets: ['Add your project description here'],
+    tech: []
+  },
+  proj6: {
+    tag: 'Seg', title: 'Customer Segmentation', org: 'Add project details', date: 'Add date',
+    bullets: ['Add your project description here'],
+    tech: []
+  },
+  proj7: {
+    tag: 'ETL', title: 'Web Scraping / ETL Pipeline', org: 'Add project details', date: 'Add date',
+    bullets: ['Add your project description here'],
+    tech: []
+  }
+};
+
 const detailModal = document.getElementById('detailModal');
 const detailContent = document.getElementById('detailContent');
 const detailBack = document.getElementById('detailBack');
 
-function openDetail(data) {
+function openDetail(data, clickEvent) {
   if (!detailModal || !detailContent) return;
-  const techHtml = data.tech.length
+
+  // grow the modal outward from wherever the card was clicked
+  if (clickEvent) {
+    const xPct = (clickEvent.clientX / window.innerWidth) * 100;
+    const yPct = (clickEvent.clientY / window.innerHeight) * 100;
+    detailModal.style.setProperty('--origin-x', xPct + '%');
+    detailModal.style.setProperty('--origin-y', yPct + '%');
+  }
+
+  const techHtml = data.tech && data.tech.length
     ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small">${data.tech.map(t => `<span class="chip">${t}</span>`).join('')}</div>`
     : '';
+  const thumbHtml = data.tag
+    ? `<div class="detail-thumb">${data.tag}</div>`
+    : '';
+
   detailContent.innerHTML = `
-    <h2>${data.title}</h2>
-    <p class="detail-meta">${data.org} · ${data.date}</p>
-    <ul class="detail-bullets">${data.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
-    ${techHtml}
+    <div class="detail-body ${thumbHtml ? '' : 'no-thumb'}">
+      ${thumbHtml}
+      <div>
+        <h2>${data.title}</h2>
+        <p class="detail-meta">${data.org} · ${data.date}</p>
+        <ul class="detail-bullets">${data.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+        ${techHtml}
+      </div>
+    </div>
   `;
   detailModal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -165,15 +251,23 @@ function closeDetail() {
   detailModal.classList.remove('open');
   document.body.style.overflow = '';
 }
-document.querySelectorAll('[data-exp]').forEach(card => {
-  card.addEventListener('click', () => openDetail(expData[card.dataset.exp]));
-  card.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openDetail(expData[card.dataset.exp]);
-    }
+
+function wireDetailCards(selector, dataMap) {
+  document.querySelectorAll(selector).forEach(card => {
+    const key = card.dataset.exp || card.dataset.edu || card.dataset.proj;
+    card.addEventListener('click', (e) => openDetail(dataMap[key], e));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openDetail(dataMap[key], null);
+      }
+    });
   });
-});
+}
+wireDetailCards('[data-exp]', expData);
+wireDetailCards('[data-edu]', eduData);
+wireDetailCards('[data-proj]', projData);
+
 if (detailBack) detailBack.addEventListener('click', closeDetail);
 if (detailModal) {
   detailModal.addEventListener('click', (e) => {
