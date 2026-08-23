@@ -105,6 +105,85 @@ if (window.matchMedia('(hover: hover)').matches) {
   });
 }
 
+// Experience detail modal
+const expData = {
+  exp1: {
+    title: 'Data Analytics Intern',
+    org: 'Company / Organization Name',
+    date: '2025 – Present',
+    bullets: [
+      'Cleaned and validated raw datasets before analysis',
+      'Built recurring reports used by the team',
+      'Assisted with dashboard maintenance in Power BI'
+    ],
+    tech: ['Excel', 'SQL', 'Power BI']
+  },
+  exp2: {
+    title: 'Freelance / College Project Work',
+    org: 'Self-directed',
+    date: '2024',
+    bullets: [
+      'Describe the problem you solved here',
+      'Describe the approach or tools you used',
+      'Describe the outcome, ideally with a number'
+    ],
+    tech: ['Python', 'Pandas']
+  },
+  exp3: {
+    title: 'Seeking My First Data Analytics Opportunity',
+    org: '—',
+    date: '2023 – 2024',
+    bullets: [
+      'Open to internships and entry-level roles in data analytics',
+      'Currently strengthening SQL, Python, and Power BI skills',
+      'Portfolio projects available on the Projects page'
+    ],
+    tech: []
+  }
+};
+
+const detailModal = document.getElementById('detailModal');
+const detailContent = document.getElementById('detailContent');
+const detailBack = document.getElementById('detailBack');
+
+function openDetail(data) {
+  if (!detailModal || !detailContent) return;
+  const techHtml = data.tech.length
+    ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small">${data.tech.map(t => `<span class="chip">${t}</span>`).join('')}</div>`
+    : '';
+  detailContent.innerHTML = `
+    <h2>${data.title}</h2>
+    <p class="detail-meta">${data.org} · ${data.date}</p>
+    <ul class="detail-bullets">${data.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    ${techHtml}
+  `;
+  detailModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDetail() {
+  if (!detailModal) return;
+  detailModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('[data-exp]').forEach(card => {
+  card.addEventListener('click', () => openDetail(expData[card.dataset.exp]));
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openDetail(expData[card.dataset.exp]);
+    }
+  });
+});
+if (detailBack) detailBack.addEventListener('click', closeDetail);
+if (detailModal) {
+  detailModal.addEventListener('click', (e) => {
+    if (e.target === detailModal) closeDetail();
+  });
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeDetail();
+});
+
 // Carousel arrow scrolling (home page previews)
 document.querySelectorAll('.carousel-arrow').forEach(btn => {
   btn.addEventListener('click', () => {

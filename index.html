@@ -115,21 +115,21 @@
   <div class="carousel-wrap">
     <button class="carousel-arrow prev" data-target="exp-track" aria-label="Scroll left">‹</button>
     <div class="carousel-track" id="exp-track">
-      <a href="experience.html" class="carousel-card reveal">
+      <div class="carousel-card reveal" data-exp="exp1" tabindex="0" role="button">
         <div class="carousel-thumb" data-tag="Now"></div>
         <h3>Data Analytics Intern</h3>
         <p>Company Name • 2025–Present</p>
-      </a>
-      <a href="experience.html" class="carousel-card reveal">
+      </div>
+      <div class="carousel-card reveal" data-exp="exp2" tabindex="0" role="button">
         <div class="carousel-thumb" data-tag="2024"></div>
         <h3>Freelance / College Projects</h3>
         <p>Self-directed • 2024</p>
-      </a>
-      <a href="experience.html" class="carousel-card reveal">
+      </div>
+      <div class="carousel-card reveal" data-exp="exp3" tabindex="0" role="button">
         <div class="carousel-thumb" data-tag="Goal"></div>
         <h3>Seeking First Opportunity</h3>
         <p>Open to internships • 2023–2024</p>
-      </a>
+      </div>
     </div>
     <button class="carousel-arrow next" data-target="exp-track" aria-label="Scroll right">›</button>
   </div>
@@ -262,6 +262,13 @@
 <footer class="footer">
   <p>© <span id="year"></span> Your Name. Built with HTML, CSS &amp; a lot of coffee.</p>
 </footer>
+
+<div class="detail-modal" id="detailModal">
+  <div class="detail-modal-inner">
+    <button class="detail-back" id="detailBack">← Back</button>
+    <div class="detail-content" id="detailContent"></div>
+  </div>
+</div>
 
 <script src="script.js?v=2"></script>
 </body>
