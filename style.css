@@ -448,7 +448,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 .timeline-center-item:hover .timeline-center-content h3{color:var(--accent);}
 .timeline-date-big{color:var(--amber); font-weight:600; font-size:.88rem; margin-bottom:18px;}
 .timeline-thumb-big{
-  width:100%; max-width:380px; height:180px; border-radius:var(--radius); overflow:hidden;
+  width:100%; max-width:440px; height:230px; border-radius:var(--radius); overflow:hidden;
   background:linear-gradient(135deg, var(--accent-soft), rgba(245,166,35,.12));
   border:1px solid var(--border);
   display:flex; align-items:center; justify-content:center;
