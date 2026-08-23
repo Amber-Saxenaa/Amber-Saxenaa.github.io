@@ -1,11 +1,17 @@
-// Preloader — smooth fade out once page has loaded
+// Preloader — only show once per visit (session), not on every internal page click
 const preloader = document.getElementById('preloader');
 if (preloader) {
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      preloader.classList.add('hide');
-    }, 2000);
-  });
+  const alreadyShown = sessionStorage.getItem('as_preloader_shown');
+  if (alreadyShown) {
+    preloader.classList.add('hide');
+  } else {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('hide');
+        sessionStorage.setItem('as_preloader_shown', 'true');
+      }, 2000);
+    });
+  }
 }
 
 // Footer year
