@@ -271,7 +271,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 
 /* HERO SPLIT (home page) — full-bleed image blending into dark bg */
 .hero-split{
-  min-height:92vh; text-align:left; padding:120px 24px 60px;
+  min-height:76vh; text-align:left; padding:88px 24px 40px;
   display:flex; align-items:center; position:relative; overflow:hidden;
 }
 .hero-split-bg{
