@@ -18,7 +18,7 @@
 <div class="cursor-glow" id="cursorGlow"></div>
 
 <header class="nav" id="nav">
-  <a href="index.html" class="nav-logo">YN<span>.</span></a>
+  <a href="index.html" class="nav-logo">AS<span>.</span></a>
   <nav class="nav-links" id="navLinks">
     <a href="index.html">Home</a>
     <a href="experience.html" class="active">Experience</a>
@@ -42,81 +42,42 @@
 </section>
 
 <section class="section">
-  <div class="timeline">
-    <div class="timeline-item reveal from-left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <p class="timeline-date">Apr 2025 – Present</p>
-        <h3>MIS Executive</h3>
-        <p class="timeline-org">Dellish Baker's · Lucknow, UP</p>
-        <p class="timeline-desc">
-          Built and maintained dashboard reporting systems across multiple departments,
-          turning raw operational data into decisions managers could act on quickly.
-        </p>
-        <ul class="timeline-points">
-          <li>Created a dashboard reporting system with data from 10+ departments, reducing report delivery time by 84% and maintaining dashboard accuracy at 99.8%</li>
-          <li>Built live KPI dashboards for 12 key business metrics, running monthly trend checks and problem analysis that helped managers fix issues 3x quicker</li>
-          <li>Redesigned data entry forms and Sheets checklists for 10+ teams, lowering submission mistakes by 47% and eliminating a 2-day data matching delay</li>
-        </ul>
-        <div class="chip-row small">
-          <span class="chip">Excel</span>
-          <span class="chip">Power BI</span>
-          <span class="chip">Google Sheets</span>
-        </div>
-      </div>
+  <div class="timeline timeline-big">
+    <div class="timeline-item-big reveal from-left" data-exp="exp1" tabindex="0" role="button">
+      <div class="timeline-dot-big"></div>
+      <h3>Dellish Baker's | MIS Executive</h3>
+      <p class="timeline-date-big">Apr 2025 – Present</p>
+      <div class="timeline-thumb-big" data-tag="Now"></div>
     </div>
 
-    <div class="timeline-item reveal from-left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <p class="timeline-date">Aug 2024 – Apr 2025</p>
-        <h3>MIS Executive</h3>
-        <p class="timeline-org">Know Finity · Lucknow, UP</p>
-        <p class="timeline-desc">
-          Focused on automating recurring reports and cleaning large operational datasets
-          to improve reliability across the org.
-        </p>
-        <ul class="timeline-points">
-          <li>Set up a shared document system that made file finding easy for all teams, cutting search time by 55% and improving inter-department response time by 30%</li>
-          <li>Automated daily attendance, salary, and stock reports using Excel macros, saving 6 hours every week while keeping data accuracy steady at 98.4%</li>
-          <li>Cleaned a 40,000+ row data file by removing duplicates, blanks, and incorrect formats, resulting in a 40% reduction in data errors</li>
-        </ul>
-        <div class="chip-row small">
-          <span class="chip">Excel</span>
-          <span class="chip">Excel Macros</span>
-          <span class="chip">Data Cleaning</span>
-        </div>
-      </div>
+    <div class="timeline-item-big reveal from-left" data-exp="exp2" tabindex="0" role="button">
+      <div class="timeline-dot-big"></div>
+      <h3>Know Finity | MIS Executive</h3>
+      <p class="timeline-date-big">Aug 2024 – Apr 2025</p>
+      <div class="timeline-thumb-big" data-tag="2024"></div>
     </div>
 
-    <div class="timeline-item reveal from-left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <p class="timeline-date">Nov 2024 – Dec 2024</p>
-        <h3>MIS Executive</h3>
-        <p class="timeline-org">Grow Enterprises · Lucknow, UP</p>
-        <p class="timeline-desc">
-          Supported sales tracking and inventory analysis across a multi-branch retail
-          operation.
-        </p>
-        <ul class="timeline-points">
-          <li>Built a sales tracker that combined data from 8 regional branches, cutting report generation time by 65% and enabling real-time target monitoring</li>
-          <li>Conducted inventory and back-order analysis for 460 products, identifying weekly demand patterns and stocking gaps to support inventory optimization</li>
-          <li>Developed interactive Excel and Power BI dashboards to monitor operational performance across 100+ retail stores</li>
-        </ul>
-        <div class="chip-row small">
-          <span class="chip">Excel</span>
-          <span class="chip">Power BI</span>
-        </div>
-      </div>
+    <div class="timeline-item-big reveal from-left" data-exp="exp3" tabindex="0" role="button">
+      <div class="timeline-dot-big"></div>
+      <h3>Grow Enterprises | MIS Executive</h3>
+      <p class="timeline-date-big">Nov 2024 – Dec 2024</p>
+      <div class="timeline-thumb-big" data-tag="2024"></div>
     </div>
   </div>
+  <p class="projects-note">Click any role to see the full description.</p>
 </section>
 
 <section class="page-nav-footer reveal">
   <a href="education.html" class="btn btn-ghost">← Education</a>
   <a href="projects.html" class="btn btn-primary">Projects →</a>
 </section>
+
+<div class="detail-modal" id="detailModal">
+  <div class="detail-modal-inner">
+    <button class="detail-back" id="detailBack">← Back</button>
+    <div class="detail-content" id="detailContent"></div>
+  </div>
+</div>
 
 <footer class="footer">
   <div class="footer-grid">
