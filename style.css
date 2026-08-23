@@ -546,8 +546,32 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 
 /* FOOTER */
 .footer{
-  text-align:center; padding:32px 24px; color:var(--text-dim);
-  font-size:.85rem; border-top:1px solid var(--border);
+  border-top:1px solid var(--border); background:var(--bg-alt);
+  padding:56px 24px 28px;
+}
+.footer-grid{
+  max-width:var(--maxw); margin:0 auto;
+  display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px;
+}
+.footer-brand h3{font-size:1.1rem; margin-bottom:10px; color:var(--text-dim); font-weight:600;}
+.footer-brand p{color:var(--text-dim); font-size:.88rem; margin-bottom:4px;}
+.footer-brand a{transition:color .2s;}
+.footer-brand a:hover{color:var(--accent);}
+.footer-col h4{
+  font-size:.82rem; color:var(--text); margin-bottom:16px;
+  text-transform:uppercase; letter-spacing:.05em; font-weight:600;
+}
+.footer-col ul{display:flex; flex-direction:column; gap:10px;}
+.footer-col a{color:var(--text-dim); font-size:.88rem; transition:color .2s;}
+.footer-col a:hover{color:var(--accent);}
+.footer-social{display:flex; gap:12px;}
+.footer-bottom{
+  max-width:var(--maxw); margin:40px auto 0; padding-top:24px;
+  border-top:1px solid var(--border);
+  text-align:center; color:var(--text-dim); font-size:.8rem;
+}
+@media (max-width:700px){
+  .footer-grid{grid-template-columns:1fr; gap:32px;}
 }
 
 /* RESPONSIVE */
