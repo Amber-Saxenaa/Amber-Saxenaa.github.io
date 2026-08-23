@@ -90,6 +90,30 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   background:var(--accent); z-index:200; transition:width .1s ease-out;
 }
 
+/* PRELOADER */
+.preloader{
+  position:fixed; inset:0; z-index:9999;
+  background:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .6s ease, visibility .6s ease;
+}
+.preloader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+.preloader-logo{
+  font-family:'Space Grotesk', sans-serif; font-weight:700;
+  font-size:clamp(3rem, 8vw, 5rem);
+  color:var(--accent);
+  text-shadow:0 0 24px rgba(45,212,191,.55), 0 0 60px rgba(45,212,191,.25);
+  letter-spacing:-0.02em;
+  animation:preloaderPulse 1.4s ease-in-out infinite;
+}
+@keyframes preloaderPulse{
+  0%,100%{opacity:.75; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.04);}
+}
+@media (prefers-reduced-motion:reduce){
+  .preloader-logo{animation:none;}
+}
+
 /* NAV */
 .nav{
   position:sticky; top:0; z-index:100;

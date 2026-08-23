@@ -1,3 +1,13 @@
+// Preloader — smooth fade out once page has loaded
+const preloader = document.getElementById('preloader');
+if (preloader) {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      preloader.classList.add('hide');
+    }, 500);
+  });
+}
+
 // Footer year
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
