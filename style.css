@@ -424,7 +424,10 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 .highlight-card:hover .highlight-arrow{opacity:1; transform:translateX(0);}
 
 /* TIMELINE */
-.timeline-big{border-left:2px solid var(--border); padding-left:40px; margin-left:6px;}
+.timeline-big{
+  border-left:2px solid var(--border); padding-left:40px; margin:0 auto;
+  max-width:600px;
+}
 .timeline-item-big{
   position:relative; padding-bottom:64px; cursor:pointer;
 }
