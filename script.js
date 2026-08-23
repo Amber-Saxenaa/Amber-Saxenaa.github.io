@@ -4,7 +4,7 @@ if (preloader) {
   window.addEventListener('load', () => {
     setTimeout(() => {
       preloader.classList.add('hide');
-    }, 500);
+    }, 2000);
   });
 }
 
