@@ -108,41 +108,40 @@ if (window.matchMedia('(hover: hover)').matches) {
 // Detail modal — shared by Experience, Education, and Projects cards
 const expData = {
   exp1: {
-    tag: 'Now', title: 'Data Analytics Intern', org: 'Company / Organization Name', date: '2025 – Present',
+    tag: 'Now', title: 'MIS Executive', org: "Dellish Baker's", date: 'Apr 2025 – Present · Lucknow, UP',
     bullets: [
-      'Cleaned and validated raw datasets before analysis',
-      'Built recurring reports used by the team',
-      'Assisted with dashboard maintenance in Power BI'
+      'Created a dashboard reporting system pulling data from 10+ departments, reducing report delivery time by 84% and maintaining dashboard accuracy at 99.8%',
+      'Built live KPI dashboards for 12 key business metrics, running monthly trend checks and problem analysis that helped managers fix issues 3x quicker',
+      "Redesigned data entry forms and Sheets checklists for 10+ teams, lowering submission mistakes by 47% and eliminating a 2-day data matching delay"
     ],
-    tech: ['Excel', 'SQL', 'Power BI']
+    tech: ['Excel', 'Power BI', 'Google Sheets']
   },
   exp2: {
-    tag: '2024', title: 'Freelance / College Project Work', org: 'Self-directed', date: '2024',
+    tag: '2024', title: 'MIS Executive', org: 'Know Finity', date: 'Aug 2024 – Apr 2025 · Lucknow, UP',
     bullets: [
-      'Describe the problem you solved here',
-      'Describe the approach or tools you used',
-      'Describe the outcome, ideally with a number'
+      'Set up a shared document system that made file finding easy across teams, cutting search time by 55% and improving inter-department response time by 30%',
+      'Automated daily attendance, salary, and stock reports using Excel macros, saving 6 hours every week while keeping data accuracy steady at 98.4%',
+      'Cleaned a 40,000+ row dataset by removing duplicates, blanks, and incorrect formats, resulting in a 40% reduction in data errors'
     ],
-    tech: ['Python', 'Pandas']
+    tech: ['Excel', 'Excel Macros', 'Data Cleaning']
   },
   exp3: {
-    tag: 'Goal', title: 'Seeking My First Data Analytics Opportunity', org: '—', date: '2023 – 2024',
+    tag: '2024', title: 'MIS Executive', org: 'Grow Enterprises', date: 'Nov 2024 – Dec 2024 · Lucknow, UP',
     bullets: [
-      'Open to internships and entry-level roles in data analytics',
-      'Currently strengthening SQL, Python, and Power BI skills',
-      'Portfolio projects available on the Projects page'
+      'Built a sales tracker combining data from 8 regional branches, cutting report generation time by 65% and enabling real-time target monitoring',
+      'Conducted inventory and back-order analysis for 460 products, identifying weekly demand patterns and stocking gaps',
+      'Developed interactive Excel and Power BI dashboards monitoring operational performance across 100+ retail stores'
     ],
-    tech: []
+    tech: ['Excel', 'Power BI']
   }
 };
 
 const eduData = {
   edu1: {
-    tag: 'BCA', title: 'Bachelor of Computer Applications', org: 'Your College / University Name', date: '2023 – 2026',
+    tag: 'BCA', title: 'Bachelor of Computer Applications', org: 'Amity University', date: '2025 – Present',
     bullets: [
-      'Key coursework: Database Management Systems, Statistics, Data Structures',
-      'Key coursework: Python Programming, Data Analytics Fundamentals',
-      'Add any academic projects, honors, or relevant activities here'
+      'Currently pursuing BCA alongside professional MIS/data analytics work',
+      'Add specific coursework, honors, or academic projects here as you complete them'
     ],
     tech: []
   },
@@ -158,40 +157,31 @@ const eduData = {
 
 const projData = {
   proj1: {
-    tag: 'EDA', title: 'Retail Sales Data Analysis', org: 'Personal Project', date: '2025',
+    tag: 'Ret', title: 'Store Performance Analytics Dashboard', org: 'Personal Project', date: 'April 2026',
     bullets: [
-      'Cleaned and analyzed a retail sales dataset in Python',
-      'Uncovered trends by region, category, and season',
-      'Presented findings in a short written report'
+      'Tracked 12-month sales and order trends, identifying peak periods to improve promotion planning by 40%',
+      'Analyzed channel performance, revealing Flipkart + Meesho drove 65%+ of revenue — helping focus marketing spend on top platforms',
+      'Identified that women contributed 55%+ of sales, enabling targeted product curation that boosted repeat purchases by 25%'
     ],
-    tech: ['Python', 'Pandas', 'Matplotlib']
+    tech: ['Excel', 'Power BI']
   },
   proj2: {
-    tag: 'SQL', title: 'SQL Business Query Case Study', org: 'Personal Project', date: '2025',
+    tag: 'HR', title: 'HR Analytics Dashboard', org: 'Personal Project', date: 'December 2025',
     bullets: [
-      'Wrote SQL queries against a sample business database',
-      'Answered realistic stakeholder questions — top customers, churn, revenue',
-      'Add your specific findings or query highlights here'
+      'Designed a centralized HR dashboard tracking 50 employees across gender, age, location, and region, giving HR heads a real-time view of workforce composition',
+      'Tracked employee status and performance ratings, identifying that part-time staff (26%) and remote workers (38%) needed more engagement — leading to targeted retention initiatives'
     ],
-    tech: ['SQL', 'PostgreSQL']
+    tech: ['Excel', 'Power BI']
   },
   proj3: {
-    tag: 'Dash', title: 'Interactive Sales Dashboard', org: 'Personal Project', date: '2025',
-    bullets: [
-      'Built an interactive dashboard tracking KPIs like revenue and growth',
-      'Let a manager filter by date and region',
-      'Add specific metrics or design decisions here'
-    ],
-    tech: ['Power BI', 'DAX']
+    tag: 'Dash', title: 'Interactive Sales Dashboard', org: 'Add project details', date: 'Add date',
+    bullets: ['Add your project description here'],
+    tech: []
   },
   proj4: {
-    tag: 'ML', title: 'Prediction Model (Beginner ML)', org: 'Personal Project', date: '2025',
-    bullets: [
-      'Trained a regression/classification model on a real dataset',
-      'Evaluated performance against a baseline',
-      'Add your accuracy/metric results here'
-    ],
-    tech: ['Python', 'Scikit-learn']
+    tag: 'ML', title: 'Prediction Model (Beginner ML)', org: 'Add project details', date: 'Add date',
+    bullets: ['Add your project description here'],
+    tech: []
   },
   proj5: {
     tag: 'TS', title: 'Time Series Forecasting', org: 'Add project details', date: 'Add date',
