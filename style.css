@@ -89,11 +89,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   position:fixed; bottom:100px; right:28px; z-index:150;
   width:56px; height:56px; perspective:600px;
   pointer-events:none;
-  animation:companionBob 3.4s ease-in-out infinite;
-}
-@keyframes companionBob{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
+  transition:transform .2s ease-out;
 }
 .companion-cube{
   position:relative; width:100%; height:100%;

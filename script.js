@@ -14,14 +14,22 @@ if (preloader) {
   }
 }
 
-// 3D scroll companion cube — rotates with scroll position, wobbles on new reveals
+// 3D scroll companion cube — moves in all directions and rotates with scroll position
 const companionCube = document.getElementById('companionCube');
-if (companionCube) {
+const companionWrap = document.getElementById('scrollCompanion');
+if (companionCube && companionWrap) {
   window.addEventListener('scroll', () => {
     const h = document.documentElement;
     const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const t = scrolled * Math.PI * 8;
+
+    // organic drift in all directions, driven purely by scroll position
+    const offsetX = Math.sin(t) * 26;
+    const offsetY = Math.cos(t * 1.4) * 20 - (Math.sin(scrolled * Math.PI * 2) * 10);
+    companionWrap.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
     const rotateY = 30 + scrolled * 360 * 2;
-    const rotateX = -20 + Math.sin(scrolled * Math.PI * 4) * 15;
+    const rotateX = -20 + Math.sin(t) * 15;
     companionCube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   }, { passive: true });
 }
