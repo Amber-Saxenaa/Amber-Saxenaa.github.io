@@ -86,10 +86,10 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 
 /* 3D scroll companion cube */
 .scroll-companion{
-  position:fixed; bottom:100px; right:28px; z-index:150;
+  position:fixed; top:90px; right:28px; z-index:150;
   width:56px; height:56px; perspective:600px;
   pointer-events:none;
-  transition:transform .2s ease-out;
+  transition:top .12s linear;
 }
 .companion-cube{
   position:relative; width:100%; height:100%;
@@ -117,7 +117,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 .face-top{transform:rotateX(90deg) translateZ(28px); color:var(--amber); border-color:rgba(245,166,35,.4);}
 .face-bottom{transform:rotateX(-90deg) translateZ(28px); color:var(--amber); border-color:rgba(245,166,35,.4);}
 @media (max-width:640px){
-  .scroll-companion{width:44px; height:44px; bottom:84px; right:18px;}
+  .scroll-companion{width:44px; height:44px; top:70px; right:18px;}
   .cube-face{width:44px; height:44px; font-size:.6rem;}
   .face-front{transform:translateZ(22px);}
   .face-back{transform:translateZ(-22px) rotateY(180deg);}

@@ -14,7 +14,7 @@ if (preloader) {
   }
 }
 
-// 3D scroll companion cube — moves in all directions and rotates with scroll position
+// 3D scroll companion cube — travels down the page with scroll, drifts, and rotates
 const companionCube = document.getElementById('companionCube');
 const companionWrap = document.getElementById('scrollCompanion');
 if (companionCube && companionWrap) {
@@ -23,9 +23,14 @@ if (companionCube && companionWrap) {
     const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
     const t = scrolled * Math.PI * 8;
 
-    // organic drift in all directions, driven purely by scroll position
+    // travel from near the top to near the bottom of the viewport as the page scrolls
+    const viewportH = window.innerHeight;
+    const topPx = 90 + scrolled * (viewportH - 220);
+    companionWrap.style.top = topPx + 'px';
+
+    // small organic side-to-side drift layered on top
     const offsetX = Math.sin(t) * 26;
-    const offsetY = Math.cos(t * 1.4) * 20 - (Math.sin(scrolled * Math.PI * 2) * 10);
+    const offsetY = Math.cos(t * 1.4) * 12;
     companionWrap.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
 
     const rotateY = 30 + scrolled * 360 * 2;
