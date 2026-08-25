@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body class="page-loading">
 
@@ -17,7 +17,10 @@
 
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-glow" id="cursorGlow"></div>
-<div class="peeking-robot" id="peekingRobot" aria-hidden="true">
+<div class="peeking-robot" id="peekingRobot" role="button" tabindex="0" aria-label="Say hi to the robot">
+  <div class="robot-speech" id="robotSpeech">Hi! 👋</div>
+  <div class="robot-prop robot-prop-bulb" id="propBulb">💡</div>
+  <div class="robot-prop robot-prop-crown" id="propCrown">👑</div>
   <div class="robot-body">
     <div class="robot-antenna"><span class="robot-antenna-ball"></span></div>
     <div class="robot-ear robot-ear-top"></div>
@@ -28,6 +31,8 @@
       <div class="robot-mouth"></div>
     </div>
     <div class="robot-arm"></div>
+    <div class="robot-prop robot-prop-laptop" id="propLaptop">💻</div>
+    <div class="robot-prop robot-prop-book" id="propBook">📖</div>
   </div>
 </div>
 
@@ -328,6 +333,6 @@
   </div>
 </div>
 
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

@@ -14,6 +14,55 @@ if (preloader) {
   }
 }
 
+// Peeking robot (home page only) — reacts to which section is in view, and to clicks
+const peekingRobot = document.getElementById('peekingRobot');
+if (peekingRobot) {
+  const robotSections = [
+    { id: 'about', state: 'about' },
+    { id: 'experience', state: 'experience' },
+    { id: 'education', state: 'education' },
+    { id: 'projects', state: 'projects' }
+  ];
+  function updateRobotState() {
+    const centerY = window.innerHeight / 2;
+    let activeState = '';
+    for (const s of robotSections) {
+      const el = document.getElementById(s.id);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= centerY && rect.bottom >= centerY) {
+        activeState = s.state;
+        break;
+      }
+    }
+    if (peekingRobot.dataset.state !== activeState) {
+      peekingRobot.dataset.state = activeState;
+    }
+  }
+  window.addEventListener('scroll', updateRobotState, { passive: true });
+  updateRobotState();
+
+  // click (or Enter/Space) to wave and say hi
+  const robotSpeech = document.getElementById('robotSpeech');
+  function robotSayHi() {
+    peekingRobot.classList.remove('waving');
+    void peekingRobot.offsetWidth; // restart animation
+    peekingRobot.classList.add('waving');
+    if (robotSpeech) {
+      robotSpeech.classList.remove('show');
+      void robotSpeech.offsetWidth;
+      robotSpeech.classList.add('show');
+    }
+  }
+  peekingRobot.addEventListener('click', robotSayHi);
+  peekingRobot.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      robotSayHi();
+    }
+  });
+}
+
 // 3D scroll companion cube — travels down the page with scroll, drifts, and rotates
 const companionCube = document.getElementById('companionCube');
 const companionWrap = document.getElementById('scrollCompanion');
