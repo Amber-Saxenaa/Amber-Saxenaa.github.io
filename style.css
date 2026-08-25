@@ -84,6 +84,98 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 }
 @media (max-width:860px){.cursor-glow{display:none;}}
 
+/* peeking robot (home page only) */
+.peeking-robot{
+  position:fixed; left:-58px; top:50%; z-index:150;
+  width:120px; height:150px; pointer-events:none;
+  transform:translateY(-50%);
+  animation:robotFloat 4s ease-in-out infinite, robotPeek 6s ease-in-out infinite;
+}
+@keyframes robotFloat{
+  0%,100%{transform:translateY(-50%);}
+  50%{transform:translateY(calc(-50% - 10px));}
+}
+@keyframes robotPeek{
+  0%,70%,100%{margin-left:0;}
+  80%,90%{margin-left:22px;}
+}
+.robot-body{
+  position:relative; width:100%; height:100%;
+}
+.robot-body::before{
+  /* soft ground shadow for depth */
+  content:''; position:absolute; left:50%; bottom:8px; width:70px; height:14px;
+  background:radial-gradient(ellipse, rgba(0,0,0,.35), transparent 70%);
+  transform:translateX(-50%);
+}
+.robot-face{
+  position:absolute; left:26px; top:34px; width:82px; height:78px;
+  background:linear-gradient(145deg, #2a3540, #161d24);
+  border:2px solid rgba(45,212,191,.35);
+  border-radius:34px 40px 40px 34px;
+  box-shadow:inset -6px -6px 14px rgba(0,0,0,.4), inset 6px 6px 14px rgba(255,255,255,.04), 0 8px 24px rgba(0,0,0,.5);
+  display:flex; align-items:center; justify-content:center; gap:12px;
+}
+.robot-eye{
+  width:14px; height:18px; border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 10px rgba(45,212,191,.7);
+  animation:robotBlink 4.5s ease-in-out infinite;
+}
+.robot-eye:nth-child(2){animation-delay:.1s;}
+@keyframes robotBlink{
+  0%,92%,100%{transform:scaleY(1);}
+  95%{transform:scaleY(.1);}
+}
+.robot-mouth{
+  position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+  width:22px; height:8px; border-radius:0 0 10px 10px;
+  background:rgba(245,166,35,.5);
+}
+.robot-antenna{
+  position:absolute; left:60px; top:6px; width:2px; height:22px; background:var(--border);
+}
+.robot-antenna-ball{
+  position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+  width:9px; height:9px; border-radius:50%; background:var(--amber);
+  box-shadow:0 0 10px rgba(245,166,35,.8);
+  animation:robotBlink 2.6s ease-in-out infinite;
+}
+.robot-ear{
+  position:absolute; width:12px; height:22px; border-radius:6px;
+  background:linear-gradient(145deg, #2a3540, #161d24);
+  border:2px solid rgba(45,212,191,.25);
+  left:20px;
+}
+.robot-ear-top{top:38px;}
+.robot-ear-bottom{top:70px;}
+.robot-arm{
+  position:absolute; left:96px; top:88px; width:26px; height:14px;
+  background:linear-gradient(145deg, #2a3540, #161d24);
+  border:2px solid rgba(45,212,191,.3);
+  border-radius:10px;
+  transform-origin:left center;
+  animation:robotWave 3.2s ease-in-out infinite;
+}
+@keyframes robotWave{
+  0%,60%,100%{transform:rotate(0deg);}
+  70%{transform:rotate(-18deg);}
+  80%{transform:rotate(6deg);}
+  90%{transform:rotate(-12deg);}
+}
+@media (max-width:860px){
+  .peeking-robot{width:88px; height:110px; left:-44px;}
+  .robot-face{left:18px; top:24px; width:60px; height:56px; border-radius:24px 28px 28px 24px;}
+  .robot-eye{width:10px; height:13px;}
+  .robot-ear{width:9px; height:16px; left:14px;}
+  .robot-ear-top{top:26px;} .robot-ear-bottom{top:50px;}
+  .robot-antenna{left:44px; height:16px;}
+  .robot-arm{left:70px; top:62px; width:18px; height:10px;}
+}
+@media (prefers-reduced-motion:reduce){
+  .peeking-robot, .robot-eye, .robot-antenna-ball, .robot-arm{animation:none;}
+}
+
 /* 3D scroll companion cube */
 .scroll-companion{
   position:fixed; top:90px; left:28px; z-index:150;
