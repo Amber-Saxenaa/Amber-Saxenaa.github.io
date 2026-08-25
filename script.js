@@ -14,6 +14,18 @@ if (preloader) {
   }
 }
 
+// 3D scroll companion cube — rotates with scroll position, wobbles on new reveals
+const companionCube = document.getElementById('companionCube');
+if (companionCube) {
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const rotateY = 30 + scrolled * 360 * 2;
+    const rotateX = -20 + Math.sin(scrolled * Math.PI * 4) * 15;
+    companionCube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  }, { passive: true });
+}
+
 // Footer year
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -59,6 +71,13 @@ if ('IntersectionObserver' in window) {
       if (entry.isIntersecting) {
         entry.target.classList.add('in-view');
         io.unobserve(entry.target);
+        // give the 3D companion a little reaction whenever new content reveals
+        const cube = document.getElementById('companionCube');
+        if (cube) {
+          cube.classList.remove('wobble');
+          void cube.offsetWidth; // restart animation
+          cube.classList.add('wobble');
+        }
       }
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });

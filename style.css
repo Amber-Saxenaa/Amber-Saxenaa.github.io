@@ -84,6 +84,57 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 }
 @media (max-width:860px){.cursor-glow{display:none;}}
 
+/* 3D scroll companion cube */
+.scroll-companion{
+  position:fixed; bottom:100px; right:28px; z-index:150;
+  width:56px; height:56px; perspective:600px;
+  pointer-events:none;
+  animation:companionBob 3.4s ease-in-out infinite;
+}
+@keyframes companionBob{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.companion-cube{
+  position:relative; width:100%; height:100%;
+  transform-style:preserve-3d;
+  transform:rotateX(-20deg) rotateY(30deg);
+  transition:transform .15s linear;
+}
+.companion-cube.wobble{animation:companionWobble .5s ease;}
+@keyframes companionWobble{
+  0%,100%{}
+  30%{transform:rotateX(-20deg) rotateY(30deg) scale(1.18);}
+}
+.cube-face{
+  position:absolute; width:56px; height:56px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono', monospace; font-weight:600; font-size:.7rem;
+  color:var(--accent); background:rgba(20,27,35,.92);
+  border:1px solid rgba(45,212,191,.4);
+  box-shadow:0 0 16px rgba(45,212,191,.15) inset;
+}
+.face-front{transform:translateZ(28px);}
+.face-back{transform:translateZ(-28px) rotateY(180deg);}
+.face-right{transform:rotateY(90deg) translateZ(28px);}
+.face-left{transform:rotateY(-90deg) translateZ(28px);}
+.face-top{transform:rotateX(90deg) translateZ(28px); color:var(--amber); border-color:rgba(245,166,35,.4);}
+.face-bottom{transform:rotateX(-90deg) translateZ(28px); color:var(--amber); border-color:rgba(245,166,35,.4);}
+@media (max-width:640px){
+  .scroll-companion{width:44px; height:44px; bottom:84px; right:18px;}
+  .cube-face{width:44px; height:44px; font-size:.6rem;}
+  .face-front{transform:translateZ(22px);}
+  .face-back{transform:translateZ(-22px) rotateY(180deg);}
+  .face-right{transform:rotateY(90deg) translateZ(22px);}
+  .face-left{transform:rotateY(-90deg) translateZ(22px);}
+  .face-top{transform:rotateX(90deg) translateZ(22px);}
+  .face-bottom{transform:rotateX(-90deg) translateZ(22px);}
+}
+@media (prefers-reduced-motion:reduce){
+  .scroll-companion{animation:none;}
+  .companion-cube{transition:none;}
+}
+
 /* scroll progress */
 .scroll-progress{
   position:fixed; top:0; left:0; height:3px; width:0%;
