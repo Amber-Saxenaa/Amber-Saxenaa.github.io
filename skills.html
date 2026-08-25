@@ -41,6 +41,35 @@
   </p>
 </section>
 
+<section class="section radar-section">
+  <div class="radar-wrap reveal">
+    <svg class="radar-chart" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- background grid rings -->
+      <polygon points="150,60 240,150 150,240 60,150" class="radar-grid" />
+      <polygon points="150,82.5 217.5,150 150,217.5 82.5,150" class="radar-grid" />
+      <polygon points="150,105 195,150 150,195 105,150" class="radar-grid" />
+      <polygon points="150,127.5 172.5,150 150,172.5 127.5,150" class="radar-grid" />
+      <!-- axis lines -->
+      <line x1="150" y1="150" x2="150" y2="60" class="radar-axis" />
+      <line x1="150" y1="150" x2="240" y2="150" class="radar-axis" />
+      <line x1="150" y1="150" x2="150" y2="240" class="radar-axis" />
+      <line x1="150" y1="150" x2="60" y2="150" class="radar-axis" />
+      <!-- data polygon: Core Tools (top) 69%, Reporting (right) 78%, Domain (bottom) 70%, Emerging (left) 53% -->
+      <polygon points="150,67.2 243.6,150 150,234 86.4,150" class="radar-shape" />
+      <circle cx="150" cy="67.2" r="4" class="radar-point" />
+      <circle cx="243.6" cy="150" r="4" class="radar-point" />
+      <circle cx="150" cy="234" r="4" class="radar-point" />
+      <circle cx="86.4" cy="150" r="4" class="radar-point" />
+      <!-- labels -->
+      <text x="150" y="42" class="radar-label" text-anchor="middle">Core Tools</text>
+      <text x="262" y="154" class="radar-label" text-anchor="start">Reporting</text>
+      <text x="150" y="266" class="radar-label" text-anchor="middle">Domain</text>
+      <text x="38" y="154" class="radar-label" text-anchor="end">Emerging</text>
+    </svg>
+    <p class="radar-caption">A rough shape of where my strengths sit today — based on the category averages below.</p>
+  </div>
+</section>
+
 <section class="section skills-page">
   <div class="skill-block reveal">
     <h3>Core Tools</h3>

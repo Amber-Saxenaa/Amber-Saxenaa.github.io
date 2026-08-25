@@ -67,6 +67,33 @@ if ('IntersectionObserver' in window) {
   revealEls.forEach(el => el.classList.add('in-view'));
 }
 
+// Animated stat counters (count up when scrolled into view)
+const statNumbers = document.querySelectorAll('.stat-number');
+if (statNumbers.length && 'IntersectionObserver' in window) {
+  const statIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseFloat(el.dataset.target);
+        const decimals = parseInt(el.dataset.decimal || '0', 10);
+        const suffix = el.dataset.suffix || '';
+        const duration = 1400;
+        const startTime = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = target * eased;
+          el.textContent = current.toFixed(decimals) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        statIo.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNumbers.forEach(el => statIo.observe(el));
+}
+
 // Skill bar fill animation (only on skills page)
 const skillBars = document.querySelectorAll('.skill-bar');
 if (skillBars.length && 'IntersectionObserver' in window) {
@@ -88,15 +115,15 @@ if (skillBars.length && 'IntersectionObserver' in window) {
   skillBars.forEach(bar => skillIo.observe(bar));
 }
 
-// Subtle 3D tilt on project cards (desktop only)
+// Subtle 3D tilt on cards and thumbnails (desktop only)
 if (window.matchMedia('(hover: hover)').matches) {
-  document.querySelectorAll('.project-card.tilt').forEach(card => {
+  document.querySelectorAll('.project-card.tilt, .tilt-el').forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      const rotateX = ((y / rect.height) - 0.5) * -6;
-      const rotateY = ((x / rect.width) - 0.5) * 6;
+      const rotateX = ((y / rect.height) - 0.5) * -8;
+      const rotateY = ((x / rect.width) - 0.5) * 8;
       card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
     });
     card.addEventListener('mouseleave', () => {
