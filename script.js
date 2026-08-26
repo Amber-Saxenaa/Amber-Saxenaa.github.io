@@ -38,6 +38,13 @@ if (peekingRobot) {
     if (peekingRobot.dataset.state !== activeState) {
       peekingRobot.dataset.state = activeState;
     }
+
+    // travel down the page with scroll, same as the 3D cube on other pages
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const viewportH = window.innerHeight;
+    const topPx = 100 + scrolled * (viewportH - 260);
+    peekingRobot.style.top = topPx + 'px';
   }
   window.addEventListener('scroll', updateRobotState, { passive: true });
   updateRobotState();
