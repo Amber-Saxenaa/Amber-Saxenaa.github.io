@@ -322,14 +322,6 @@ const detailBack = document.getElementById('detailBack');
 function openDetail(data, clickEvent) {
   if (!detailModal || !detailContent) return;
 
-  // grow the modal outward from wherever the card was clicked
-  if (clickEvent) {
-    const xPct = (clickEvent.clientX / window.innerWidth) * 100;
-    const yPct = (clickEvent.clientY / window.innerHeight) * 100;
-    detailModal.style.setProperty('--origin-x', xPct + '%');
-    detailModal.style.setProperty('--origin-y', yPct + '%');
-  }
-
   const techHtml = data.tech && data.tech.length
     ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small">${data.tech.map(t => `<span class="chip">${t}</span>`).join('')}</div>`
     : '';
