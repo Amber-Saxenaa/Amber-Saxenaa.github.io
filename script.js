@@ -318,12 +318,24 @@ const projData = {
 const detailModal = document.getElementById('detailModal');
 const detailContent = document.getElementById('detailContent');
 const detailBack = document.getElementById('detailBack');
+let lastThumbOriginEl = null; // the small thumbnail element that was clicked, used for morph in/out
 
-function openDetail(data, clickEvent) {
+// wrap standout numbers/percentages in bullet text so they can be highlighted
+function highlightStats(text) {
+  return text.replace(/(\d[\d,]*\.?\d*\s?[%Kk]?\+?)/g, (match) => {
+    // only wrap things that actually look like a stat (has a digit)
+    if (/\d/.test(match)) return `<span class="stat-highlight">${match}</span>`;
+    return match;
+  });
+}
+
+function openDetail(data, clickEvent, originThumbEl) {
   if (!detailModal || !detailContent) return;
 
+  lastThumbOriginEl = originThumbEl || null;
+
   const techHtml = data.tech && data.tech.length
-    ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small">${data.tech.map(t => `<span class="chip">${t}</span>`).join('')}</div>`
+    ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small">${data.tech.map(t => `<span class="chip stagger-chip">${t}</span>`).join('')}</div>`
     : '';
   const thumbHtml = data.tag
     ? `<div class="detail-thumb">${data.tag}</div>`
@@ -333,30 +345,108 @@ function openDetail(data, clickEvent) {
     <div class="detail-body ${thumbHtml ? '' : 'no-thumb'}">
       ${thumbHtml}
       <div>
-        <h2>${data.title}</h2>
-        <p class="detail-meta">${data.org} · ${data.date}</p>
-        <ul class="detail-bullets">${data.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+        <h2 class="stagger-item">${data.title}</h2>
+        <p class="detail-meta stagger-item">${data.org} · ${data.date}</p>
+        <ul class="detail-bullets">${data.bullets.map(b => `<li class="stagger-item">${highlightStats(b)}</li>`).join('')}</ul>
         ${techHtml}
       </div>
     </div>
   `;
+
   detailModal.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // stagger the title, meta, each bullet, then each tech chip, in sequence
+  const staggerItems = detailContent.querySelectorAll('.stagger-item');
+  staggerItems.forEach((el, i) => {
+    el.style.transitionDelay = (0.15 + i * 0.09) + 's';
+  });
+  const staggerChips = detailContent.querySelectorAll('.stagger-chip');
+  const chipBaseDelay = 0.15 + staggerItems.length * 0.09 + 0.1;
+  staggerChips.forEach((el, i) => {
+    el.style.transitionDelay = (chipBaseDelay + i * 0.06) + 's';
+  });
+  requestAnimationFrame(() => {
+    detailContent.classList.add('stagger-in');
+  });
+
+  // pulse the highlighted stats shortly after everything has appeared
+  setTimeout(() => {
+    detailContent.querySelectorAll('.stat-highlight').forEach((el, i) => {
+      setTimeout(() => el.classList.add('pulse'), i * 90);
+    });
+  }, (chipBaseDelay + staggerChips.length * 0.06) * 1000 + 200);
+
+  // shared-element morph: grow the clicked thumbnail into the box's thumbnail
+  const targetThumb = detailContent.querySelector('.detail-thumb');
+  if (lastThumbOriginEl && targetThumb) {
+    const fromRect = lastThumbOriginEl.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      const toRect = targetThumb.getBoundingClientRect();
+      const scaleX = fromRect.width / toRect.width;
+      const scaleY = fromRect.height / toRect.height;
+      const deltaX = fromRect.left + fromRect.width / 2 - (toRect.left + toRect.width / 2);
+      const deltaY = fromRect.top + fromRect.height / 2 - (toRect.top + toRect.height / 2);
+      targetThumb.style.transition = 'none';
+      targetThumb.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+      targetThumb.style.opacity = '0.4';
+      requestAnimationFrame(() => {
+        targetThumb.style.transition = 'transform .5s cubic-bezier(.2,.85,.25,1), opacity .3s ease';
+        targetThumb.style.transform = 'translate(0,0) scale(1,1)';
+        targetThumb.style.opacity = '1';
+      });
+    });
+  }
 }
+
 function closeDetail() {
   if (!detailModal) return;
+  const modalInner = detailModal.querySelector('.detail-modal-inner');
+  const targetThumb = detailContent.querySelector('.detail-thumb');
+
+  // morph the box back down toward the card it came from, if we know where that is
+  if (lastThumbOriginEl && modalInner && targetThumb) {
+    const originRect = lastThumbOriginEl.getBoundingClientRect();
+    const currentRect = modalInner.getBoundingClientRect();
+    const scaleX = originRect.width / currentRect.width;
+    const scaleY = originRect.height / currentRect.height;
+    const deltaX = originRect.left + originRect.width / 2 - (currentRect.left + currentRect.width / 2);
+    const deltaY = originRect.top + originRect.height / 2 - (currentRect.top + currentRect.height / 2);
+    modalInner.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1), opacity .3s ease';
+    modalInner.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+    modalInner.style.opacity = '0';
+  }
+
   detailModal.classList.remove('open');
   document.body.style.overflow = '';
+
+  setTimeout(() => {
+    if (modalInner) {
+      modalInner.style.transition = '';
+      modalInner.style.transform = '';
+      modalInner.style.opacity = '';
+    }
+    lastThumbOriginEl = null;
+  }, 380);
 }
 
 function wireDetailCards(selector, dataMap) {
   document.querySelectorAll(selector).forEach(card => {
     const key = card.dataset.exp || card.dataset.edu || card.dataset.proj;
-    card.addEventListener('click', (e) => openDetail(dataMap[key], e));
+    const thumbEl = card.querySelector('.carousel-thumb, .timeline-thumb-big, .project-thumb') || card;
+
+    // tactile press feedback
+    const press = () => card.classList.add('card-pressed');
+    const release = () => card.classList.remove('card-pressed');
+    card.addEventListener('mousedown', press);
+    card.addEventListener('touchstart', press, { passive: true });
+    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(ev => card.addEventListener(ev, release));
+
+    card.addEventListener('click', (e) => openDetail(dataMap[key], e, thumbEl));
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openDetail(dataMap[key], null);
+        openDetail(dataMap[key], null, thumbEl);
       }
     });
   });

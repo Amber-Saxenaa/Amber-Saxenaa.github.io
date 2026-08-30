@@ -388,6 +388,53 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   .detail-modal-inner{padding:28px 20px;}
 }
 
+/* deeper blur once the box is open, to push focus onto it */
+.detail-modal{transition:opacity .3s ease, visibility .3s ease, backdrop-filter .3s ease;}
+.detail-modal.open{backdrop-filter:blur(10px);}
+
+/* card press feedback */
+.carousel-card, .timeline-center-item, .timeline-item-big{
+  transition:transform .15s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.carousel-card.card-pressed{transform:scale(.96) !important;}
+.timeline-center-item.card-pressed .timeline-center-content,
+.timeline-item-big.card-pressed{transform:scale(.97);}
+
+/* staggered reveal of title / meta / bullets / chips */
+.stagger-item{
+  opacity:0; transform:translateX(-14px);
+  transition:opacity .4s ease, transform .4s ease;
+}
+.stagger-chip{
+  opacity:0; transform:scale(.7);
+  transition:opacity .3s cubic-bezier(.34,1.56,.64,1), transform .3s cubic-bezier(.34,1.56,.64,1);
+  display:inline-block;
+}
+.stagger-in .stagger-item{opacity:1; transform:translateX(0);}
+.stagger-in .stagger-chip{opacity:1; transform:scale(1);}
+
+/* stat number highlight pulse */
+.stat-highlight{
+  color:var(--text); font-weight:600; border-radius:4px; padding:0 2px;
+  transition:color .3s ease, text-shadow .3s ease;
+}
+.stat-highlight.pulse{
+  color:var(--accent);
+  text-shadow:0 0 12px rgba(45,212,191,.6);
+  animation:statPop .5s ease;
+}
+@keyframes statPop{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.14);}
+  100%{transform:scale(1);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .stagger-item, .stagger-chip, .stat-highlight, .stat-highlight.pulse{
+    animation:none; transition:none; opacity:1; transform:none;
+  }
+}
+
 /* NAV */
 .nav{
   position:sticky; top:0; z-index:100;
