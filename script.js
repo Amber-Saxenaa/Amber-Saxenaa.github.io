@@ -221,8 +221,6 @@ if (window.matchMedia('(hover: hover)').matches) {
 }
 
 // Detail modal — shared by Experience, Education, and Projects cards
-// To show a real photo instead of the colored tag box, add e.g. img: 'assets/exp1.jpg'
-// to any entry below — clicking it will then open it larger in a lightbox.
 const expData = {
   exp1: {
     tag: 'Now', title: 'MIS Executive', org: "Dellish Baker's", date: 'Apr 2025 – Present · Lucknow, UP',
@@ -320,175 +318,106 @@ const projData = {
 const detailModal = document.getElementById('detailModal');
 const detailContent = document.getElementById('detailContent');
 const detailBack = document.getElementById('detailBack');
-let lastCardOriginEl = null; // the card that was clicked, used to morph the box open/closed
-
-// --- image lightbox (click the detail image for a bigger view) ---
-let lightboxEl = null;
-function ensureLightbox() {
-  if (lightboxEl) return lightboxEl;
-  lightboxEl = document.createElement('div');
-  lightboxEl.className = 'image-lightbox';
-  lightboxEl.innerHTML = `<button class="lightbox-close" aria-label="Close image">&times;</button><img alt="">`;
-  document.body.appendChild(lightboxEl);
-  lightboxEl.querySelector('.lightbox-close').addEventListener('click', hideLightbox);
-  lightboxEl.addEventListener('click', (e) => { if (e.target === lightboxEl) hideLightbox(); });
-  return lightboxEl;
-}
-function showLightbox(src, alt) {
-  if (!src) return;
-  const box = ensureLightbox();
-  const img = box.querySelector('img');
-  img.src = src;
-  img.alt = alt || '';
-  box.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function hideLightbox() {
-  if (!lightboxEl) return;
-  lightboxEl.classList.remove('open');
-  document.body.style.overflow = (detailModal && detailModal.classList.contains('open')) ? 'hidden' : '';
-}
-
-// wraps a bullet's text into per-word spans (keeping any stat-highlight span intact)
-// so CSS can reveal them one at a time, like typing, when the bullet is hovered
-function wrapBulletWords(li) {
-  const nodes = Array.from(li.childNodes);
-  li.innerHTML = '';
-  let wordIndex = 0;
-  nodes.forEach(node => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      node.textContent.split(/(\s+)/).forEach(part => {
-        if (part === '') return;
-        if (part.trim() === '') {
-          li.appendChild(document.createTextNode(part));
-        } else {
-          const span = document.createElement('span');
-          span.className = 'bullet-word';
-          span.style.setProperty('--wi', wordIndex++);
-          span.textContent = part;
-          li.appendChild(span);
-        }
-      });
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      node.classList.add('bullet-word');
-      node.style.setProperty('--wi', wordIndex++);
-      li.appendChild(node);
-    }
-  });
-}
-
-// wrap standout numbers/percentages in bullet text so they can be highlighted
-function highlightStats(text) {
-  return text.replace(/(\d[\d,]*\.?\d*\s?[%Kk]?\+?)/g, (match) => {
-    // only wrap things that actually look like a stat (has a digit)
-    if (/\d/.test(match)) return `<span class="stat-highlight">${match}</span>`;
-    return match;
-  });
-}
+let lastCardEl = null; // the whole card that was clicked, used to morph the box to/from it
 
 function openDetail(data, clickEvent, originCardEl) {
   if (!detailModal || !detailContent) return;
 
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  lastCardOriginEl = originCardEl || null;
+  lastCardEl = originCardEl || null;
+  const modalInner = detailModal.querySelector('.detail-modal-inner');
 
   const techHtml = data.tech && data.tech.length
-    ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small">${data.tech.map(t => `<span class="chip stagger-chip">${t}</span>`).join('')}</div>`
+    ? `<p class="detail-tech-label">Technologies Used</p><div class="chip-row small tech-fade">${data.tech.map(t => `<span class="chip">${t}</span>`).join('')}</div>`
     : '';
-  // once you add data.img on any entry (in expData/eduData/projData below), its thumb
-  // becomes a real photo that opens in a lightbox when clicked
-  const thumbHtml = data.img
-    ? `<div class="detail-thumb has-img stagger-item" tabindex="0" role="button" aria-label="View larger image"><img src="${data.img}" alt="${data.title}"></div>`
-    : (data.tag ? `<div class="detail-thumb stagger-item">${data.tag}</div>` : '');
+  const thumbHtml = data.tag
+    ? `<div class="detail-thumb" tabindex="0" role="button" aria-label="View larger image">${data.tag}</div>`
+    : '';
 
   detailContent.innerHTML = `
     <div class="detail-body ${thumbHtml ? '' : 'no-thumb'}">
       ${thumbHtml}
       <div>
-        <h2 class="stagger-item">${data.title}</h2>
-        <p class="detail-meta stagger-item">${data.org} · ${data.date}</p>
-        <ul class="detail-bullets">${data.bullets.map(b => `<li class="stagger-item">${highlightStats(b)}</li>`).join('')}</ul>
+        <h2>${data.title}</h2>
+        <p class="detail-meta">${data.org} · ${data.date}</p>
+        <ul class="detail-bullets" id="detailBullets">${data.bullets.map(b => `<li></li>`).join('')}</ul>
         ${techHtml}
       </div>
     </div>
   `;
 
-  // wrap each bullet's words so they can "type in" on hover
-  detailContent.querySelectorAll('.detail-bullets li').forEach(wrapBulletWords);
+  // store the real bullet text so we can type it out, without breaking on quotes/HTML
+  const bulletEls = detailContent.querySelectorAll('#detailBullets li');
+  const bulletTexts = data.bullets;
 
-  // clicking (or Enter/Space on) the image thumb opens it larger in the lightbox
-  const thumbBox = detailContent.querySelector('.detail-thumb.has-img');
-  if (thumbBox) {
-    const openImg = () => showLightbox(data.img, data.title);
-    thumbBox.addEventListener('click', openImg);
-    thumbBox.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openImg(); }
-    });
-  }
-
-  const modalInner = detailModal.querySelector('.detail-modal-inner');
-
-  // FLIP: park the box exactly on top of the clicked card first, so opening it
-  // reads as that same card growing open — then let it animate to full size/position
-  if (!reducedMotion && originCardEl && modalInner) {
-    const fromRect = originCardEl.getBoundingClientRect();
+  // morph the box outward from the clicked card's exact position/size
+  if (lastCardEl && modalInner) {
+    const fromRect = lastCardEl.getBoundingClientRect();
     const toRect = modalInner.getBoundingClientRect();
     const scaleX = fromRect.width / toRect.width;
     const scaleY = fromRect.height / toRect.height;
-    const deltaX = (fromRect.left + fromRect.width / 2) - (toRect.left + toRect.width / 2);
-    const deltaY = (fromRect.top + fromRect.height / 2) - (toRect.top + toRect.height / 2);
+    const deltaX = fromRect.left + fromRect.width / 2 - (toRect.left + toRect.width / 2);
+    const deltaY = fromRect.top + fromRect.height / 2 - (toRect.top + toRect.height / 2);
     modalInner.style.transition = 'none';
     modalInner.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
-    void modalInner.offsetWidth; // force the browser to register the start position
+    modalInner.style.opacity = '0';
+    modalInner.style.filter = 'blur(6px)';
+    void modalInner.offsetWidth; // force reflow so the "from" state actually paints
   }
 
   detailModal.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  if (!reducedMotion && originCardEl && modalInner) {
-    requestAnimationFrame(() => {
-      modalInner.style.transition = '';
-      modalInner.style.transform = 'translate(0,0) scale(1,1)';
-    });
-  }
-
-  // stagger the thumb, title, meta, each bullet, then each tech chip, in sequence
-  const staggerItems = detailContent.querySelectorAll('.stagger-item');
-  staggerItems.forEach((el, i) => {
-    el.style.transitionDelay = (0.15 + i * 0.09) + 's';
-  });
-  const staggerChips = detailContent.querySelectorAll('.stagger-chip');
-  const chipBaseDelay = 0.15 + staggerItems.length * 0.09 + 0.1;
-  staggerChips.forEach((el, i) => {
-    el.style.transitionDelay = (chipBaseDelay + i * 0.06) + 's';
-  });
   requestAnimationFrame(() => {
-    detailContent.classList.add('stagger-in');
+    if (modalInner) {
+      modalInner.style.transition = 'transform .5s cubic-bezier(.2,.85,.25,1), filter .4s ease, opacity .3s ease';
+      modalInner.style.transform = 'translate(0,0) scale(1,1)';
+      modalInner.style.opacity = '1';
+      modalInner.style.filter = 'blur(0px)';
+    }
   });
 
-  // pulse the highlighted stats shortly after everything has appeared
-  setTimeout(() => {
-    detailContent.querySelectorAll('.stat-highlight').forEach((el, i) => {
-      setTimeout(() => el.classList.add('pulse'), i * 90);
-    });
-  }, (chipBaseDelay + staggerChips.length * 0.06) * 1000 + 200);
+  // type the bullet points out sequentially, once the box has mostly finished opening
+  setTimeout(() => typeBullets(bulletEls, bulletTexts, 0), 260);
+}
+
+function typeBullets(bulletEls, texts, index) {
+  if (index >= bulletEls.length) {
+    // reveal the tech chips as a block once all bullets are done
+    const chips = detailContent.querySelector('.tech-fade');
+    if (chips) chips.classList.add('show');
+    return;
+  }
+  const li = bulletEls[index];
+  const text = texts[index];
+  let i = 0;
+  function typeChar() {
+    li.textContent = text.slice(0, i);
+    i++;
+    if (i <= text.length) {
+      setTimeout(typeChar, 12);
+    } else {
+      setTimeout(() => typeBullets(bulletEls, texts, index + 1), 120);
+    }
+  }
+  typeChar();
 }
 
 function closeDetail() {
   if (!detailModal) return;
   const modalInner = detailModal.querySelector('.detail-modal-inner');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // morph the box back down into the card it opened from — the exact reverse of openDetail
-  if (!reducedMotion && lastCardOriginEl && modalInner) {
-    const originRect = lastCardOriginEl.getBoundingClientRect();
+  // morph the box back down to the card it came from
+  if (lastCardEl && modalInner) {
+    const originRect = lastCardEl.getBoundingClientRect();
     const currentRect = modalInner.getBoundingClientRect();
     const scaleX = originRect.width / currentRect.width;
     const scaleY = originRect.height / currentRect.height;
     const deltaX = originRect.left + originRect.width / 2 - (currentRect.left + currentRect.width / 2);
     const deltaY = originRect.top + originRect.height / 2 - (currentRect.top + currentRect.height / 2);
-    modalInner.style.transition = 'transform .4s cubic-bezier(.4,0,.2,1), opacity .3s ease, filter .3s ease';
+    modalInner.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1), filter .3s ease, opacity .3s ease';
     modalInner.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+    modalInner.style.opacity = '0';
+    modalInner.style.filter = 'blur(6px)';
   }
 
   detailModal.classList.remove('open');
@@ -498,15 +427,16 @@ function closeDetail() {
     if (modalInner) {
       modalInner.style.transition = '';
       modalInner.style.transform = '';
+      modalInner.style.opacity = '';
+      modalInner.style.filter = '';
     }
-    lastCardOriginEl = null;
-  }, 420);
+    lastCardEl = null;
+  }, 380);
 }
 
 function wireDetailCards(selector, dataMap) {
   document.querySelectorAll(selector).forEach(card => {
     const key = card.dataset.exp || card.dataset.edu || card.dataset.proj;
-    const thumbEl = card.querySelector('.carousel-thumb, .timeline-thumb-big, .project-thumb') || card;
 
     // tactile press feedback
     const press = () => card.classList.add('card-pressed');
@@ -515,20 +445,16 @@ function wireDetailCards(selector, dataMap) {
     card.addEventListener('touchstart', press, { passive: true });
     ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(ev => card.addEventListener(ev, release));
 
-    // flash a ring on the card's thumbnail to confirm the pick, then morph the box open
-    const trigger = () => {
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      thumbEl.classList.remove('card-ring-flash');
-      void thumbEl.offsetWidth; // restart the flash if it's already mid-animation
-      thumbEl.classList.add('card-ring-flash');
-      setTimeout(() => openDetail(dataMap[key], null, card), reducedMotion ? 0 : 200);
-    };
-
-    card.addEventListener('click', trigger);
+    function open(e) {
+      card.classList.add('click-ring');
+      setTimeout(() => card.classList.remove('click-ring'), 500);
+      openDetail(dataMap[key], e, card);
+    }
+    card.addEventListener('click', open);
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        trigger();
+        open(null);
       }
     });
   });
@@ -544,13 +470,42 @@ if (detailModal) {
   });
 }
 document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  if (lightboxEl && lightboxEl.classList.contains('open')) {
-    hideLightbox();
-  } else {
+  if (e.key === 'Escape') {
     closeDetail();
+    closeLightbox();
   }
 });
+
+// image lightbox — click the thumbnail inside an open box to see it larger
+const imageLightbox = document.getElementById('imageLightbox');
+const lightboxInner = document.getElementById('lightboxInner');
+function openLightbox(thumbEl) {
+  if (!imageLightbox || !lightboxInner || !thumbEl) return;
+  lightboxInner.innerHTML = thumbEl.innerHTML;
+  const bg = window.getComputedStyle(thumbEl).backgroundImage;
+  lightboxInner.style.backgroundImage = bg && bg !== 'none' ? bg : '';
+  imageLightbox.classList.add('open');
+}
+function closeLightbox() {
+  if (!imageLightbox) return;
+  imageLightbox.classList.remove('open');
+}
+document.addEventListener('click', (e) => {
+  const thumb = e.target.closest('.detail-thumb');
+  if (thumb) {
+    e.stopPropagation();
+    openLightbox(thumb);
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 'Enter' || e.key === ' ') && document.activeElement && document.activeElement.classList.contains('detail-thumb')) {
+    e.preventDefault();
+    openLightbox(document.activeElement);
+  }
+});
+if (imageLightbox) {
+  imageLightbox.addEventListener('click', closeLightbox);
+}
 
 // Carousel arrow scrolling (home page previews)
 document.querySelectorAll('.carousel-arrow').forEach(btn => {
