@@ -479,7 +479,14 @@
 
     typeText(title, d.title, 24, 90);
     typeText(meta, d.meta, 17, 600);
-    typeText(desc, d.description, 10, 980);
+    const descriptionSpeed = 10;
+    const descriptionDelay = 980;
+    typeText(desc, d.description, descriptionSpeed, descriptionDelay);
+
+    // Start the points only AFTER the description has completely finished typing.
+    // This prevents the bullet points from appearing over/alongside the last
+    // words of the description, especially on longer descriptions or mobile.
+    const pointsStart = descriptionDelay + (d.description.length + 1) * descriptionSpeed + 320;
 
     d.points.forEach((point, i) => {
       const li = document.createElement('li');
@@ -490,7 +497,7 @@
       timers.push(setTimeout(() => {
         li.style.opacity = '1';
         li.style.transform = 'translateY(0)';
-      }, 1450 + i * 220));
+      }, pointsStart + i * 220));
     });
     setTimeout(() => back.focus(), 80);
   };
