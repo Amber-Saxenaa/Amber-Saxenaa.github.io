@@ -40,48 +40,137 @@
   </p>
 </section>
 
-<section class="simple-skills" id="skills-showcase">
-  <div class="simple-skills-inner">
-    <div class="section-head simple-skills-head reveal-up">
-      <p class="section-eyebrow">Skills</p>
-      <h2>A simple look at my toolkit.</h2>
-      <p class="simple-skills-intro">The tools I use most, shown with clear self-assessed levels.</p>
+<section class="skills-command" id="skills-showcase">
+  <div class="skills-command-bg"></div>
+  <div class="skills-command-inner">
+    <div class="skills-intro reveal-up">
+      <div>
+        <p class="section-eyebrow">Skill Stack / 01</p>
+        <h2>A living map of what I work with.</h2>
+      </div>
+      <p class="skills-intro-copy">Tools I use, analytical skills I practise, and areas I'm actively developing — presented as an interactive skill system instead of static progress bars.</p>
     </div>
 
-    <div class="simple-skill-grid">
-      <article class="simple-skill-card reveal">
-        <div class="simple-skill-top"><span>01</span><strong>Excel</strong><b>90%</b></div>
-        <p>Reporting · Models · Analysis</p>
-        <div class="simple-skill-bar"><i style="--w:90%"></i></div>
-        <small>Advanced</small>
-      </article>
-      <article class="simple-skill-card reveal">
-        <div class="simple-skill-top"><span>02</span><strong>Power BI</strong><b>85%</b></div>
-        <p>Dashboards · DAX · Insights</p>
-        <div class="simple-skill-bar"><i style="--w:85%"></i></div>
-        <small>Advanced</small>
-      </article>
-      <article class="simple-skill-card reveal">
-        <div class="simple-skill-top"><span>03</span><strong>SQL</strong><b>55%</b></div>
-        <p>Queries · Filtering · Data</p>
-        <div class="simple-skill-bar"><i style="--w:55%"></i></div>
-        <small>Building</small>
-      </article>
-      <article class="simple-skill-card reveal">
-        <div class="simple-skill-top"><span>04</span><strong>Python</strong><b>45%</b></div>
-        <p>Analysis · Automation · ETL</p>
-        <div class="simple-skill-bar"><i style="--w:45%"></i></div>
-        <small>Building</small>
-      </article>
+    <div class="skills-orbit-layout">
+      <div class="skill-orbit-panel reveal">
+        <div class="orbit-glow"></div>
+        <div class="orbit-ring orbit-ring-1"></div>
+        <div class="orbit-ring orbit-ring-2"></div>
+        <div class="orbit-ring orbit-ring-3"></div>
+        <div class="orbit-core">
+          <span class="orbit-core-kicker">DATA</span>
+          <strong>STACK</strong>
+          <small>TOOLS + ANALYSIS</small>
+        </div>
+        <div class="orbit-node orbit-node-1" data-label="Excel"><span>EX</span></div>
+        <div class="orbit-node orbit-node-2" data-label="Power BI"><span>BI</span></div>
+        <div class="orbit-node orbit-node-3" data-label="SQL"><span>SQL</span></div>
+        <div class="orbit-node orbit-node-4" data-label="Python"><span>PY</span></div>
+        <div class="orbit-node orbit-node-5" data-label="AI"><span>AI</span></div>
+        <div class="orbit-scan"></div>
+      </div>
+
+      <div class="skills-category-grid">
+        <article class="skill-category-card featured reveal" style="--delay:.05s">
+          <div class="skill-category-top"><span class="skill-category-index">01</span><span class="skill-category-label">Core Tools</span><span class="skill-category-line"></span></div>
+          <h3>Build the workflow.</h3>
+          <p class="skill-category-desc">The tools at the centre of my day-to-day reporting and data work.</p>
+          <div class="skill-node-grid">
+            <div class="skill-node" data-level="90"><div class="skill-ring"><span>90</span></div><div><strong>Excel</strong><small>Reporting</small></div></div>
+            <div class="skill-node" data-level="85"><div class="skill-ring"><span>85</span></div><div><strong>Power BI</strong><small>Dashboards</small></div></div>
+            <div class="skill-node" data-level="55"><div class="skill-ring"><span>55</span></div><div><strong>SQL</strong><small>Queries</small></div></div>
+            <div class="skill-node" data-level="45"><div class="skill-ring"><span>45</span></div><div><strong>Python</strong><small>Analysis</small></div></div>
+          </div>
+        </article>
+
+        <article class="skill-category-card reveal" style="--delay:.12s">
+          <div class="skill-category-top"><span class="skill-category-index">02</span><span class="skill-category-label">Reporting &amp; Analysis</span><span class="skill-category-line"></span></div>
+          <h3>Turn data into signals.</h3>
+          <div class="skill-pill-list">
+            <span class="skill-pill" data-level="85"><b>KPI Dashboards</b><i><em></em></i><small>85%</small></span>
+            <span class="skill-pill" data-level="80"><b>Trend Analysis</b><i><em></em></i><small>80%</small></span>
+            <span class="skill-pill" data-level="75"><b>Power Query</b><i><em></em></i><small>75%</small></span>
+            <span class="skill-pill" data-level="70"><b>Data-Driven Insights</b><i><em></em></i><small>70%</small></span>
+          </div>
+        </article>
+
+        <article class="skill-category-card reveal" style="--delay:.19s">
+          <div class="skill-category-top"><span class="skill-category-index">03</span><span class="skill-category-label">Domain Knowledge</span><span class="skill-category-line"></span></div>
+          <h3>Understand the business.</h3>
+          <div class="skill-pill-list">
+            <span class="skill-pill" data-level="80"><b>Retail Analysis</b><i><em></em></i><small>80%</small></span>
+            <span class="skill-pill" data-level="70"><b>Customer Analytics</b><i><em></em></i><small>70%</small></span>
+            <span class="skill-pill" data-level="60"><b>CRM Systems</b><i><em></em></i><small>60%</small></span>
+          </div>
+        </article>
+
+        <article class="skill-category-card skill-category-card--emerging reveal" style="--delay:.26s">
+          <div class="skill-category-top"><span class="skill-category-index">04</span><span class="skill-category-label">Emerging</span><span class="skill-category-line"></span></div>
+          <h3>Keep expanding.</h3>
+          <div class="skill-pill-list">
+            <span class="skill-pill" data-level="55"><b>Generative AI</b><i><em></em></i><small>55%</small></span>
+            <span class="skill-pill" data-level="50"><b>SaaS Tools</b><i><em></em></i><small>50%</small></span>
+          </div>
+          <div class="learning-pulse"><span></span>Currently developing</div>
+        </article>
+      </div>
     </div>
 
-    <div class="simple-skill-groups">
-      <article class="simple-group reveal"><span class="simple-group-label">REPORTING & ANALYSIS</span><h3>What I work with</h3><div class="simple-pills"><span>KPI Dashboards</span><span>Trend Analysis</span><span>Power Query</span><span>Data-Driven Insights</span></div></article>
-      <article class="simple-group reveal"><span class="simple-group-label">DOMAIN KNOWLEDGE</span><h3>Business context</h3><div class="simple-pills"><span>Retail Analysis</span><span>Customer Analytics</span><span>CRM Systems</span></div></article>
-      <article class="simple-group reveal"><span class="simple-group-label">EMERGING</span><h3>Currently learning</h3><div class="simple-pills"><span>Generative AI</span><span>SaaS Tools</span></div></article>
+    <div class="skills-footer-strip reveal">
+      <span class="skills-footer-dot"></span>
+      <span>Comfort levels are self-assessed and intentionally honest.</span>
+      <span class="skills-footer-rule"></span>
+      <span>01 — 04</span>
     </div>
   </div>
 </section>
+
+<script>
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rings = document.querySelectorAll('.skill-ring');
+  const pills = document.querySelectorAll('.skill-pill');
+
+  const animateSkills = () => {
+    rings.forEach((ring) => {
+      const node = ring.closest('.skill-node');
+      const level = Number(node?.dataset.level || 0);
+      ring.style.setProperty('--level', `${level * 3.6}deg`);
+    });
+    pills.forEach((pill, index) => {
+      pill.style.setProperty('--level', `${Number(pill.dataset.level || 0)}%`);
+      pill.style.setProperty('--pill-delay', `${index * 80}ms`);
+    });
+  };
+
+  if (reduceMotion) animateSkills();
+  else {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        animateSkills();
+        observer.disconnect();
+      }
+    }, { threshold: .2 });
+    const target = document.querySelector('.skills-command');
+    if (target) observer.observe(target);
+  }
+
+  document.querySelectorAll('.skill-category-card').forEach(card => {
+    card.addEventListener('pointermove', (event) => {
+      if (window.innerWidth < 861 || reduceMotion) return;
+      const r = card.getBoundingClientRect();
+      const x = (event.clientX - r.left) / r.width - .5;
+      const y = (event.clientY - r.top) / r.height - .5;
+      card.style.setProperty('--rx', `${y * -3}deg`);
+      card.style.setProperty('--ry', `${x * 3}deg`);
+    });
+    card.addEventListener('pointerleave', () => {
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+  });
+})();
+</script>
 
 <section class="page-nav-footer reveal">
   <a href="education.html" class="btn btn-ghost">← Education</a>
