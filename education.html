@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=16">
+<link rel="stylesheet" href="style.css?v=17">
 </head>
 <body class="page-loading">
 
@@ -43,22 +43,32 @@
   <div class="timeline-center">
 
     <!-- Education 1 — LEFT -->
-    <div class="timeline-center-item left reveal" data-edu="edu1" tabindex="0" role="button">
+    <div class="timeline-center-item left reveal edu-timeline-item" data-edu="edu1" tabindex="0" role="button" aria-label="Open BCA education details">
       <div class="timeline-center-dot"></div>
       <div class="timeline-center-content">
         <h3>Bachelor of Computer Applications (BCA)</h3>
         <p class="timeline-date-big">2025 – Present</p>
-        <div class="timeline-thumb-big tilt-el" data-tag="BCA"></div>
+        <div class="timeline-thumb-big tilt-el" data-tag="">
+          <div class="education-thumb-content">
+            <div class="education-icon">🎓</div>
+            <span class="education-thumb-label">BCA</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Education 2 — RIGHT -->
-    <div class="timeline-center-item right reveal" data-edu="edu2" tabindex="0" role="button">
+    <div class="timeline-center-item right reveal edu-timeline-item" data-edu="edu2" tabindex="0" role="button" aria-label="Open Class XII education details">
       <div class="timeline-center-dot"></div>
       <div class="timeline-center-content">
         <h3>Class XII (Higher Secondary)</h3>
         <p class="timeline-date-big">2022 – 2023</p>
-        <div class="timeline-thumb-big tilt-el" data-tag="XII"></div>
+        <div class="timeline-thumb-big tilt-el" data-tag="">
+          <div class="education-thumb-content">
+            <div class="education-icon">📚</div>
+            <span class="education-thumb-label">Class XII</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -120,6 +130,139 @@
   </div>
 </footer>
 
+<!-- EDUCATION DETAIL MODAL -->
+<div class="education-detail-modal" id="educationDetailModal" aria-hidden="true">
+  <div class="education-detail-inner" role="dialog" aria-modal="true" aria-labelledby="educationDetailTitle">
+    <button class="education-detail-back" id="educationDetailBack" type="button">← Back</button>
+    <div class="education-detail-grid">
+      <div class="education-detail-visual" id="educationDetailVisual"></div>
+      <div class="education-detail-content">
+        <h2 id="educationDetailTitle"></h2>
+        <p class="education-detail-meta" id="educationDetailMeta"></p>
+        <p class="education-detail-description" id="educationDetailDescription"></p>
+        <ul class="education-detail-list" id="educationDetailList"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="script.js?v=9"></script>
+<script>
+(function(){
+  const modal = document.getElementById("educationDetailModal");
+  const back = document.getElementById("educationDetailBack");
+  const title = document.getElementById("educationDetailTitle");
+  const meta = document.getElementById("educationDetailMeta");
+  const desc = document.getElementById("educationDetailDescription");
+  const list = document.getElementById("educationDetailList");
+  const visual = document.getElementById("educationDetailVisual");
+  const items = document.querySelectorAll(".edu-timeline-item[data-edu]");
+  if(!modal || !items.length) return;
+
+  const education = {
+    edu1: {
+      title: "Bachelor of Computer Applications (BCA)",
+      meta: "Amity University • 2025 – Present",
+      icon: "🎓", tag: "BCA",
+      description: "Pursuing BCA alongside professional MIS and data analytics work, building on a foundation already applied in real reporting and dashboard projects.",
+      points: [
+        "Building a stronger foundation in programming and computer applications.",
+        "Developing skills that complement my professional Excel, Power BI, SQL and Python work.",
+        "Applying academic learning through practical dashboards, reporting and analytics projects."
+      ]
+    },
+    edu2: {
+      title: "Class XII (Higher Secondary)",
+      meta: "Your School Name • 2022 – 2023",
+      icon: "📚", tag: "XII",
+      description: "Completed higher secondary education, developing the academic foundation that led into my current BCA and analytics journey.",
+      points: [
+        "Higher secondary academic foundation completed in 2022 – 2023.",
+        "Commerce / Science stream with Mathematics or Computer Science.",
+        "Built the foundation for continued learning in technology and data."
+      ]
+    }
+  };
+
+  let typingTimers = [];
+  let previousFocus = null;
+
+  function clearTyping(){
+    typingTimers.forEach(clearTimeout);
+    typingTimers = [];
+    [title, meta, desc].forEach(el => el.innerHTML = "");
+    list.innerHTML = "";
+  }
+
+  function typeText(el, text, speed, delay){
+    const token = document.createElement("span");
+    token.className = "edu-typewriter";
+    const caret = document.createElement("span");
+    caret.className = "edu-caret";
+    el.appendChild(token);
+    el.appendChild(caret);
+    let i = 0;
+    const run = () => {
+      if(i <= text.length){
+        token.textContent = text.slice(0,i++);
+        typingTimers.push(setTimeout(run, speed));
+      } else caret.remove();
+    };
+    typingTimers.push(setTimeout(run, delay));
+  }
+
+  function openEducation(key){
+    const data = education[key];
+    if(!data) return;
+    previousFocus = document.activeElement;
+    clearTyping();
+    visual.innerHTML = '<div class="big-icon">'+data.icon+'</div><span>'+data.tag+'</span>';
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+
+    typeText(title, data.title, 26, 120);
+    typeText(meta, data.meta, 18, 650);
+    typeText(desc, data.description, 11, 1050);
+
+    data.points.forEach((point, index) => {
+      const li = document.createElement("li");
+      li.style.opacity = "0";
+      li.style.transform = "translateY(6px)";
+      li.textContent = point;
+      list.appendChild(li);
+      typingTimers.push(setTimeout(() => {
+        li.style.transition = "opacity .4s ease, transform .4s ease, background .2s ease, border-color .2s ease, color .2s ease";
+        li.style.opacity = "1";
+        li.style.transform = "translateY(0)";
+      }, 1550 + index * 260));
+    });
+    setTimeout(() => back.focus(), 50);
+  }
+
+  function closeEducation(){
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+    clearTyping();
+    if(previousFocus && previousFocus.focus) previousFocus.focus();
+  }
+
+  items.forEach(item => {
+    item.addEventListener("click", () => openEducation(item.dataset.edu));
+    item.addEventListener("keydown", e => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        openEducation(item.dataset.edu);
+      }
+    });
+  });
+
+  back.addEventListener("click", closeEducation);
+  modal.addEventListener("click", e => { if(e.target === modal) closeEducation(); });
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && modal.classList.contains("open")) closeEducation(); });
+})();
+</script>
+
 </body>
 </html>

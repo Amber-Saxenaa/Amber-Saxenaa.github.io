@@ -992,3 +992,239 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important; transition:none !important;}
 }
+
+/* =========================================================
+   EDUCATION — INTERACTIVE TIMELINE ENHANCEMENTS
+   ========================================================= */
+.edu-timeline-item .timeline-center-content{
+  transition:transform .25s ease, filter .25s ease;
+}
+
+.edu-timeline-item:hover .timeline-center-content{
+  transform:translateY(-4px);
+}
+
+/* Glowing connector from the center line to the hovered card */
+.edu-timeline-item::after{
+  content:'';
+  position:absolute;
+  top:13px;
+  height:2px;
+  width:52px;
+  background:var(--border);
+  transition:background .25s ease, box-shadow .25s ease, width .25s ease;
+  pointer-events:none;
+}
+.edu-timeline-item.left::after{right:0;}
+.edu-timeline-item.right::after{left:0;}
+.edu-timeline-item:hover::after{
+  background:var(--accent);
+  box-shadow:0 0 12px rgba(45,212,191,.7);
+}
+
+.edu-timeline-item:hover .timeline-center-dot{
+  background:#fff;
+  box-shadow:0 0 0 5px var(--accent-soft), 0 0 18px rgba(45,212,191,.85);
+}
+
+/* Keep the education thumbnail feeling like the existing experience cards */
+.education-thumb-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  height:100%;
+  width:100%;
+}
+.education-icon{
+  width:58px;
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:16px;
+  border:1px solid rgba(45,212,191,.28);
+  background:rgba(45,212,191,.08);
+  font-size:27px;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.edu-timeline-item:hover .education-icon{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 0 22px rgba(45,212,191,.16);
+}
+.education-thumb-label{
+  font-family:'JetBrains Mono', monospace;
+  color:var(--accent);
+  font-size:1rem;
+}
+
+/* Education detail modal */
+.education-detail-modal{
+  position:fixed;
+  inset:0;
+  z-index:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+  background:rgba(5,8,11,.80);
+  backdrop-filter:blur(7px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .28s ease, visibility .28s ease;
+}
+.education-detail-modal.open{
+  opacity:1;
+  visibility:visible;
+}
+.education-detail-inner{
+  width:min(920px, 94vw);
+  max-height:88vh;
+  overflow:auto;
+  position:relative;
+  padding:42px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:var(--surface);
+  box-shadow:0 30px 90px rgba(0,0,0,.5);
+  transform:translateY(18px) scale(.97);
+  transition:transform .38s cubic-bezier(.2,.85,.25,1);
+}
+.education-detail-modal.open .education-detail-inner{
+  transform:translateY(0) scale(1);
+}
+.education-detail-inner::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  border-radius:18px 18px 0 0;
+  background:linear-gradient(90deg,var(--accent),var(--amber));
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .55s ease .12s;
+}
+.education-detail-modal.open .education-detail-inner::before{transform:scaleX(1);}
+
+.education-detail-back{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-dim);
+  padding:8px 16px;
+  font-size:.85rem;
+  cursor:pointer;
+  margin-bottom:28px;
+  transition:border-color .2s,color .2s,transform .2s;
+}
+.education-detail-back:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  transform:translateX(-2px);
+}
+
+.education-detail-grid{
+  display:grid;
+  grid-template-columns:230px 1fr;
+  gap:34px;
+  align-items:start;
+}
+.education-detail-visual{
+  min-height:300px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:linear-gradient(145deg,rgba(45,212,191,.11),rgba(245,166,35,.10));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:14px;
+  color:var(--accent);
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.15rem;
+}
+.education-detail-visual .big-icon{font-size:54px;filter:drop-shadow(0 0 14px rgba(45,212,191,.25));}
+.education-detail-content h2{
+  font-size:clamp(1.5rem,3vw,2.2rem);
+  line-height:1.2;
+  margin-bottom:8px;
+}
+.education-detail-meta{
+  color:var(--amber);
+  font-weight:600;
+  font-size:.9rem;
+  margin-bottom:20px;
+}
+.education-detail-description{
+  color:var(--text-dim);
+  font-size:.96rem;
+  line-height:1.75;
+  margin-bottom:22px;
+}
+.education-detail-list{
+  display:grid;
+  gap:10px;
+  margin-top:10px;
+}
+.education-detail-list li{
+  position:relative;
+  padding:11px 14px 11px 34px;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:var(--text-dim);
+  background:transparent;
+  transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease;
+}
+.education-detail-list li::before{
+  content:'→';
+  position:absolute;
+  left:13px;
+  color:var(--accent);
+  opacity:.7;
+  transition:transform .2s ease,opacity .2s ease;
+}
+/* Highlight the exact line under the cursor */
+.education-detail-list li:hover{
+  background:rgba(45,212,191,.075);
+  border-color:rgba(45,212,191,.22);
+  color:var(--text);
+  transform:translateX(5px);
+}
+.education-detail-list li:hover::before{
+  transform:translateX(3px);
+  opacity:1;
+}
+
+/* Typewriter / writing animation */
+.edu-typewriter{
+  display:inline;
+  white-space:pre-wrap;
+}
+.edu-caret{
+  display:inline-block;
+  width:2px;
+  height:1em;
+  margin-left:3px;
+  vertical-align:-2px;
+  background:var(--accent);
+  animation:eduCaretBlink .75s step-end infinite;
+}
+@keyframes eduCaretBlink{50%{opacity:0;}}
+
+@media (max-width:700px){
+  .edu-timeline-item::after{display:none;}
+  .education-detail-grid{grid-template-columns:1fr;}
+  .education-detail-visual{min-height:170px;}
+  .education-detail-inner{padding:28px 20px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .edu-caret{animation:none;}
+  .education-detail-inner,.edu-timeline-item .timeline-center-content{transition:none;}
+}
