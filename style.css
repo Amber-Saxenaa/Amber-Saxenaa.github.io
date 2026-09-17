@@ -1311,3 +1311,64 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   .portfolio-detail-modal,.portfolio-detail-inner,.portfolio-detail-back,.portfolio-detail-list li{transition:none;}
   .portfolio-caret{animation:none;}
 }
+
+/* =========================================================
+   SKILLS — MOTION COMMAND CENTER
+   ========================================================= */
+.skills-command{
+  position:relative;max-width:none;overflow:hidden;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:
+    radial-gradient(circle at 18% 35%,rgba(45,212,191,.08),transparent 25%),
+    radial-gradient(circle at 86% 70%,rgba(245,166,35,.06),transparent 24%),
+    var(--bg-alt);
+}
+.skills-command-bg{position:absolute;inset:0;pointer-events:none;opacity:.45;background-image:linear-gradient(rgba(148,167,181,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(148,167,181,.035) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent);}
+.skills-command-inner{position:relative;z-index:1;max-width:1120px;margin:auto;padding:100px 24px 80px;}
+.skills-intro{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:48px;}
+.skills-intro h2{font-size:clamp(1.8rem,4vw,3rem);max-width:680px;line-height:1.05;}
+.skills-intro-copy{max-width:390px;color:var(--text-dim);font-size:.9rem;line-height:1.75;}
+.skills-orbit-layout{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(0,1.55fr);gap:28px;align-items:stretch;}
+.skill-orbit-panel{min-height:650px;position:relative;overflow:hidden;border:1px solid var(--border);border-radius:24px;background:linear-gradient(145deg,rgba(20,27,35,.94),rgba(9,14,19,.98));display:grid;place-items:center;box-shadow:0 24px 80px rgba(0,0,0,.24);}
+.skill-orbit-panel::before{content:'';position:absolute;inset:12px;border:1px solid rgba(45,212,191,.07);border-radius:18px;}
+.orbit-glow{position:absolute;width:270px;height:270px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.18),transparent 68%);filter:blur(6px);animation:orbitGlow 4s ease-in-out infinite;}
+@keyframes orbitGlow{0%,100%{transform:scale(.9);opacity:.6}50%{transform:scale(1.12);opacity:1}}
+.orbit-ring{position:absolute;border:1px solid rgba(45,212,191,.16);border-radius:50%;}
+.orbit-ring-1{width:190px;height:190px;animation:orbitSpin 18s linear infinite;}
+.orbit-ring-2{width:330px;height:330px;border-style:dashed;animation:orbitSpin 28s linear infinite reverse;}
+.orbit-ring-3{width:500px;height:500px;border-color:rgba(148,167,181,.08);animation:orbitSpin 42s linear infinite;}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+.orbit-core{position:relative;z-index:3;width:142px;height:142px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(45,212,191,.4);background:radial-gradient(circle at 35% 25%,#20383a,#0e171b 68%);box-shadow:0 0 0 8px rgba(45,212,191,.035),0 0 45px rgba(45,212,191,.12);text-align:center;animation:coreFloat 4s ease-in-out infinite;}
+@keyframes coreFloat{50%{transform:translateY(-7px)}}
+.orbit-core-kicker{font:500 .62rem 'JetBrains Mono',monospace;letter-spacing:.22em;color:var(--accent);}
+.orbit-core strong{font:700 1.25rem 'Space Grotesk',sans-serif;letter-spacing:.08em;}
+.orbit-core small{font:500 .5rem 'JetBrains Mono',monospace;color:var(--text-dim);letter-spacing:.12em;margin-top:4px;}
+.orbit-node{position:absolute;z-index:4;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(13,19,24,.94);border:1px solid var(--border);color:var(--text);font:600 .66rem 'JetBrains Mono',monospace;box-shadow:0 8px 25px rgba(0,0,0,.3);transition:transform .25s,border-color .25s,color .25s,box-shadow .25s;}
+.orbit-node::after{content:attr(data-label);position:absolute;white-space:nowrap;bottom:-23px;color:var(--text-dim);font:500 .56rem 'JetBrains Mono',monospace;letter-spacing:.04em;opacity:.8;}
+.orbit-node:hover{transform:scale(1.16);border-color:var(--accent);color:var(--accent);box-shadow:0 0 25px rgba(45,212,191,.2);}
+.orbit-node-1{top:18%;left:22%;}.orbit-node-2{top:23%;right:17%;}.orbit-node-3{bottom:21%;right:19%;}.orbit-node-4{bottom:17%;left:23%;}.orbit-node-5{top:48%;right:6%;}
+.orbit-scan{position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 14px rgba(45,212,191,.55);opacity:.25;animation:scanLine 4.5s ease-in-out infinite;}
+@keyframes scanLine{0%,100%{transform:translateY(-230px)}50%{transform:translateY(230px)}}
+.skills-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+.skill-category-card{position:relative;min-height:316px;padding:24px;border:1px solid var(--border);border-radius:20px;background:rgba(20,27,35,.74);backdrop-filter:blur(10px);overflow:hidden;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .18s ease,border-color .3s,box-shadow .3s;transition-delay:var(--delay,0s);}
+.skill-category-card::before{content:'';position:absolute;inset:-60% -20%;background:linear-gradient(115deg,transparent 40%,rgba(45,212,191,.08) 50%,transparent 60%);transform:translateX(-35%) rotate(10deg);transition:transform .7s ease;pointer-events:none;}
+.skill-category-card:hover{border-color:rgba(45,212,191,.5);box-shadow:0 25px 55px -30px rgba(45,212,191,.35);}
+.skill-category-card:hover::before{transform:translateX(35%) rotate(10deg);}
+.skill-category-top{display:flex;align-items:center;gap:10px;margin-bottom:18px;color:var(--text-dim);font:500 .63rem 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;}
+.skill-category-index{color:var(--accent);}.skill-category-line{height:1px;flex:1;background:var(--border);}
+.skill-category-card h3{font-size:1.35rem;margin-bottom:8px;}.skill-category-desc{color:var(--text-dim);font-size:.82rem;line-height:1.6;margin-bottom:18px;}
+.skill-node-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:24px;}
+.skill-node{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid rgba(148,167,181,.09);border-radius:14px;background:rgba(255,255,255,.018);transition:transform .25s,border-color .25s,background .25s;}
+.skill-node:hover{transform:translateY(-3px);border-color:rgba(45,212,191,.28);background:rgba(45,212,191,.045);}
+.skill-ring{--level:0deg;width:48px;height:48px;flex:none;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) var(--level),rgba(148,167,181,.12) 0);position:relative;transform:rotate(-90deg);transition:background 1.2s cubic-bezier(.2,.8,.2,1);}
+.skill-ring::before{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--surface);}.skill-ring span{position:relative;z-index:1;transform:rotate(90deg);font:600 .61rem 'JetBrains Mono',monospace;color:var(--text);}
+.skill-node strong{display:block;font-size:.8rem;line-height:1.15;}.skill-node small{display:block;color:var(--text-dim);font-size:.62rem;margin-top:3px;}
+.skill-pill-list{display:grid;gap:12px;margin-top:24px;}.skill-pill{display:grid;grid-template-columns:minmax(0,1fr) 90px 34px;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;border:1px solid rgba(148,167,181,.09);background:rgba(255,255,255,.015);transition:transform .22s,border-color .22s,background .22s;}
+.skill-pill:hover{transform:translateX(5px);border-color:rgba(45,212,191,.3);background:rgba(45,212,191,.035);}.skill-pill b{font-size:.76rem;font-weight:500;}.skill-pill small{font:500 .61rem 'JetBrains Mono',monospace;color:var(--accent);text-align:right;}.skill-pill i{height:4px;border-radius:100px;background:rgba(148,167,181,.12);overflow:hidden;}.skill-pill i em{display:block;width:var(--level,0%);height:100%;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--amber));transform-origin:left;animation:pillFill .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--pill-delay,0ms);}
+@keyframes pillFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.skill-category-card--emerging{background:linear-gradient(145deg,rgba(20,27,35,.8),rgba(245,166,35,.035));}.skill-category-card--emerging .skill-category-label{color:var(--amber);}.skill-category-card--emerging .skill-category-index{color:var(--amber);}
+.learning-pulse{display:inline-flex;align-items:center;gap:8px;margin-top:22px;color:var(--text-dim);font:500 .62rem 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;}.learning-pulse span{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 0 rgba(245,166,35,.45);animation:pulseDot 1.8s infinite;}@keyframes pulseDot{70%{box-shadow:0 0 0 8px rgba(245,166,35,0)}}
+.skills-footer-strip{display:flex;align-items:center;gap:12px;margin-top:22px;padding:13px 2px;color:var(--text-dim);font:500 .62rem 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em;}.skills-footer-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}.skills-footer-rule{height:1px;flex:1;background:var(--border);}
+@media(max-width:900px){.skills-orbit-layout{grid-template-columns:1fr}.skill-orbit-panel{min-height:430px}.orbit-ring-3{width:360px;height:360px}.skills-intro{align-items:start;flex-direction:column;gap:16px}.skills-intro-copy{max-width:620px}}
+@media(max-width:620px){.skills-command-inner{padding:76px 18px 60px}.skills-category-grid{grid-template-columns:1fr}.skill-category-card{min-height:auto}.skill-orbit-panel{min-height:390px}.orbit-ring-2{width:280px;height:280px}.orbit-ring-3{width:330px;height:330px}.orbit-node-1{left:12%}.orbit-node-2{right:9%}.orbit-node-3{right:11%}.orbit-node-4{left:13%}.orbit-node-5{right:2%}.skill-node-grid{gap:8px}.skill-node{padding:8px}.skill-pill{grid-template-columns:minmax(0,1fr) 62px 30px}.skills-footer-strip{flex-wrap:wrap}.skills-footer-rule{flex-basis:100%;order:3}}
+@media(prefers-reduced-motion:reduce){.orbit-glow,.orbit-ring,.orbit-core,.orbit-scan,.learning-pulse span,.skill-pill i em{animation:none !important}.skill-category-card{transform:none !important;transition:none}.skill-ring{transition:none}.skill-category-card::before{display:none}}
