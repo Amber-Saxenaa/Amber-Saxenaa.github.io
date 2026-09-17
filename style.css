@@ -604,6 +604,16 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   padding-bottom:8px; scrollbar-width:none;
 }
 .carousel-track::-webkit-scrollbar{display:none;}
+/* fitted variant: spread items evenly to fill the section, no scrolling */
+.carousel-track--fit{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; overflow:visible;
+}
+.carousel-track--fit .carousel-card{flex:none; width:auto;}
+.carousel-track--fit .carousel-thumb{height:160px;}
+@media (max-width:860px){
+  .carousel-track--fit{grid-template-columns:1fr;}
+  .carousel-track--fit .carousel-thumb{height:180px;}
+}
 .carousel-card{
   flex:0 0 260px; scroll-snap-align:start;
   background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
