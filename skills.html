@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20">
+<link rel="stylesheet" href="style.css?v=16">
 </head>
 <body class="page-loading">
 
@@ -40,137 +40,65 @@
   </p>
 </section>
 
-<section class="skills-command" id="skills-showcase">
-  <div class="skills-command-bg"></div>
-  <div class="skills-command-inner">
-    <div class="skills-intro reveal-up">
-      <div>
-        <p class="section-eyebrow">Skill Stack / 01</p>
-        <h2>A living map of what I work with.</h2>
-      </div>
-      <p class="skills-intro-copy">Tools I use, analytical skills I practise, and areas I'm actively developing — presented as an interactive skill system instead of static progress bars.</p>
-    </div>
-
-    <div class="skills-orbit-layout">
-      <div class="skill-orbit-panel reveal">
-        <div class="orbit-glow"></div>
-        <div class="orbit-ring orbit-ring-1"></div>
-        <div class="orbit-ring orbit-ring-2"></div>
-        <div class="orbit-ring orbit-ring-3"></div>
-        <div class="orbit-core">
-          <span class="orbit-core-kicker">DATA</span>
-          <strong>STACK</strong>
-          <small>TOOLS + ANALYSIS</small>
-        </div>
-        <div class="orbit-node orbit-node-1" data-label="Excel"><span>EX</span></div>
-        <div class="orbit-node orbit-node-2" data-label="Power BI"><span>BI</span></div>
-        <div class="orbit-node orbit-node-3" data-label="SQL"><span>SQL</span></div>
-        <div class="orbit-node orbit-node-4" data-label="Python"><span>PY</span></div>
-        <div class="orbit-node orbit-node-5" data-label="AI"><span>AI</span></div>
-        <div class="orbit-scan"></div>
-      </div>
-
-      <div class="skills-category-grid">
-        <article class="skill-category-card featured reveal" style="--delay:.05s">
-          <div class="skill-category-top"><span class="skill-category-index">01</span><span class="skill-category-label">Core Tools</span><span class="skill-category-line"></span></div>
-          <h3>Build the workflow.</h3>
-          <p class="skill-category-desc">The tools at the centre of my day-to-day reporting and data work.</p>
-          <div class="skill-node-grid">
-            <div class="skill-node" data-level="90"><div class="skill-ring"><span>90</span></div><div><strong>Excel</strong><small>Reporting</small></div></div>
-            <div class="skill-node" data-level="85"><div class="skill-ring"><span>85</span></div><div><strong>Power BI</strong><small>Dashboards</small></div></div>
-            <div class="skill-node" data-level="55"><div class="skill-ring"><span>55</span></div><div><strong>SQL</strong><small>Queries</small></div></div>
-            <div class="skill-node" data-level="45"><div class="skill-ring"><span>45</span></div><div><strong>Python</strong><small>Analysis</small></div></div>
-          </div>
-        </article>
-
-        <article class="skill-category-card reveal" style="--delay:.12s">
-          <div class="skill-category-top"><span class="skill-category-index">02</span><span class="skill-category-label">Reporting &amp; Analysis</span><span class="skill-category-line"></span></div>
-          <h3>Turn data into signals.</h3>
-          <div class="skill-pill-list">
-            <span class="skill-pill" data-level="85"><b>KPI Dashboards</b><i><em></em></i><small>85%</small></span>
-            <span class="skill-pill" data-level="80"><b>Trend Analysis</b><i><em></em></i><small>80%</small></span>
-            <span class="skill-pill" data-level="75"><b>Power Query</b><i><em></em></i><small>75%</small></span>
-            <span class="skill-pill" data-level="70"><b>Data-Driven Insights</b><i><em></em></i><small>70%</small></span>
-          </div>
-        </article>
-
-        <article class="skill-category-card reveal" style="--delay:.19s">
-          <div class="skill-category-top"><span class="skill-category-index">03</span><span class="skill-category-label">Domain Knowledge</span><span class="skill-category-line"></span></div>
-          <h3>Understand the business.</h3>
-          <div class="skill-pill-list">
-            <span class="skill-pill" data-level="80"><b>Retail Analysis</b><i><em></em></i><small>80%</small></span>
-            <span class="skill-pill" data-level="70"><b>Customer Analytics</b><i><em></em></i><small>70%</small></span>
-            <span class="skill-pill" data-level="60"><b>CRM Systems</b><i><em></em></i><small>60%</small></span>
-          </div>
-        </article>
-
-        <article class="skill-category-card skill-category-card--emerging reveal" style="--delay:.26s">
-          <div class="skill-category-top"><span class="skill-category-index">04</span><span class="skill-category-label">Emerging</span><span class="skill-category-line"></span></div>
-          <h3>Keep expanding.</h3>
-          <div class="skill-pill-list">
-            <span class="skill-pill" data-level="55"><b>Generative AI</b><i><em></em></i><small>55%</small></span>
-            <span class="skill-pill" data-level="50"><b>SaaS Tools</b><i><em></em></i><small>50%</small></span>
-          </div>
-          <div class="learning-pulse"><span></span>Currently developing</div>
-        </article>
-      </div>
-    </div>
-
-    <div class="skills-footer-strip reveal">
-      <span class="skills-footer-dot"></span>
-      <span>Comfort levels are self-assessed and intentionally honest.</span>
-      <span class="skills-footer-rule"></span>
-      <span>01 — 04</span>
-    </div>
+<section class="section radar-section">
+  <div class="radar-wrap reveal">
+    <svg class="radar-chart" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- background grid rings -->
+      <polygon points="150,60 240,150 150,240 60,150" class="radar-grid" />
+      <polygon points="150,82.5 217.5,150 150,217.5 82.5,150" class="radar-grid" />
+      <polygon points="150,105 195,150 150,195 105,150" class="radar-grid" />
+      <polygon points="150,127.5 172.5,150 150,172.5 127.5,150" class="radar-grid" />
+      <!-- axis lines -->
+      <line x1="150" y1="150" x2="150" y2="60" class="radar-axis" />
+      <line x1="150" y1="150" x2="240" y2="150" class="radar-axis" />
+      <line x1="150" y1="150" x2="150" y2="240" class="radar-axis" />
+      <line x1="150" y1="150" x2="60" y2="150" class="radar-axis" />
+      <!-- data polygon: Core Tools (top) 69%, Reporting (right) 78%, Domain (bottom) 70%, Emerging (left) 53% -->
+      <polygon points="150,67.2 243.6,150 150,234 86.4,150" class="radar-shape" />
+      <circle cx="150" cy="67.2" r="4" class="radar-point" />
+      <circle cx="243.6" cy="150" r="4" class="radar-point" />
+      <circle cx="150" cy="234" r="4" class="radar-point" />
+      <circle cx="86.4" cy="150" r="4" class="radar-point" />
+      <!-- labels -->
+      <text x="150" y="42" class="radar-label" text-anchor="middle">Core Tools</text>
+      <text x="262" y="154" class="radar-label" text-anchor="start">Reporting</text>
+      <text x="150" y="266" class="radar-label" text-anchor="middle">Domain</text>
+      <text x="38" y="154" class="radar-label" text-anchor="end">Emerging</text>
+    </svg>
+    <p class="radar-caption">A rough shape of where my strengths sit today — based on the category averages below.</p>
   </div>
 </section>
 
-<script>
-(() => {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const rings = document.querySelectorAll('.skill-ring');
-  const pills = document.querySelectorAll('.skill-pill');
+<section class="section skills-page">
+  <div class="skill-block reveal">
+    <h3>Core Tools</h3>
+    <div class="skill-bar" data-level="90"><div class="skill-bar-label"><span>Excel</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="85"><div class="skill-bar-label"><span>Power BI</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="55"><div class="skill-bar-label"><span>SQL</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="45"><div class="skill-bar-label"><span>Python</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
 
-  const animateSkills = () => {
-    rings.forEach((ring) => {
-      const node = ring.closest('.skill-node');
-      const level = Number(node?.dataset.level || 0);
-      ring.style.setProperty('--level', `${level * 3.6}deg`);
-    });
-    pills.forEach((pill, index) => {
-      pill.style.setProperty('--level', `${Number(pill.dataset.level || 0)}%`);
-      pill.style.setProperty('--pill-delay', `${index * 80}ms`);
-    });
-  };
+  <div class="skill-block reveal">
+    <h3>Reporting & Analysis</h3>
+    <div class="skill-bar" data-level="85"><div class="skill-bar-label"><span>KPI Dashboards</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="80"><div class="skill-bar-label"><span>Trend Analysis</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="75"><div class="skill-bar-label"><span>Power Query</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="70"><div class="skill-bar-label"><span>Data-Driven Insights</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
 
-  if (reduceMotion) animateSkills();
-  else {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        animateSkills();
-        observer.disconnect();
-      }
-    }, { threshold: .2 });
-    const target = document.querySelector('.skills-command');
-    if (target) observer.observe(target);
-  }
+  <div class="skill-block reveal">
+    <h3>Domain Knowledge</h3>
+    <div class="skill-bar" data-level="80"><div class="skill-bar-label"><span>Retail Analysis</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="70"><div class="skill-bar-label"><span>Customer Analytics</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="60"><div class="skill-bar-label"><span>CRM Systems</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
 
-  document.querySelectorAll('.skill-category-card').forEach(card => {
-    card.addEventListener('pointermove', (event) => {
-      if (window.innerWidth < 861 || reduceMotion) return;
-      const r = card.getBoundingClientRect();
-      const x = (event.clientX - r.left) / r.width - .5;
-      const y = (event.clientY - r.top) / r.height - .5;
-      card.style.setProperty('--rx', `${y * -3}deg`);
-      card.style.setProperty('--ry', `${x * 3}deg`);
-    });
-    card.addEventListener('pointerleave', () => {
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-    });
-  });
-})();
-</script>
+  <div class="skill-block reveal">
+    <h3>Emerging</h3>
+    <div class="skill-bar" data-level="55"><div class="skill-bar-label"><span>Generative AI</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+    <div class="skill-bar" data-level="50"><div class="skill-bar-label"><span>SaaS Tools</span><span class="skill-pct"></span></div><div class="skill-bar-track"><div class="skill-bar-fill"></div></div></div>
+  </div>
+</section>
 
 <section class="page-nav-footer reveal">
   <a href="education.html" class="btn btn-ghost">← Education</a>
