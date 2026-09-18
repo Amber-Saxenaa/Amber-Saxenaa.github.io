@@ -800,8 +800,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       const meshCount=brightenGLB(model);
 
       /* The supplied model's source axes are flipped vertically; correct that here. */
-      model.rotation.x=0;
-      model.rotation.y=Math.PI;
+      model.rotation.set(0,Math.PI,0);
 
       stage.add(model);
 
@@ -918,7 +917,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     if(modelReady){
       /* 3/4 idle turn + cursor response. */
       model.rotation.y=Math.PI+cx+Math.sin(t*.55)*.045;
-      model.rotation.x=Math.PI+cy;
+      model.rotation.x=cy;
       model.position.y=-.05+Math.sin(t*1.35)*.045;
 
       if(head){
