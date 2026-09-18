@@ -2303,3 +2303,32 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
     font-size:8px!important;
   }
 }
+
+/* V19 — speech bubble size + position */
+#robotSpeech.robot-speech,
+.robot-speech#robotSpeech{
+  position:absolute!important;
+  left:145px!important;
+  top:66px!important;
+  width:max-content!important;
+  min-width:0!important;
+  max-width:135px!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:6px 9px!important;
+  font-size:9px!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+  box-sizing:border-box!important;
+  z-index:20!important;
+}
+@media(max-width:900px){
+  #robotSpeech.robot-speech,
+  .robot-speech#robotSpeech{
+    left:128px!important;
+    top:58px!important;
+    max-width:125px!important;
+    padding:6px 8px!important;
+    font-size:9px!important;
+  }
+}
