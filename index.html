@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=28">
+<link rel="stylesheet" href="style.css?v=29">
 </head>
 <body class="page-loading">
 
@@ -628,14 +628,15 @@
 
 
 
-<div class="mini-data-robot" id="miniDataRobot" aria-label="Interactive portfolio robot">
+
+<div class="mini-data-robot" id="miniDataRobot" aria-label="Interactive 3D portfolio robot">
   <div class="robot-speech" id="robotSpeech" aria-live="polite"></div>
-  <div class="robot-image-wrap">
-    <div class="robot-glow"></div>
-    <img class="robot-image" src="assets/mini-data-robot.png" alt="Mini data robot">
+  <div class="robot-3d-wrap">
+    <canvas id="robot3DCanvas"></canvas>
   </div>
   <div class="robot-stars" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>
 </div>
+
 
 
 
@@ -768,96 +769,376 @@
 
 
 
-<script>
-/* Mini Data Robot V5 — exact user-provided robot image */
+
+
+
+<script type="module">
+/* Mini Data Robot V6 — real interactive 3D WebGL robot */
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { RoundedBoxGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js';
+
 (() => {
   const robot = document.getElementById('miniDataRobot');
-  if (!robot) return;
-
+  const canvas = document.getElementById('robot3DCanvas');
   const speech = document.getElementById('robotSpeech');
-  const about = document.querySelector('#about, [id*="about"], .about-section');
-  let clicks = 0, resetTimer, speechTimer, knockoutTimer;
+  if (!robot || !canvas) return;
 
-  const say = (text, duration = 2200) => {
-    speech.textContent = text;
+  /* ---------- Scene ---------- */
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
+  camera.position.set(0, 1.65, 7.4);
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+    powerPreference: 'high-performance'
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  const root = new THREE.Group();
+  scene.add(root);
+  root.position.y = -0.55;
+
+  const teal = new THREE.Color(0x58e9dc);
+  const purple = new THREE.Color(0x7659e8);
+
+  const darkMat = new THREE.MeshStandardMaterial({
+    color: 0x11161d, metalness: .72, roughness: .24
+  });
+  const darkMat2 = new THREE.MeshStandardMaterial({
+    color: 0x20252e, metalness: .64, roughness: .30
+  });
+  const trimMat = new THREE.MeshStandardMaterial({
+    color: 0x6969a8, metalness: .72, roughness: .22,
+    emissive: 0x17162e, emissiveIntensity: .7
+  });
+  const glowMat = new THREE.MeshStandardMaterial({
+    color: 0x63f2e4, emissive: 0x32dacc, emissiveIntensity: 4.0,
+    metalness: .15, roughness: .2
+  });
+  const eyeMat = new THREE.MeshBasicMaterial({color:0x67fff0});
+
+  const box = (w,h,d,mat,r=.12,segments=5) => {
+    const m = new THREE.Mesh(new RoundedBoxGeometry(w,h,d,segments,r), mat);
+    m.castShadow = true; m.receiveShadow = true;
+    return m;
+  };
+
+  /* ---------- Hoverboard ---------- */
+  const board = box(3.05,.28,1.25,darkMat,.18,6);
+  board.position.set(0,-1.65,0);
+  root.add(board);
+
+  const boardTrim = box(2.78,.055,1.05,trimMat,.12,5);
+  boardTrim.position.set(0,-1.50,.01);
+  root.add(boardTrim);
+
+  const boardGlow = box(2.45,.025,.88,glowMat,.08,4);
+  boardGlow.scale.y = .28;
+  boardGlow.position.set(0,-1.475,.02);
+  root.add(boardGlow);
+
+  for (const x of [-.95,.95]) {
+    const wheel = new THREE.Mesh(
+      new THREE.CylinderGeometry(.20,.20,.16,24),
+      darkMat2
+    );
+    wheel.rotation.z = Math.PI/2;
+    wheel.position.set(x,-1.82,.02);
+    root.add(wheel);
+  }
+
+  /* ---------- Body / feet ---------- */
+  const body = box(1.20,1.15,.92,darkMat,.22,7);
+  body.position.set(0,-.55,0);
+  root.add(body);
+
+  const chest = box(.62,.42,.055,glowMat,.10,5);
+  chest.position.set(0,-.55,.49);
+  chest.scale.set(.82,.78,1);
+  root.add(chest);
+
+  const chestDark = box(.50,.29,.022,darkMat,.07,4);
+  chestDark.position.set(0,-.55,.525);
+  root.add(chestDark);
+
+  const dataLines = [];
+  for(let i=0;i<3;i++){
+    const line = box(.07,.07,.025,glowMat,.02,2);
+    line.position.set(-.16+i*.16,-.55,.545);
+    dataLines.push(line);
+    root.add(line);
+  }
+
+  const leftLeg = box(.40,1.15,.48,darkMat2,.12,5);
+  leftLeg.position.set(-.42,-1.18,.02);
+  leftLeg.rotation.z = -.12;
+  root.add(leftLeg);
+
+  const rightLeg = box(.40,1.15,.48,darkMat2,.12,5);
+  rightLeg.position.set(.42,-1.18,.02);
+  rightLeg.rotation.z = .12;
+  root.add(rightLeg);
+
+  for (const x of [-.42,.42]) {
+    const foot = box(.72,.20,1.10,darkMat,.10,5);
+    foot.position.set(x,-1.67,.05);
+    root.add(foot);
+    const footTrim = box(.55,.035,.86,trimMat,.06,4);
+    footTrim.position.set(x,-1.55,.06);
+    root.add(footTrim);
+  }
+
+  /* ---------- Head ---------- */
+  const headGroup = new THREE.Group();
+  headGroup.position.set(0,.55,.02);
+  root.add(headGroup);
+
+  const head = box(1.72,1.42,1.22,darkMat,.30,8);
+  head.position.z = 0;
+  headGroup.add(head);
+
+  const face = box(1.32,1.00,.075,darkMat2,.23,7);
+  face.position.set(0,.02,.64);
+  headGroup.add(face);
+
+  /* Eyes: two luminous rounded squares */
+  for (const x of [-.31,.31]) {
+    const eye = box(.34,.34,.045,eyeMat,.08,5);
+    eye.position.set(x,.10,.70);
+    eye.scale.y = 1.05;
+    headGroup.add(eye);
+  }
+
+  /* Tiny camera/sensor */
+  const sensor = new THREE.Mesh(new THREE.SphereGeometry(.045,16,10), glowMat);
+  sensor.position.set(0,.62,.69);
+  headGroup.add(sensor);
+
+  /* Smile curve */
+  const smileCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-.20,-.22,.70),
+    new THREE.Vector3(0,-.29,.71),
+    new THREE.Vector3(.20,-.22,.70)
+  ]);
+  const smileGeo = new THREE.TubeGeometry(smileCurve,16,.025,6,false);
+  const smile = new THREE.Mesh(smileGeo,glowMat);
+  headGroup.add(smile);
+
+  /* ---------- Headphones ---------- */
+  const earY = .55;
+  for (const side of [-1,1]) {
+    const ear = new THREE.Mesh(
+      new THREE.TorusGeometry(.27,.10,12,28,Math.PI*2),
+      trimMat
+    );
+    ear.rotation.y = Math.PI/2;
+    ear.position.set(side*.91,earY,0);
+    headGroup.add(ear);
+
+    const earGlow = new THREE.Mesh(
+      new THREE.TorusGeometry(.19,.035,10,24,Math.PI*2),
+      glowMat
+    );
+    earGlow.rotation.y = Math.PI/2;
+    earGlow.position.set(side*.93,earY,.01);
+    headGroup.add(earGlow);
+  }
+
+  const bandCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-.88,.95,.0),
+    new THREE.Vector3(-.65,1.30,.0),
+    new THREE.Vector3(0,1.48,.0),
+    new THREE.Vector3(.65,1.30,.0),
+    new THREE.Vector3(.88,.95,.0)
+  ]);
+  const band = new THREE.Mesh(
+    new THREE.TubeGeometry(bandCurve,32,.055,8,false),
+    trimMat
+  );
+  headGroup.add(band);
+
+  const bandGlowCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-.73,1.02,.02),
+    new THREE.Vector3(-.50,1.27,.02),
+    new THREE.Vector3(0,1.39,.02),
+    new THREE.Vector3(.50,1.27,.02),
+    new THREE.Vector3(.73,1.02,.02)
+  ]);
+  headGroup.add(new THREE.Mesh(
+    new THREE.TubeGeometry(bandGlowCurve,32,.022,6,false), glowMat
+  ));
+
+  /* ---------- Arms ---------- */
+  const leftArm = new THREE.Group();
+  leftArm.position.set(-.78,-.25,.0);
+  leftArm.rotation.z = -.14;
+  root.add(leftArm);
+  const lUpper = box(.32,.86,.34,darkMat2,.10,5);
+  lUpper.position.y = -.40;
+  leftArm.add(lUpper);
+  const lHand = box(.38,.22,.36,darkMat,.08,4);
+  lHand.position.set(0,-.88,.0);
+  leftArm.add(lHand);
+
+  const rightArm = new THREE.Group();
+  rightArm.position.set(.78,-.25,.0);
+  rightArm.rotation.z = .14;
+  root.add(rightArm);
+  const rUpper = box(.32,.86,.34,darkMat2,.10,5);
+  rUpper.position.y = -.40;
+  rightArm.add(rUpper);
+  const rHand = box(.38,.22,.36,darkMat,.08,4);
+  rHand.position.set(0,-.88,.0);
+  rightArm.add(rHand);
+
+  /* ---------- Lighting ---------- */
+  scene.add(new THREE.HemisphereLight(0xb8ffff,0x080b12,2.0));
+  const key = new THREE.DirectionalLight(0xffffff,3.2);
+  key.position.set(3,5,6);
+  scene.add(key);
+  const tealLight = new THREE.PointLight(0x42eadb,12,8);
+  tealLight.position.set(-2,1,3);
+  scene.add(tealLight);
+  const purpleLight = new THREE.PointLight(0x7254e8,9,7);
+  purpleLight.position.set(2,-1,2);
+  scene.add(purpleLight);
+
+  /* ---------- Interaction ---------- */
+  const mouse = new THREE.Vector2(0,0);
+  let targetX=0, targetY=0;
+  let currentX=0, currentY=0;
+  let clickCount=0, resetTimer, speechTimer, knockoutTimer;
+
+  const say = (text,duration=2200) => {
+    speech.textContent=text;
     speech.classList.add('show');
     clearTimeout(speechTimer);
-    speechTimer = setTimeout(() => speech.classList.remove('show'), duration);
+    speechTimer=setTimeout(()=>speech.classList.remove('show'),duration);
   };
 
-  // Hidden on Home. Once About enters the viewport, the robot appears and
-  // remains visible through the lower sections while following the viewport.
-  const updateVisibility = () => {
-    if (!about) {
-      robot.classList.add('robot-visible');
+  robot.addEventListener('pointermove',(e)=>{
+    const r=robot.getBoundingClientRect();
+    mouse.x=((e.clientX-r.left)/r.width-.5)*2;
+    mouse.y=((e.clientY-r.top)/r.height-.5)*2;
+    targetX=mouse.x*.34;
+    targetY=mouse.y*.16;
+  });
+
+  robot.addEventListener('pointerleave',()=>{
+    targetX=0; targetY=0;
+  });
+
+  robot.addEventListener('click',()=>{
+    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')) return;
+    clickCount++;
+    clearTimeout(resetTimer);
+
+    if(clickCount===1){
+      say('Hi! 👋',2400);
+      let t=0;
+      const start=rightArm.rotation.z;
+      const wave=()=>{
+        t++;
+        rightArm.rotation.z=start + Math.sin(t*.72)*.72;
+        if(t<28) requestAnimationFrame(wave);
+        else rightArm.rotation.z=start;
+      };
+      wave();
+    }else if(clickCount===2) say('Again? 😄',1500);
+    else if(clickCount===3) say('Bro... 😂',1500);
+    else if(clickCount===4) say('Okay okay! 😵',1500);
+    else{
+      say("I'll be back in 1 minute... 😵",1200);
+      robot.classList.add('knockout');
+      clearTimeout(knockoutTimer);
+      knockoutTimer=setTimeout(()=>{
+        robot.classList.remove('knockout');
+        robot.classList.add('recover');
+        clickCount=0;
+        say("I'm back! ✨",1800);
+        setTimeout(()=>robot.classList.remove('recover'),1000);
+      },60000);
       return;
     }
-    const rect = about.getBoundingClientRect();
-    const aboutHasStarted = rect.top <= window.innerHeight * 0.78;
-    robot.classList.toggle('robot-visible', aboutHasStarted);
-  };
+    resetTimer=setTimeout(()=>clickCount=0,3500);
+  });
 
-  window.addEventListener('scroll', updateVisibility, {passive:true});
-  window.addEventListener('resize', updateVisibility);
+  /* ---------- About visibility ---------- */
+  let aboutSection=document.querySelector('#about,.about-section,[data-section="about"]');
+  if(!aboutSection){
+    const candidates=[...document.querySelectorAll('section,main > div,.section')];
+    aboutSection=candidates.find(el=>
+      /(^|\s)about(\s|$)/i.test(el.id||'') ||
+      /about\s*(me|section)?/i.test(el.querySelector('h1,h2,h3')?.textContent||'')
+    );
+  }
+
+  const updateVisibility=()=>{
+    if(!aboutSection){robot.classList.add('robot-visible');return;}
+    const rect=aboutSection.getBoundingClientRect();
+    robot.classList.toggle('robot-visible',rect.top<=window.innerHeight*.78);
+  };
+  window.addEventListener('scroll',updateVisibility,{passive:true});
+  window.addEventListener('resize',updateVisibility);
   updateVisibility();
 
-  // Section hover reactions.
-  const sectionMessages = {
-    experience: '👀 Experience!',
-    education: '🎓 Learning mode!',
-    skills: '🧠 Skills spotted!',
-    project: '📊 Nice project!'
+  /* Section hover reactions */
+  const sectionMessages={
+    experience:'👀 Experience!',
+    education:'🎓 Learning mode!',
+    skills:'🧠 Skills spotted!',
+    project:'📊 Nice project!'
   };
-
-  document.querySelectorAll('a,button,.card,.timeline-item,.experience-card,.education-card,.carousel-card').forEach(el => {
-    const text = (el.textContent || '').toLowerCase();
-    let key = '';
-    if (text.includes('experience')) key = 'experience';
-    else if (text.includes('education')) key = 'education';
-    else if (text.includes('skill')) key = 'skills';
-    else if (text.includes('project')) key = 'project';
-    if (!key) return;
-
-    el.addEventListener('pointerenter', () => {
-      if (robot.classList.contains('robot-visible') && !robot.classList.contains('knockout')) {
-        say(sectionMessages[key], 1100);
-      }
+  document.querySelectorAll('a,button,.card,.timeline-item,.experience-card,.education-card,.carousel-card').forEach(el=>{
+    const text=(el.textContent||'').toLowerCase();
+    let key='';
+    if(text.includes('experience'))key='experience';
+    else if(text.includes('education'))key='education';
+    else if(text.includes('skill'))key='skills';
+    else if(text.includes('project'))key='project';
+    if(!key)return;
+    el.addEventListener('pointerenter',()=>{
+      if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout'))say(sectionMessages[key],1100);
     });
   });
 
-  robot.addEventListener('click', () => {
-    if (!robot.classList.contains('robot-visible') || robot.classList.contains('knockout')) return;
+  /* ---------- Render ---------- */
+  const resize=()=>{
+    const w=canvas.clientWidth||245, h=canvas.clientHeight||245;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h;
+    camera.updateProjectionMatrix();
+  };
+  window.addEventListener('resize',resize);
+  resize();
 
-    clicks++;
-    clearTimeout(resetTimer);
+  const clock=new THREE.Clock();
+  const animate=()=>{
+    requestAnimationFrame(animate);
+    const t=clock.getElapsedTime();
 
-    if (clicks === 1) {
-      robot.classList.add('wave');
-      say('Hi! 👋', 2400);
-      setTimeout(() => robot.classList.remove('wave'), 2400);
-    } else if (clicks === 2) {
-      say('Again? 😄', 1500);
-    } else if (clicks === 3) {
-      say('Bro... 😂', 1500);
-    } else if (clicks === 4) {
-      say('Okay okay! 😵', 1500);
-    } else {
-      robot.classList.add('knockout');
-      say("I'll be back in 1 minute... 😵", 1200);
+    currentX += (targetX-currentX)*.055;
+    currentY += (targetY-currentY)*.055;
 
-      clearTimeout(knockoutTimer);
-      knockoutTimer = setTimeout(() => {
-        robot.classList.remove('knockout');
-        robot.classList.add('recover');
-        clicks = 0;
-        say("I'm back! ✨", 1800);
-        setTimeout(() => robot.classList.remove('recover'), 1000);
-      }, 60000);
-      return;
-    }
+    root.rotation.y = currentX + Math.sin(t*.55)*.045;
+    root.rotation.x = currentY;
+    root.position.y = -.55 + Math.sin(t*1.55)*.035;
 
-    resetTimer = setTimeout(() => { clicks = 0; }, 3500);
-  });
+    headGroup.rotation.y = currentX*.55;
+    headGroup.rotation.x = currentY*.30;
+
+    dataLines.forEach((line,i)=>{
+      line.material.emissiveIntensity=2.5+Math.sin(t*3+i)*1.2;
+    });
+
+    renderer.render(scene,camera);
+  };
+  animate();
 })();
 </script>
 
