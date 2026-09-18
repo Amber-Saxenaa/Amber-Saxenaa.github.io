@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=33">
+<link rel="stylesheet" href="style.css?v=34">
 </head>
 <body class="page-loading">
 
@@ -710,7 +710,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   scene.add(stage);
 
   let model=null, mixer=null, head=null, rightArm=null;
+  let leftLeg=null, rightLeg=null, leftFoot=null, rightFoot=null, bodyRoot=null;
   let modelReady=false, waving=false, clicks=0, resetTimer, speechTimer, knockoutTimer;
+  const robotParts=[];
 
   const clock=new THREE.Clock();
   const say=(text,duration=2200)=>{
@@ -748,6 +750,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       const n=(o.name||'').toLowerCase();
       if(!head && /(head|face|neck)/.test(n)) head=o;
       if(!rightArm && /(right|r)[ _-]?(arm|hand|upper|fore)/.test(n)) rightArm=o;
+      if(!leftLeg && /(left|l)[ _-]?(leg|thigh|shin|calf)/.test(n)) leftLeg=o;
+      if(!rightLeg && /(right|r)[ _-]?(leg|thigh|shin|calf)/.test(n)) rightLeg=o;
+      if(!leftFoot && /(left|l)[ _-]?(foot|shoe)/.test(n)) leftFoot=o;
+      if(!rightFoot && /(right|r)[ _-]?(foot|shoe)/.test(n)) rightFoot=o;
+      if(!bodyRoot && /(body|torso|chest|pelvis|root)/.test(n)) bodyRoot=o;
     });
     return meshes;
   };
@@ -908,6 +915,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   addEventListener('resize',resize);
   resize();
 
+  let motionPhase=0;
   const animate=()=>{
     requestAnimationFrame(animate);
     const dt=clock.getDelta(),t=clock.elapsedTime;
@@ -915,14 +923,33 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     cy+=(ty-cy)*.055;
 
     if(modelReady){
-      /* 3/4 idle turn + cursor response. */
-      model.rotation.y=cx+Math.sin(t*.55)*.045;
-      model.rotation.x=cy;
-      model.position.y=-.05+Math.sin(t*1.35)*.045;
+      /* Gentle "alive" motion: walking-in-place, head tilt, body bob and sway.
+         These are deliberately subtle so the supplied GLB remains recognizable. */
+      const step=Math.sin(t*3.2);
+      const step2=Math.sin(t*3.2+Math.PI);
+      const bob=Math.abs(Math.sin(t*3.2))*.018;
+
+      model.rotation.y += ((cx + Math.sin(t*.55)*.045)-model.rotation.y)*.06;
+      model.rotation.x += (cy*.35-model.rotation.x)*.06;
+      model.position.y = -.05 + Math.sin(t*2.0)*.025 + bob;
+
+      /* Whole-body balance / tiny side-to-side lean. */
+      model.rotation.z = Math.sin(t*1.6)*.018;
 
       if(head){
-        head.rotation.y+=(cx*.18-head.rotation.y)*.04;
-        head.rotation.x+=(cy*.12-head.rotation.x)*.04;
+        head.rotation.y += ((cx*.18)-head.rotation.y)*.045;
+        head.rotation.x += ((cy*.12)-head.rotation.x)*.045;
+        head.rotation.z = Math.sin(t*1.35)*.045 + Math.sin(t*.7)*.018;
+      }
+
+      if(leftLeg) leftLeg.rotation.x = step*.10;
+      if(rightLeg) rightLeg.rotation.x = step2*.10;
+      if(leftFoot) leftFoot.rotation.x = -step*.06;
+      if(rightFoot) rightFoot.rotation.x = -step2*.06;
+
+      if(rightArm && !waving){
+        rightArm.rotation.z = Math.sin(t*1.7+1.2)*.035;
+        rightArm.rotation.x = Math.sin(t*1.2)*.025;
       }
     }
     if(mixer)mixer.update(dt);
