@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=34">
+<link rel="stylesheet" href="style.css?v=35">
 </head>
 <body class="page-loading">
 
@@ -737,8 +737,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         if(!m)return;
         m.side=THREE.DoubleSide;
         m.needsUpdate=true;
-
-        /* Preserve the supplied GLB colors exactly; only improve readability with lighting. */
+        /* Preserve the supplied GLB colors; lighting provides readability. */
         if(m.emissive){
           const ec=m.emissive;
           if(ec.g>ec.r*1.25 && ec.g>ec.b*1.05){
@@ -747,14 +746,26 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         }
       });
 
-      const n=(o.name||'').toLowerCase();
-      if(!head && /(head|face|neck)/.test(n)) head=o;
-      if(!rightArm && /(right|r)[ _-]?(arm|hand|upper|fore)/.test(n)) rightArm=o;
-      if(!leftLeg && /(left|l)[ _-]?(leg|thigh|shin|calf)/.test(n)) leftLeg=o;
-      if(!rightLeg && /(right|r)[ _-]?(leg|thigh|shin|calf)/.test(n)) rightLeg=o;
-      if(!leftFoot && /(left|l)[ _-]?(foot|shoe)/.test(n)) leftFoot=o;
-      if(!rightFoot && /(right|r)[ _-]?(foot|shoe)/.test(n)) rightFoot=o;
-      if(!bodyRoot && /(body|torso|chest|pelvis|root)/.test(n)) bodyRoot=o;
+      /* The uploaded robot has generic Sketchfab Object_* node names.
+         Give each moving mesh a centered pivot by moving its geometry to
+         its own bounding-box center. This lets us rotate the head/legs
+         around themselves instead of around the robot's origin. */
+      if(o.geometry && !o.userData.robotPivotPrepared){
+        o.geometry.computeBoundingBox();
+        const box=o.geometry.boundingBox;
+        if(box){
+          const center=box.getCenter(new THREE.Vector3());
+          o.geometry.translate(-center.x,-center.y,-center.z);
+          o.position.copy(center);
+        }
+        o.userData.robotPivotPrepared=true;
+      }
+
+      const n=o.name||'';
+      if(n==='Object_7') head=o;       // upper/head shell
+      if(n==='Object_4') leftLeg=o;    // left lower assembly
+      if(n==='Object_5') rightLeg=o;   // right lower assembly
+      if(n==='Object_6') rightArm=o;   // side/arm assembly
     });
     return meshes;
   };
@@ -852,7 +863,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         let t=0;
         const wave=()=>{
           t++;
-          target.rotation.z=original+Math.sin(t*.72)*.45;
+          target.rotation.z=original+Math.sin(t*.72)*.55;
           if(t<34)requestAnimationFrame(wave);
           else{target.rotation.z=original;waving=false}
         };
@@ -923,33 +934,39 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     cy+=(ty-cy)*.055;
 
     if(modelReady){
-      /* Gentle "alive" motion: walking-in-place, head tilt, body bob and sway.
-         These are deliberately subtle so the supplied GLB remains recognizable. */
-      const step=Math.sin(t*3.2);
-      const step2=Math.sin(t*3.2+Math.PI);
-      const bob=Math.abs(Math.sin(t*3.2))*.018;
+      /* Clearly visible idle/walk cycle for the supplied GLB.
+         The model has no baked skeletal animation, so the individual
+         Sketchfab mesh nodes are moved around their own pivots. */
+      const step=Math.sin(t*3.0);
+      const step2=Math.sin(t*3.0+Math.PI);
+      const bounce=Math.abs(Math.sin(t*3.0));
 
-      model.rotation.y += ((cx + Math.sin(t*.55)*.045)-model.rotation.y)*.06;
-      model.rotation.x += (cy*.35-model.rotation.x)*.06;
-      model.position.y = -.05 + Math.sin(t*2.0)*.025 + bob;
+      model.rotation.y += ((cx + Math.sin(t*.7)*.035)-model.rotation.y)*.07;
+      model.rotation.x += (cy*.28-model.rotation.x)*.07;
+      model.rotation.z = Math.sin(t*1.8)*.025;
+      model.position.y = -.05 + bounce*.045 + Math.sin(t*1.5)*.018;
 
-      /* Whole-body balance / tiny side-to-side lean. */
-      model.rotation.z = Math.sin(t*1.6)*.018;
-
+      /* Head tilt + tiny "look around" movement. */
       if(head){
-        head.rotation.y += ((cx*.18)-head.rotation.y)*.045;
-        head.rotation.x += ((cy*.12)-head.rotation.x)*.045;
-        head.rotation.z = Math.sin(t*1.35)*.045 + Math.sin(t*.7)*.018;
+        head.rotation.y += ((cx*.20 + Math.sin(t*.55)*.035)-head.rotation.y)*.06;
+        head.rotation.x += ((cy*.12)-head.rotation.x)*.06;
+        head.rotation.z = Math.sin(t*1.25)*.075;
       }
 
-      if(leftLeg) leftLeg.rotation.x = step*.10;
-      if(rightLeg) rightLeg.rotation.x = step2*.10;
-      if(leftFoot) leftFoot.rotation.x = -step*.06;
-      if(rightFoot) rightFoot.rotation.x = -step2*.06;
+      /* Opposite leg swings make the lower body read as walking in place. */
+      if(leftLeg){
+        leftLeg.rotation.x = step*.20;
+        leftLeg.rotation.z = step*.035;
+      }
+      if(rightLeg){
+        rightLeg.rotation.x = step2*.20;
+        rightLeg.rotation.z = step2*.035;
+      }
 
+      /* Small arm/side movement while idle. */
       if(rightArm && !waving){
-        rightArm.rotation.z = Math.sin(t*1.7+1.2)*.035;
-        rightArm.rotation.x = Math.sin(t*1.2)*.025;
+        rightArm.rotation.z = Math.sin(t*1.8)*.055;
+        rightArm.rotation.x = Math.sin(t*1.15)*.035;
       }
     }
     if(mixer)mixer.update(dt);
