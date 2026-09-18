@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=25">
+<link rel="stylesheet" href="style.css?v=27">
 </head>
 <body class="page-loading">
 
@@ -626,49 +626,30 @@
 
 
 
+
 <div class="mini-data-robot" id="miniDataRobot" aria-label="Interactive portfolio robot">
   <div class="robot-speech" id="robotSpeech" aria-live="polite"></div>
-
-  <div class="droid">
-    <div class="droid-aura"></div>
-    <div class="droid-antenna"><span></span></div>
-
-    <div class="droid-head">
-      <div class="droid-visor">
-        <span class="visor-eye visor-eye-left"></span>
-        <span class="visor-eye visor-eye-right"></span>
-        <span class="visor-glint"></span>
+  <div class="robot-shell">
+    <div class="robot-aura"></div>
+    <div class="robot-core">
+      <div class="robot-top-light"></div>
+      <div class="robot-face">
+        <div class="robot-eyes"><span></span><span></span></div>
+        <div class="robot-smile"></div>
+        <i class="robot-cheek robot-cheek-left"></i>
+        <i class="robot-cheek robot-cheek-right"></i>
       </div>
-      <div class="droid-smile"></div>
+      <div class="robot-chest"><span></span><span></span><span></span><b>DATA / AI</b></div>
+      <div class="robot-side-panel robot-side-panel-left"></div>
+      <div class="robot-side-panel robot-side-panel-right"></div>
     </div>
-
-    <div class="droid-collar"></div>
-
-    <div class="droid-core">
-      <div class="core-screen">
-        <span class="core-bar"></span>
-        <span class="core-bar"></span>
-        <span class="core-bar"></span>
-        <b>DATA</b>
-      </div>
-      <span class="core-dot core-dot-a"></span>
-      <span class="core-dot core-dot-b"></span>
-    </div>
-
-    <div class="droid-shoulder droid-shoulder-left"></div>
-    <div class="droid-shoulder droid-shoulder-right"></div>
-
-    <div class="droid-hand droid-hand-left"><i></i><i></i><i></i></div>
-    <div class="droid-hand droid-hand-right"><i></i><i></i><i></i></div>
-
-    <div class="droid-base">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="robot-arm robot-arm-left"><span class="robot-hand"><i></i><i></i><i></i></span></div>
+    <div class="robot-arm robot-arm-right"><span class="robot-hand"><i></i><i></i><i></i></span></div>
+    <div class="robot-base"><span></span><span></span></div>
   </div>
-
-  <div class="droid-shadow"></div>
   <div class="robot-stars" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>
 </div>
+
 
 
 
@@ -791,6 +772,77 @@
     }
 
     resetTimer = setTimeout(() => { clicks = 0; }, 3500);
+  });
+})();
+</script>
+
+
+<script>
+/* Mini Data Robot V4 */
+(() => {
+  const robot = document.getElementById('miniDataRobot');
+  if (!robot) return;
+  const speech = document.getElementById('robotSpeech');
+  const about = document.querySelector('#about, [id*="about"], .about-section');
+  let clicks = 0, resetTimer, speechTimer, knockoutTimer;
+
+  const say = (text, duration=2200) => {
+    speech.textContent = text;
+    speech.classList.add('show');
+    clearTimeout(speechTimer);
+    speechTimer = setTimeout(() => speech.classList.remove('show'), duration);
+  };
+
+  const updateVisibility = () => {
+    if (!about) { robot.classList.add('robot-visible'); return; }
+    const rect = about.getBoundingClientRect();
+    // Reveal as About enters the viewport; hide again above About.
+    const show = rect.top <= window.innerHeight * .78 && rect.bottom > window.innerHeight * .08;
+    robot.classList.toggle('robot-visible', show);
+  };
+  window.addEventListener('scroll', updateVisibility, {passive:true});
+  window.addEventListener('resize', updateVisibility);
+  updateVisibility();
+
+  const sectionMessages = {
+    experience:'👀 Experience!',
+    education:'🎓 Learning mode!',
+    skills:'🧠 Skills spotted!',
+    project:'📊 Nice project!'
+  };
+
+  document.querySelectorAll('a,button,.card,.timeline-item,.experience-card,.education-card,.carousel-card').forEach(el => {
+    const text=(el.textContent||'').toLowerCase();
+    let key='';
+    if(text.includes('experience')) key='experience';
+    else if(text.includes('education')) key='education';
+    else if(text.includes('skill')) key='skills';
+    else if(text.includes('project')) key='project';
+    if(!key) return;
+    el.addEventListener('pointerenter',()=> {
+      if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout')) say(sectionMessages[key],1100);
+    });
+  });
+
+  robot.addEventListener('click',()=>{
+    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')) return;
+    clicks++; clearTimeout(resetTimer);
+    if(clicks===1){
+      robot.classList.add('wave'); say('Hi! 👋',2400);
+      setTimeout(()=>robot.classList.remove('wave'),2400);
+    }else if(clicks===2) say('Again? 😄',1500);
+    else if(clicks===3) say('Bro... 😂',1500);
+    else if(clicks===4) say('Okay okay! 😵',1500);
+    else{
+      robot.classList.add('knockout'); say("I'll be back in 1 minute... 😵",1200);
+      clearTimeout(knockoutTimer);
+      knockoutTimer=setTimeout(()=>{
+        robot.classList.remove('knockout'); robot.classList.add('recover'); clicks=0;
+        say("I'm back! ✨",1800); setTimeout(()=>robot.classList.remove('recover'),1000);
+      },60000);
+      return;
+    }
+    resetTimer=setTimeout(()=>{clicks=0},3500);
   });
 })();
 </script>
