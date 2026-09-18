@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=27">
+<link rel="stylesheet" href="style.css?v=28">
 </head>
 <body class="page-loading">
 
@@ -627,28 +627,16 @@
 
 
 
+
 <div class="mini-data-robot" id="miniDataRobot" aria-label="Interactive portfolio robot">
   <div class="robot-speech" id="robotSpeech" aria-live="polite"></div>
-  <div class="robot-shell">
-    <div class="robot-aura"></div>
-    <div class="robot-core">
-      <div class="robot-top-light"></div>
-      <div class="robot-face">
-        <div class="robot-eyes"><span></span><span></span></div>
-        <div class="robot-smile"></div>
-        <i class="robot-cheek robot-cheek-left"></i>
-        <i class="robot-cheek robot-cheek-right"></i>
-      </div>
-      <div class="robot-chest"><span></span><span></span><span></span><b>DATA / AI</b></div>
-      <div class="robot-side-panel robot-side-panel-left"></div>
-      <div class="robot-side-panel robot-side-panel-right"></div>
-    </div>
-    <div class="robot-arm robot-arm-left"><span class="robot-hand"><i></i><i></i><i></i></span></div>
-    <div class="robot-arm robot-arm-right"><span class="robot-hand"><i></i><i></i><i></i></span></div>
-    <div class="robot-base"><span></span><span></span></div>
+  <div class="robot-image-wrap">
+    <div class="robot-glow"></div>
+    <img class="robot-image" src="assets/mini-data-robot.png" alt="Mini data robot">
   </div>
   <div class="robot-stars" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>
 </div>
+
 
 
 
@@ -777,72 +765,98 @@
 </script>
 
 
+
+
+
 <script>
-/* Mini Data Robot V4 */
+/* Mini Data Robot V5 — exact user-provided robot image */
 (() => {
   const robot = document.getElementById('miniDataRobot');
   if (!robot) return;
+
   const speech = document.getElementById('robotSpeech');
   const about = document.querySelector('#about, [id*="about"], .about-section');
   let clicks = 0, resetTimer, speechTimer, knockoutTimer;
 
-  const say = (text, duration=2200) => {
+  const say = (text, duration = 2200) => {
     speech.textContent = text;
     speech.classList.add('show');
     clearTimeout(speechTimer);
     speechTimer = setTimeout(() => speech.classList.remove('show'), duration);
   };
 
+  // Hidden on Home. Once About enters the viewport, the robot appears and
+  // remains visible through the lower sections while following the viewport.
   const updateVisibility = () => {
-    if (!about) { robot.classList.add('robot-visible'); return; }
+    if (!about) {
+      robot.classList.add('robot-visible');
+      return;
+    }
     const rect = about.getBoundingClientRect();
-    // Reveal as About enters the viewport; hide again above About.
-    const show = rect.top <= window.innerHeight * .78 && rect.bottom > window.innerHeight * .08;
-    robot.classList.toggle('robot-visible', show);
+    const aboutHasStarted = rect.top <= window.innerHeight * 0.78;
+    robot.classList.toggle('robot-visible', aboutHasStarted);
   };
+
   window.addEventListener('scroll', updateVisibility, {passive:true});
   window.addEventListener('resize', updateVisibility);
   updateVisibility();
 
+  // Section hover reactions.
   const sectionMessages = {
-    experience:'👀 Experience!',
-    education:'🎓 Learning mode!',
-    skills:'🧠 Skills spotted!',
-    project:'📊 Nice project!'
+    experience: '👀 Experience!',
+    education: '🎓 Learning mode!',
+    skills: '🧠 Skills spotted!',
+    project: '📊 Nice project!'
   };
 
   document.querySelectorAll('a,button,.card,.timeline-item,.experience-card,.education-card,.carousel-card').forEach(el => {
-    const text=(el.textContent||'').toLowerCase();
-    let key='';
-    if(text.includes('experience')) key='experience';
-    else if(text.includes('education')) key='education';
-    else if(text.includes('skill')) key='skills';
-    else if(text.includes('project')) key='project';
-    if(!key) return;
-    el.addEventListener('pointerenter',()=> {
-      if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout')) say(sectionMessages[key],1100);
+    const text = (el.textContent || '').toLowerCase();
+    let key = '';
+    if (text.includes('experience')) key = 'experience';
+    else if (text.includes('education')) key = 'education';
+    else if (text.includes('skill')) key = 'skills';
+    else if (text.includes('project')) key = 'project';
+    if (!key) return;
+
+    el.addEventListener('pointerenter', () => {
+      if (robot.classList.contains('robot-visible') && !robot.classList.contains('knockout')) {
+        say(sectionMessages[key], 1100);
+      }
     });
   });
 
-  robot.addEventListener('click',()=>{
-    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')) return;
-    clicks++; clearTimeout(resetTimer);
-    if(clicks===1){
-      robot.classList.add('wave'); say('Hi! 👋',2400);
-      setTimeout(()=>robot.classList.remove('wave'),2400);
-    }else if(clicks===2) say('Again? 😄',1500);
-    else if(clicks===3) say('Bro... 😂',1500);
-    else if(clicks===4) say('Okay okay! 😵',1500);
-    else{
-      robot.classList.add('knockout'); say("I'll be back in 1 minute... 😵",1200);
+  robot.addEventListener('click', () => {
+    if (!robot.classList.contains('robot-visible') || robot.classList.contains('knockout')) return;
+
+    clicks++;
+    clearTimeout(resetTimer);
+
+    if (clicks === 1) {
+      robot.classList.add('wave');
+      say('Hi! 👋', 2400);
+      setTimeout(() => robot.classList.remove('wave'), 2400);
+    } else if (clicks === 2) {
+      say('Again? 😄', 1500);
+    } else if (clicks === 3) {
+      say('Bro... 😂', 1500);
+    } else if (clicks === 4) {
+      say('Okay okay! 😵', 1500);
+    } else {
+      robot.classList.add('knockout');
+      say("I'll be back in 1 minute... 😵", 1200);
+
       clearTimeout(knockoutTimer);
-      knockoutTimer=setTimeout(()=>{
-        robot.classList.remove('knockout'); robot.classList.add('recover'); clicks=0;
-        say("I'm back! ✨",1800); setTimeout(()=>robot.classList.remove('recover'),1000);
-      },60000);
+      knockoutTimer = setTimeout(() => {
+        robot.classList.remove('knockout');
+        robot.classList.add('recover');
+        clicks = 0;
+        say("I'm back! ✨", 1800);
+        setTimeout(() => robot.classList.remove('recover'), 1000);
+      }, 60000);
       return;
     }
-    resetTimer=setTimeout(()=>{clicks=0},3500);
+
+    resetTimer = setTimeout(() => { clicks = 0; }, 3500);
   });
 })();
 </script>
