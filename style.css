@@ -2216,3 +2216,42 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
     font-size:8px!important;
   }
 }
+/* FINAL SPEECH BUBBLE FIX — V16
+   Let the bubble be only as large as its current text. */
+#robotSpeech.robot-speech,
+.robot-speech#robotSpeech{
+  position:absolute!important;
+  left:128px!important;
+  top:18px!important;
+  right:auto!important;
+  bottom:auto!important;
+  inset-inline:auto!important;
+  width:fit-content!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:fit-content!important;
+  min-height:0!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+  display:block!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+  padding:3px 5px!important;
+  margin:0!important;
+  border-radius:7px 7px 7px 2px!important;
+  font-size:7px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:-.15px!important;
+  white-space:nowrap!important;
+  vertical-align:top!important;
+}
+@media(max-width:900px){
+  #robotSpeech.robot-speech,
+  .robot-speech#robotSpeech{
+    left:112px!important;
+    top:18px!important;
+    padding:3px 5px!important;
+    font-size:7px!important;
+  }
+}
