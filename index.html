@@ -542,6 +542,7 @@
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    event.stopImmediatePropagation();
     const emailField = form.querySelector('input[name="email"]');
     replyTo.value = emailField ? emailField.value : '';
     const originalText = button.textContent;
@@ -566,7 +567,7 @@
       button.disabled = false;
       button.textContent = originalText;
     }
-  });
+  }, true);
 })();
 </script>
 
