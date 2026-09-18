@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=36">
+<link rel="stylesheet" href="style.css?v=37">
 </head>
 <body class="page-loading">
 
@@ -715,8 +715,15 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   const robotParts=[];
 
   const clock=new THREE.Clock();
+  const positionSpeech=()=>{
+    if(!robot||!speech)return;
+    const r=robot.getBoundingClientRect();
+    speech.style.left=Math.round(r.left+Math.min(112,r.width*.55))+'px';
+    speech.style.top=Math.round(r.top+Math.max(4,r.height*.08))+'px';
+  };
   const say=(text,duration=2200)=>{
     speech.textContent=text;
+    positionSpeech();
     speech.classList.add('show');
     clearTimeout(speechTimer);
     speechTimer=setTimeout(()=>speech.classList.remove('show'),duration);
