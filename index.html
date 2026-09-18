@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=22">
+<link rel="stylesheet" href="style.css?v=23">
 </head>
 <body class="page-loading">
 
@@ -620,6 +620,113 @@
       button.textContent = originalText;
     }
   }, true);
+})();
+</script>
+
+
+<div class="mini-data-robot" id="miniDataRobot" aria-label="Interactive portfolio robot">
+  <div class="robot-status">DATA BUDDY</div>
+  <div class="robot-speech" id="robotSpeech" aria-live="polite"></div>
+  <div class="robot-body">
+    <div class="robot-antenna"><span></span></div>
+    <div class="robot-head">
+      <span class="robot-ear robot-ear-left"></span>
+      <span class="robot-ear robot-ear-right"></span>
+      <div class="robot-eyes"><i></i><i></i></div>
+      <div class="robot-mouth"><span></span></div>
+      <div class="robot-blush robot-blush-left"></div>
+      <div class="robot-blush robot-blush-right"></div>
+    </div>
+    <div class="robot-neck"></div>
+    <div class="robot-torso">
+      <div class="robot-screen"><span>01</span><span>10</span><b>▦</b></div>
+      <span class="robot-panel-light"></span>
+    </div>
+    <div class="robot-arm robot-arm-left"><span class="robot-hand">●</span></div>
+    <div class="robot-arm robot-arm-right"><span class="robot-hand">●</span></div>
+    <div class="robot-leg robot-leg-left"></div>
+    <div class="robot-leg robot-leg-right"></div>
+  </div>
+  <div class="robot-shadow"></div>
+  <div class="robot-stars" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>
+</div>
+
+
+<script>
+/* Mini Data Robot interactions */
+(() => {
+  const robot = document.getElementById('miniDataRobot');
+  if (!robot) return;
+
+  const speech = document.getElementById('robotSpeech');
+  let clicks = 0;
+  let resetTimer;
+  let speechTimer;
+  let knockoutTimer;
+
+  const say = (text, duration = 2200) => {
+    speech.textContent = text;
+    speech.classList.add('show');
+    clearTimeout(speechTimer);
+    speechTimer = setTimeout(() => speech.classList.remove('show'), duration);
+  };
+
+  const sectionMessages = {
+    experience: '👀 Experience!',
+    education: '🎓 Learning mode!',
+    skills: '🧠 Skills spotted!',
+    project: '📊 Nice project!'
+  };
+
+  document.querySelectorAll('a, button, .card, .timeline-item, .experience-card, .education-card').forEach(el => {
+    const text = (el.textContent || '').toLowerCase();
+    let key = '';
+    if (text.includes('experience')) key = 'experience';
+    else if (text.includes('education')) key = 'education';
+    else if (text.includes('skill')) key = 'skills';
+    else if (text.includes('project')) key = 'project';
+    if (!key) return;
+
+    el.addEventListener('pointerenter', () => {
+      if (robot.classList.contains('knockout')) return;
+      say(sectionMessages[key], 1100);
+      robot.classList.add('notice');
+      setTimeout(() => robot.classList.remove('notice'), 400);
+    });
+  });
+
+  robot.addEventListener('click', () => {
+    if (robot.classList.contains('knockout')) return;
+
+    clicks++;
+    clearTimeout(resetTimer);
+
+    if (clicks === 1) {
+      robot.classList.add('wave');
+      say('Hi! 👋', 2400);
+      setTimeout(() => robot.classList.remove('wave'), 2400);
+    } else if (clicks === 2) {
+      say('Again? 😄', 1500);
+    } else if (clicks === 3) {
+      say('Bro... 😂', 1500);
+    } else if (clicks === 4) {
+      say('Okay okay! 😵', 1500);
+    } else if (clicks >= 5) {
+      robot.classList.add('knockout');
+      say('I\'ll be back in 1 minute... 😵', 1200);
+      clearTimeout(knockoutTimer);
+      knockoutTimer = setTimeout(() => {
+        robot.classList.remove('knockout');
+        robot.classList.add('recover');
+        clicks = 0;
+        say('I\'m back! ✨', 1800);
+        setTimeout(() => robot.classList.remove('recover'), 1000);
+      }, 60000);
+      return;
+    }
+
+    resetTimer = setTimeout(() => { clicks = 0; }, 3500);
+  });
 })();
 </script>
 
