@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=23">
+<link rel="stylesheet" href="style.css?v=24">
 </head>
 <body class="page-loading">
 
@@ -624,32 +624,61 @@
 </script>
 
 
+
 <div class="mini-data-robot" id="miniDataRobot" aria-label="Interactive portfolio robot">
-  <div class="robot-status">DATA BUDDY</div>
   <div class="robot-speech" id="robotSpeech" aria-live="polite"></div>
-  <div class="robot-body">
-    <div class="robot-antenna"><span></span></div>
+
+  <div class="robot-figure">
+    <div class="robot-antenna">
+      <span class="antenna-dot"></span>
+      <span class="antenna-ring"></span>
+    </div>
+
     <div class="robot-head">
-      <span class="robot-ear robot-ear-left"></span>
-      <span class="robot-ear robot-ear-right"></span>
-      <div class="robot-eyes"><i></i><i></i></div>
-      <div class="robot-mouth"><span></span></div>
-      <div class="robot-blush robot-blush-left"></div>
-      <div class="robot-blush robot-blush-right"></div>
+      <span class="robot-side robot-side-left"></span>
+      <span class="robot-side robot-side-right"></span>
+      <div class="robot-face">
+        <div class="robot-brow robot-brow-left"></div>
+        <div class="robot-brow robot-brow-right"></div>
+        <div class="robot-eyes">
+          <span></span><span></span>
+        </div>
+        <div class="robot-cheek robot-cheek-left"></div>
+        <div class="robot-cheek robot-cheek-right"></div>
+        <div class="robot-mouth"><span></span></div>
+      </div>
     </div>
+
     <div class="robot-neck"></div>
+
     <div class="robot-torso">
-      <div class="robot-screen"><span>01</span><span>10</span><b>▦</b></div>
-      <span class="robot-panel-light"></span>
+      <div class="robot-chest">
+        <div class="robot-chest-screen">
+          <i></i><i></i><i></i>
+          <b>DATA</b>
+        </div>
+      </div>
+      <span class="robot-light robot-light-one"></span>
+      <span class="robot-light robot-light-two"></span>
     </div>
-    <div class="robot-arm robot-arm-left"><span class="robot-hand">●</span></div>
-    <div class="robot-arm robot-arm-right"><span class="robot-hand">●</span></div>
+
+    <div class="robot-arm robot-arm-left">
+      <span class="robot-joint"></span>
+      <span class="robot-hand"><i></i><i></i></span>
+    </div>
+    <div class="robot-arm robot-arm-right">
+      <span class="robot-joint"></span>
+      <span class="robot-hand"><i></i><i></i></span>
+    </div>
+
     <div class="robot-leg robot-leg-left"></div>
     <div class="robot-leg robot-leg-right"></div>
   </div>
-  <div class="robot-shadow"></div>
+
+  <div class="robot-floor-glow"></div>
   <div class="robot-stars" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>
 </div>
+
 
 
 <script>
@@ -678,7 +707,7 @@
     project: '📊 Nice project!'
   };
 
-  document.querySelectorAll('a, button, .card, .timeline-item, .experience-card, .education-card').forEach(el => {
+  document.querySelectorAll('.carousel-card, .timeline-card, .timeline-item, .experience-card, .education-card, [data-exp], [data-edu], a[href*="experience"], a[href*="education"], a[href*="skills"]').forEach(el => {
     const text = (el.textContent || '').toLowerCase();
     let key = '';
     if (text.includes('experience')) key = 'experience';
