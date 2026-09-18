@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=31">
+<link rel="stylesheet" href="style.css?v=32">
 </head>
 <body class="page-loading">
 
@@ -692,17 +692,17 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.5;
+  renderer.toneMappingExposure=1.08;
 
   /* Strong, broad lighting so even nearly-black GLB materials remain readable. */
-  scene.add(new THREE.AmbientLight(0xffffff,2.8));
-  const key=new THREE.DirectionalLight(0xffffff,5.5);
+  scene.add(new THREE.AmbientLight(0x8aa9ad,1.55));
+  const key=new THREE.DirectionalLight(0x9be5df,2.4);
   key.position.set(3,5,7); scene.add(key);
   const cyan=new THREE.PointLight(0x53f2e3,22,12);
   cyan.position.set(-3,1.5,5); scene.add(cyan);
   const purple=new THREE.PointLight(0x7659e8,18,11);
   purple.position.set(3,-1,4); scene.add(purple);
-  const front=new THREE.PointLight(0xffffff,7,10);
+  const front=new THREE.PointLight(0x77d8d0,2.5,10);
   front.position.set(0,0,7); scene.add(front);
 
   const stage=new THREE.Group();
@@ -736,15 +736,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         m.side=THREE.DoubleSide;
         m.needsUpdate=true;
 
-        /* Preserve the supplied GLB look but lift extremely dark materials. */
-        if(m.color){
-          const c=m.color;
-          const lum=(c.r+c.g+c.b)/3;
-          if(lum<.10){
-            const boost=.18/Math.max(lum,.025);
-            c.multiplyScalar(Math.min(boost,4));
-          }
-        }
+        /* Preserve the supplied GLB colors exactly; only improve readability with lighting. */
         if(m.emissive){
           const ec=m.emissive;
           if(ec.g>ec.r*1.25 && ec.g>ec.b*1.05){
@@ -808,7 +800,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       const meshCount=brightenGLB(model);
 
       /* The supplied model's source axes are flipped vertically; correct that here. */
-      model.rotation.x=Math.PI;
+      model.rotation.x=0;
       model.rotation.y=Math.PI;
 
       stage.add(model);

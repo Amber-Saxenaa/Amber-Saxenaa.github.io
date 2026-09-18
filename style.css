@@ -2151,7 +2151,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 
 /* MINI DATA ROBOT V10 — supplied GLB */
 .mini-data-robot{
-  position:fixed;left:8px;top:56%;width:270px;height:270px;z-index:9999;
+  position:fixed;left:8px;top:56%;width:285px;height:285px;z-index:9999;
   cursor:pointer;user-select:none;-webkit-user-select:none;
   opacity:0;visibility:hidden;pointer-events:none;
   transform:translateY(22px) scale(.88);transform-origin:left center;
@@ -2184,7 +2184,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   100%{opacity:1;transform:translateY(-50%) scale(.88)}
 }
 @media(max-width:900px){
-  .mini-data-robot{left:0;top:62%;width:205px;height:205px}
+  .mini-data-robot{left:0;top:62%;width:215px;height:215px}
   .mini-data-robot.robot-visible{transform:translateY(-50%) scale(.86)}
   .robot-speech{left:142px;top:7px;max-width:155px}
 }
