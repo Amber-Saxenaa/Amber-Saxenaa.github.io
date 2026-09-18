@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=41">
+<link rel="stylesheet" href="style.css?v=42">
 </head>
 <body class="page-loading">
 
@@ -715,39 +715,45 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   let smileLine=null, smileMaterial=null;
   const robotParts=[];
 
-  /* Coded 3D smile: a small neon curve attached directly to the robot's
-     actual head mesh. It therefore moves/tilts with the GLB. */
+  /* Coded 3D smile — actual Three.js tube geometry attached to the
+     robot face. It is not an image and follows the head when it moves. */
   const addSmileToHead=()=>{
     if(!head || smileLine)return;
 
     head.updateMatrixWorld(true);
-    head.geometry.computeBoundingBox();
-    const b=head.geometry.boundingBox;
+    if(!head.geometry || !head.geometry.boundingBox) head.geometry?.computeBoundingBox();
+    const b=head.geometry?.boundingBox;
     if(!b)return;
 
     const w=b.max.x-b.min.x;
     const h=b.max.y-b.min.y;
-    const z=b.max.z+Math.max(w,h)*.035;
-    const y=b.min.y+h*.30;
-    const half=w*.20;
+    const half=w*.19;
+    const smileY=b.min.y+h*.31;
+    const frontZ=b.max.z+Math.max(w,h)*.035;
 
-    const pts=[];
-    for(let i=0;i<=24;i++){
-      const u=i/24;
-      const x=-half+u*(half*2);
-      const yy=y - Math.sin(Math.PI*u)*h*.075;
-      pts.push(new THREE.Vector3(x,yy,z));
-    }
+    const curve=new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-half,smileY,frontZ),
+      new THREE.Vector3(-half*.52,smileY-h*.07,frontZ),
+      new THREE.Vector3(0,smileY-h*.10,frontZ),
+      new THREE.Vector3(half*.52,smileY-h*.07,frontZ),
+      new THREE.Vector3(half,smileY,frontZ)
+    ]);
 
-    const geo=new THREE.BufferGeometry().setFromPoints(pts);
-    smileMaterial=new THREE.LineBasicMaterial({
+    const tube=new THREE.TubeGeometry(
+      curve,24,Math.max(.012,Math.min(w,h)*.018),8,false
+    );
+
+    smileMaterial=new THREE.MeshBasicMaterial({
       color:0x45f1df,
       transparent:true,
-      opacity:.82
+      opacity:.96,
+      depthTest:false,
+      depthWrite:false
     });
-    smileLine=new THREE.Line(geo,smileMaterial);
-    smileLine.name='RobotCodedSmile';
-    smileLine.renderOrder=20;
+
+    smileLine=new THREE.Mesh(tube,smileMaterial);
+    smileLine.name='RobotCodedSmile3D';
+    smileLine.renderOrder=999;
     smileLine.frustumCulled=false;
     head.add(smileLine);
   };
@@ -899,7 +905,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     if(smileMaterial){
       smileMaterial.opacity=1;
       clearTimeout(smileGlowTimer);
-      smileGlowTimer=setTimeout(()=>{ if(smileMaterial) smileMaterial.opacity=.82; },2200);
+      smileGlowTimer=setTimeout(()=>{ if(smileMaterial) smileMaterial.opacity=.96; },2200);
     }
 
     if(waving)return;
