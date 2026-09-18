@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=18">
+<link rel="stylesheet" href="style.css?v=19">
 </head>
 <body class="page-loading">
 
@@ -58,6 +58,36 @@
         <a href="index.html#contact" class="btn btn-primary btn-big">Hire Me</a>
         <a href="./resume.pdf" class="btn btn-ghost" download>Download Resume</a>
       </div>
+    </div>
+
+    <div class="glass-data-orb" id="glassDataOrb" aria-label="Interactive data visualization">
+      <div class="orb-aura"></div>
+      <div class="orb-ring orb-ring-1"></div>
+      <div class="orb-ring orb-ring-2"></div>
+      <div class="orb-core">
+        <span class="orb-core-label">DATA</span>
+        <span class="orb-core-sub">ANALYTICS</span>
+      </div>
+      <div class="orb-particles" aria-hidden="true">
+        <i style="--x:18%;--y:28%;--z:18px;--d:0s"></i>
+        <i style="--x:68%;--y:18%;--z:-12px;--d:.7s"></i>
+        <i style="--x:79%;--y:49%;--z:20px;--d:1.4s"></i>
+        <i style="--x:58%;--y:76%;--z:-18px;--d:2.1s"></i>
+        <i style="--x:25%;--y:72%;--z:8px;--d:2.8s"></i>
+        <i style="--x:15%;--y:52%;--z:-10px;--d:3.5s"></i>
+        <i style="--x:42%;--y:16%;--z:10px;--d:4.2s"></i>
+        <i style="--x:49%;--y:88%;--z:14px;--d:4.9s"></i>
+        <i style="--x:88%;--y:66%;--z:-8px;--d:5.6s"></i>
+        <i style="--x:34%;--y:46%;--z:24px;--d:6.3s"></i>
+        <i style="--x:64%;--y:43%;--z:-22px;--d:7s"></i>
+        <i style="--x:37%;--y:63%;--z:-14px;--d:7.7s"></i>
+        <i style="--x:72%;--y:82%;--z:4px;--d:8.4s"></i>
+        <i style="--x:10%;--y:35%;--z:16px;--d:9.1s"></i>
+      </div>
+      <div class="orb-label orb-label-1">SQL</div>
+      <div class="orb-label orb-label-2">POWER BI</div>
+      <div class="orb-label orb-label-3">PYTHON</div>
+      <div class="orb-label orb-label-4">EXCEL</div>
     </div>
   </div>
 </section>
@@ -528,6 +558,28 @@
   back.addEventListener('click', close);
   modal.addEventListener('click', e => { if (e.target === modal) close(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+})();
+</script>
+
+
+<script>
+(() => {
+  const orb = document.getElementById('glassDataOrb');
+  if (!orb || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let frame;
+  orb.addEventListener('pointermove', e => {
+    const r = orb.getBoundingClientRect();
+    const x = (e.clientX - (r.left + r.width / 2)) / r.width;
+    const y = (e.clientY - (r.top + r.height / 2)) / r.height;
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      orb.style.transform = `translateY(-50%) rotateX(${(-y*8).toFixed(2)}deg) rotateY(${(x*10).toFixed(2)}deg)`;
+    });
+  });
+  orb.addEventListener('pointerleave', () => {
+    cancelAnimationFrame(frame);
+    orb.style.transform = 'translateY(-50%) rotateX(0deg) rotateY(0deg)';
+  });
 })();
 </script>
 
