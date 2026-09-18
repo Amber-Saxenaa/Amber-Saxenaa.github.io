@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=32">
+<link rel="stylesheet" href="style.css?v=33">
 </head>
 <body class="page-loading">
 
@@ -800,7 +800,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       const meshCount=brightenGLB(model);
 
       /* The supplied model's source axes are flipped vertically; correct that here. */
-      model.rotation.set(0,Math.PI,0);
+      model.rotation.set(0,0,0);
 
       stage.add(model);
 
@@ -916,13 +916,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     if(modelReady){
       /* 3/4 idle turn + cursor response. */
-      model.rotation.y=Math.PI+cx+Math.sin(t*.55)*.045;
+      model.rotation.y=cx+Math.sin(t*.55)*.045;
       model.rotation.x=cy;
       model.position.y=-.05+Math.sin(t*1.35)*.045;
 
       if(head){
-        head.rotation.y+=(cx*.65-head.rotation.y)*.05;
-        head.rotation.x+=(cy*.35-head.rotation.x)*.05;
+        head.rotation.y+=(cx*.18-head.rotation.y)*.04;
+        head.rotation.x+=(cy*.12-head.rotation.x)*.04;
       }
     }
     if(mixer)mixer.update(dt);
