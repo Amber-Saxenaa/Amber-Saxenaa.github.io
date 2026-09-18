@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=21">
+<link rel="stylesheet" href="style.css?v=22">
 </head>
 <body class="page-loading">
 
@@ -69,88 +69,6 @@
   </div>
 </section>
 
-
-<section class="section skill-network-section" id="skill-network">
-  <div class="section-head reveal">
-    <p class="section-eyebrow">Interactive skill map</p>
-    <h2>How my skills connect.</h2>
-    <p class="network-intro">
-      Hover over a skill to highlight the tools and workflow around it.
-      Move across the network to explore how I connect data collection, analysis and visualization.
-    </p>
-  </div>
-
-  <div class="skill-network reveal" id="skillNetwork" aria-label="Interactive network of skills">
-    <svg class="skill-network-lines" viewBox="0 0 900 560" preserveAspectRatio="none" aria-hidden="true">
-      <line x1="450" y1="280" x2="450" y2="95" data-link="excel"></line>
-      <line x1="450" y1="280" x2="680" y2="185" data-link="powerbi"></line>
-      <line x1="450" y1="280" x2="670" y2="390" data-link="sql"></line>
-      <line x1="450" y1="280" x2="230" y2="390" data-link="python"></line>
-      <line x1="450" y1="280" x2="220" y2="185" data-link="tools"></line>
-
-      <line x1="450" y1="95" x2="220" y2="185" data-link="excel-tools"></line>
-      <line x1="450" y1="95" x2="680" y2="185" data-link="excel-powerbi"></line>
-      <line x1="680" y1="185" x2="670" y2="390" data-link="powerbi-sql"></line>
-      <line x1="670" y1="390" x2="230" y2="390" data-link="sql-python"></line>
-      <line x1="230" y1="390" x2="220" y2="185" data-link="python-tools"></line>
-    </svg>
-
-    <button class="skill-node skill-node-center" data-skill="center" aria-label="Amber Saxena — Data Analyst">
-      <span class="node-kicker">CORE</span>
-      <strong>Amber Saxena</strong>
-      <small>Data Analyst</small>
-    </button>
-
-    <button class="skill-node skill-node-excel" data-skill="excel" aria-label="Excel">
-      <span class="node-icon">▦</span>
-      <strong>Excel</strong>
-      <small>Analyze</small>
-    </button>
-
-    <button class="skill-node skill-node-powerbi" data-skill="powerbi" aria-label="Power BI">
-      <span class="node-icon">◒</span>
-      <strong>Power BI</strong>
-      <small>Visualize</small>
-    </button>
-
-    <button class="skill-node skill-node-sql" data-skill="sql" aria-label="SQL">
-      <span class="node-icon">◉</span>
-      <strong>SQL</strong>
-      <small>Query</small>
-    </button>
-
-    <button class="skill-node skill-node-python" data-skill="python" aria-label="Python">
-      <span class="node-icon">⌘</span>
-      <strong>Python</strong>
-      <small>Automate</small>
-    </button>
-
-    <button class="skill-node skill-node-tools" data-skill="tools" aria-label="Other tools">
-      <span class="node-icon">✦</span>
-      <strong>Other Tools</strong>
-      <small>Support</small>
-    </button>
-
-    <div class="skill-tooltip" id="skillTooltip" aria-live="polite">
-      <strong id="skillTooltipTitle">Excel</strong>
-      <ul id="skillTooltipList">
-        <li>Data cleaning</li>
-        <li>Analysis & reporting</li>
-        <li>Pivot tables</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="network-flow reveal">
-    <div class="network-flow-step"><span>01</span><strong>Collect</strong><small>Gather the right data</small></div>
-    <b>→</b>
-    <div class="network-flow-step"><span>02</span><strong>Process</strong><small>Clean and transform</small></div>
-    <b>→</b>
-    <div class="network-flow-step"><span>03</span><strong>Analyze</strong><small>Find meaningful patterns</small></div>
-    <b>→</b>
-    <div class="network-flow-step"><span>04</span><strong>Visualize</strong><small>Turn insights into action</small></div>
-  </div>
-</section>
 
 <section class="section skills-page">
   <div class="skill-block reveal">
@@ -222,62 +140,6 @@
   </div>
 </footer>
 
-
-<script>
-/* Interactive Skills Network */
-(() => {
-  const network = document.getElementById('skillNetwork');
-  if (!network) return;
-
-  const nodes = [...network.querySelectorAll('.skill-node')];
-  const lines = [...network.querySelectorAll('line[data-link]')];
-  const tooltip = document.getElementById('skillTooltip');
-  const title = document.getElementById('skillTooltipTitle');
-  const list = document.getElementById('skillTooltipList');
-
-  const info = {
-    excel: {title:'Excel', items:['Data cleaning','Analysis & reporting','Pivot tables & dashboards']},
-    powerbi: {title:'Power BI', items:['Interactive dashboards','Data visualization','KPI reporting']},
-    sql: {title:'SQL', items:['Data querying','Joins & subqueries','Data manipulation']},
-    python: {title:'Python', items:['Data analysis','Automation','Pandas / NumPy']},
-    tools: {title:'Other Tools', items:['Power Query','CRM / SaaS tools','Data workflow support']},
-    center: {title:'Amber Saxena', items:['Excel • SQL • Power BI • Python','Turning data into useful insights']}
-  };
-
-  const connected = {
-    excel:['excel','excel-tools','excel-powerbi'],
-    powerbi:['powerbi','excel-powerbi','powerbi-sql'],
-    sql:['sql','powerbi-sql','sql-python'],
-    python:['python','sql-python','python-tools'],
-    tools:['tools','excel-tools','python-tools'],
-    center:['excel','powerbi','sql','python','tools']
-  };
-
-  function activate(key){
-    nodes.forEach(n => n.classList.toggle('active', n.dataset.skill === key));
-    lines.forEach(l => l.classList.toggle('active', connected[key]?.includes(l.dataset.link)));
-    const item = info[key];
-    if (!item) return;
-    title.textContent = item.title;
-    list.innerHTML = item.items.map(x => `<li>${x}</li>`).join('');
-    tooltip.classList.add('show');
-  }
-
-  function clear(){
-    nodes.forEach(n => n.classList.remove('active'));
-    lines.forEach(l => l.classList.remove('active'));
-    tooltip.classList.remove('show');
-  }
-
-  nodes.forEach(node => {
-    node.addEventListener('pointerenter', () => activate(node.dataset.skill));
-    node.addEventListener('focus', () => activate(node.dataset.skill));
-    node.addEventListener('click', () => activate(node.dataset.skill));
-  });
-
-  network.addEventListener('pointerleave', clear);
-})();
-</script>
 
 <script src="script.js?v=9"></script>
 </body>
