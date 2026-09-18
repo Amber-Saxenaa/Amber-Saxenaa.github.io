@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=40">
+<link rel="stylesheet" href="style.css?v=41">
 </head>
 <body class="page-loading">
 
@@ -711,8 +711,46 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   let model=null, mixer=null, head=null, rightArm=null;
   let leftLeg=null, rightLeg=null, leftFoot=null, rightFoot=null, bodyRoot=null;
-  let modelReady=false, waving=false, speechTimer;
+  let modelReady=false, waving=false, speechTimer, smileGlowTimer;
+  let smileLine=null, smileMaterial=null;
   const robotParts=[];
+
+  /* Coded 3D smile: a small neon curve attached directly to the robot's
+     actual head mesh. It therefore moves/tilts with the GLB. */
+  const addSmileToHead=()=>{
+    if(!head || smileLine)return;
+
+    head.updateMatrixWorld(true);
+    head.geometry.computeBoundingBox();
+    const b=head.geometry.boundingBox;
+    if(!b)return;
+
+    const w=b.max.x-b.min.x;
+    const h=b.max.y-b.min.y;
+    const z=b.max.z+Math.max(w,h)*.035;
+    const y=b.min.y+h*.30;
+    const half=w*.20;
+
+    const pts=[];
+    for(let i=0;i<=24;i++){
+      const u=i/24;
+      const x=-half+u*(half*2);
+      const yy=y - Math.sin(Math.PI*u)*h*.075;
+      pts.push(new THREE.Vector3(x,yy,z));
+    }
+
+    const geo=new THREE.BufferGeometry().setFromPoints(pts);
+    smileMaterial=new THREE.LineBasicMaterial({
+      color:0x45f1df,
+      transparent:true,
+      opacity:.82
+    });
+    smileLine=new THREE.Line(geo,smileMaterial);
+    smileLine.name='RobotCodedSmile';
+    smileLine.renderOrder=20;
+    smileLine.frustumCulled=false;
+    head.add(smileLine);
+  };
 
   const clock=new THREE.Clock();
   const say=(text,duration=2200)=>{
@@ -828,6 +866,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       }
 
       frameModel();
+      addSmileToHead();
 
       if(!meshCount){
         console.warn('mini_robot.glb loaded but contains no mesh objects');
@@ -857,6 +896,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     if(!modelReady)return;
 
     say('Hi! 👋',2200);
+    if(smileMaterial){
+      smileMaterial.opacity=1;
+      clearTimeout(smileGlowTimer);
+      smileGlowTimer=setTimeout(()=>{ if(smileMaterial) smileMaterial.opacity=.82; },2200);
+    }
 
     if(waving)return;
     waving=true;
