@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=42">
+<link rel="stylesheet" href="style.css?v=43">
 </head>
 <body class="page-loading">
 
@@ -715,45 +715,51 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   let smileLine=null, smileMaterial=null;
   const robotParts=[];
 
-  /* Coded 3D smile — actual Three.js tube geometry attached to the
-     robot face. It is not an image and follows the head when it moves. */
+  /* V27 — visible 3D smile.
+     IMPORTANT: the GLB meshes are re-centered during loading, so the
+     bounding box is recomputed AFTER that operation. The smile is then
+     attached to the actual head mesh and placed just in front of its face. */
   const addSmileToHead=()=>{
     if(!head || smileLine)return;
 
     head.updateMatrixWorld(true);
-    if(!head.geometry || !head.geometry.boundingBox) head.geometry?.computeBoundingBox();
-    const b=head.geometry?.boundingBox;
+    if(!head.geometry)return;
+
+    head.geometry.computeBoundingBox();
+    const b=head.geometry.boundingBox;
     if(!b)return;
 
     const w=b.max.x-b.min.x;
     const h=b.max.y-b.min.y;
-    const half=w*.19;
-    const smileY=b.min.y+h*.31;
-    const frontZ=b.max.z+Math.max(w,h)*.035;
+    const d=b.max.z-b.min.z;
 
+    const half=w*.16;
+    const yBase=b.min.y+h*.30;
+    const zFront=b.max.z+d*.035;
+
+    /* U-shaped curve: ends higher, center lower = a real smile. */
     const curve=new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-half,smileY,frontZ),
-      new THREE.Vector3(-half*.52,smileY-h*.07,frontZ),
-      new THREE.Vector3(0,smileY-h*.10,frontZ),
-      new THREE.Vector3(half*.52,smileY-h*.07,frontZ),
-      new THREE.Vector3(half,smileY,frontZ)
+      new THREE.Vector3(-half,yBase,zFront),
+      new THREE.Vector3(-half*.52,yBase-h*.085,zFront),
+      new THREE.Vector3(0,yBase-h*.12,zFront),
+      new THREE.Vector3(half*.52,yBase-h*.085,zFront),
+      new THREE.Vector3(half,yBase,zFront)
     ]);
 
-    const tube=new THREE.TubeGeometry(
-      curve,24,Math.max(.012,Math.min(w,h)*.018),8,false
-    );
+    const thickness=Math.max(.018,Math.min(w,h)*.022);
+    const tube=new THREE.TubeGeometry(curve,32,thickness,10,false);
 
     smileMaterial=new THREE.MeshBasicMaterial({
       color:0x45f1df,
       transparent:true,
-      opacity:.96,
+      opacity:1,
       depthTest:false,
       depthWrite:false
     });
 
     smileLine=new THREE.Mesh(tube,smileMaterial);
     smileLine.name='RobotCodedSmile3D';
-    smileLine.renderOrder=999;
+    smileLine.renderOrder=10000;
     smileLine.frustumCulled=false;
     head.add(smileLine);
   };
