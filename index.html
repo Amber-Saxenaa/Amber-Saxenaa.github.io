@@ -669,72 +669,275 @@
 
 
 <script type="module">
-/* Mini Data Robot V9 — supplied GLB, robustly framed and rendered as real 3D */
+/* Mini Data Robot V10 — robust GLB renderer */
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 (() => {
-  const robot=document.getElementById('miniDataRobot'), canvas=document.getElementById('robot3DCanvas'), speech=document.getElementById('robotSpeech');
+  const robot=document.getElementById('miniDataRobot');
+  const canvas=document.getElementById('robot3DCanvas');
+  const speech=document.getElementById('robotSpeech');
   if(!robot||!canvas)return;
+
   const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(24,1,.01,1000);
-  camera.position.set(0,.2,7); camera.lookAt(0,0,0);
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.3;
-  const stage=new THREE.Group(); scene.add(stage);
-  scene.add(new THREE.HemisphereLight(0xffffff,0x10131d,3));
-  const key=new THREE.DirectionalLight(0xffffff,4.5); key.position.set(4,6,8); scene.add(key);
-  const cyanLight=new THREE.PointLight(0x49f3df,16,12); cyanLight.position.set(-3,1.5,4); scene.add(cyanLight);
-  const purpleLight=new THREE.PointLight(0x7659e8,14,10); purpleLight.position.set(3,0,3); scene.add(purpleLight);
-  const front=new THREE.PointLight(0xffffff,4,8); front.position.set(0,2,6); scene.add(front);
-  let model=null,head=null,rightArm=null,mixer=null,waving=false,clickCount=0,resetTimer,speechTimer,knockoutTimer;
-  const clock=new THREE.Clock();
-  const say=(text,duration=2200)=>{speech.textContent=text;speech.classList.add('show');clearTimeout(speechTimer);speechTimer=setTimeout(()=>speech.classList.remove('show'),duration)};
-  const loader=new GLTFLoader();
-  loader.load('assets/mini_robot.glb',gltf=>{
-    model=gltf.scene;
-    model.traverse(o=>{
-      if(!o.isMesh)return;
-      o.visible=true;o.frustumCulled=false;o.castShadow=true;o.receiveShadow=true;
-      if(o.material){(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{m.side=THREE.DoubleSide;m.needsUpdate=true})}
-      const n=(o.name||'').toLowerCase();
-      if(!head&&/(head|face|neck)/.test(n))head=o;
-      if(!rightArm&&/(right|r)[ _-]?(arm|hand|upper|fore)/.test(n))rightArm=o;
-    });
-    stage.add(model);
-    // Center + fit using the actual post-load bounds. This fixes models whose GLB origin is far from the mesh.
-    const raw=new THREE.Box3().setFromObject(model), center=raw.getCenter(new THREE.Vector3()), size=raw.getSize(new THREE.Vector3());
-    model.position.sub(center);
-    const maxDim=Math.max(size.x,size.y,size.z)||1;
-    model.scale.setScalar(3.25/maxDim);
-    model.position.y=-.12;
-    const fit=new THREE.Box3().setFromObject(model), sphere=fit.getBoundingSphere(new THREE.Sphere());
-    const fov=THREE.MathUtils.degToRad(camera.fov);
-    const dist=Math.max(4.2,(sphere.radius/Math.tan(fov/2))*1.22);
-    camera.position.set(0,fit.getCenter(new THREE.Vector3()).y+.05,dist);
-    camera.lookAt(0,fit.getCenter(new THREE.Vector3()).y,0);
-    if(gltf.animations?.length){mixer=new THREE.AnimationMixer(model);gltf.animations.forEach(c=>mixer.clipAction(c).play())}
-    speech.classList.remove('show');
-  },undefined,error=>{console.error(error);say('3D model failed to load 😵',3500)});
-  let tx=0,ty=0,cx=0,cy=0;
-  robot.addEventListener('pointermove',e=>{const r=robot.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5)*.55;ty=-((e.clientY-r.top)/r.height-.5)*.25});
-  robot.addEventListener('pointerleave',()=>{tx=0;ty=0});
-  robot.addEventListener('click',()=>{
-    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')||!model)return;
-    clickCount++;clearTimeout(resetTimer);
-    if(clickCount===1){say('Hi! 👋',2400);if(!waving){waving=true;const target=rightArm||model,orig=target.rotation.z;let t=0;const wave=()=>{t++;target.rotation.z=orig+Math.sin(t*.72)*.45;if(t<34)requestAnimationFrame(wave);else{target.rotation.z=orig;waving=false}};wave()}}
-    else if(clickCount===2)say('Again? 😄',1500); else if(clickCount===3)say('Bro... 😂',1500); else if(clickCount===4)say('Okay okay! 😵',1500);
-    else{say("I'll be back in 1 minute... 😵",1300);robot.classList.add('knockout');clearTimeout(knockoutTimer);knockoutTimer=setTimeout(()=>{robot.classList.remove('knockout');robot.classList.add('recover');clickCount=0;say("I'm back! ✨",1800);setTimeout(()=>robot.classList.remove('recover'),1000)},60000);return}
-    resetTimer=setTimeout(()=>clickCount=0,3500);
+
+  /* Orthographic camera removes perspective/framing edge cases on small fixed cards. */
+  const camera=new THREE.OrthographicCamera(-2,2,2,-2,.01,1000);
+  camera.position.set(0,0,8);
+  camera.lookAt(0,0,0);
+
+  const renderer=new THREE.WebGLRenderer({
+    canvas,alpha:true,antialias:true,powerPreference:'high-performance'
   });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.5;
+
+  /* Strong, broad lighting so even nearly-black GLB materials remain readable. */
+  scene.add(new THREE.AmbientLight(0xffffff,2.8));
+  const key=new THREE.DirectionalLight(0xffffff,5.5);
+  key.position.set(3,5,7); scene.add(key);
+  const cyan=new THREE.PointLight(0x53f2e3,22,12);
+  cyan.position.set(-3,1.5,5); scene.add(cyan);
+  const purple=new THREE.PointLight(0x7659e8,18,11);
+  purple.position.set(3,-1,4); scene.add(purple);
+  const front=new THREE.PointLight(0xffffff,7,10);
+  front.position.set(0,0,7); scene.add(front);
+
+  const stage=new THREE.Group();
+  stage.position.set(0,-.05,0);
+  scene.add(stage);
+
+  let model=null, mixer=null, head=null, rightArm=null;
+  let modelReady=false, waving=false, clicks=0, resetTimer, speechTimer, knockoutTimer;
+
+  const clock=new THREE.Clock();
+  const say=(text,duration=2200)=>{
+    speech.textContent=text;
+    speech.classList.add('show');
+    clearTimeout(speechTimer);
+    speechTimer=setTimeout(()=>speech.classList.remove('show'),duration);
+  };
+
+  const brightenGLB=(root)=>{
+    let meshes=0;
+    root.traverse(o=>{
+      if(!o.isMesh)return;
+      meshes++;
+      o.visible=true;
+      o.frustumCulled=false;
+      o.castShadow=true;
+      o.receiveShadow=true;
+
+      const materials=Array.isArray(o.material)?o.material:[o.material];
+      materials.forEach(m=>{
+        if(!m)return;
+        m.side=THREE.DoubleSide;
+        m.needsUpdate=true;
+
+        /* Preserve the supplied GLB look but lift extremely dark materials. */
+        if(m.color){
+          const c=m.color;
+          const lum=(c.r+c.g+c.b)/3;
+          if(lum<.10){
+            const boost=.18/Math.max(lum,.025);
+            c.multiplyScalar(Math.min(boost,4));
+          }
+        }
+        if(m.emissive){
+          const ec=m.emissive;
+          if(ec.g>ec.r*1.25 && ec.g>ec.b*1.05){
+            m.emissiveIntensity=Math.max(m.emissiveIntensity||0,1.5);
+          }
+        }
+      });
+
+      const n=(o.name||'').toLowerCase();
+      if(!head && /(head|face|neck)/.test(n)) head=o;
+      if(!rightArm && /(right|r)[ _-]?(arm|hand|upper|fore)/.test(n)) rightArm=o;
+    });
+    return meshes;
+  };
+
+  const frameModel=()=>{
+    if(!model)return;
+    model.updateMatrixWorld(true);
+
+    const bounds=new THREE.Box3().setFromObject(model);
+    const center=bounds.getCenter(new THREE.Vector3());
+    const size=bounds.getSize(new THREE.Vector3());
+    const maxDim=Math.max(size.x,size.y,size.z,0.001);
+
+    /* Center the actual rendered geometry, not the GLB origin. */
+    model.position.sub(center);
+    model.updateMatrixWorld(true);
+
+    const centered=new THREE.Box3().setFromObject(model);
+    const c=centered.getCenter(new THREE.Vector3());
+    const s=centered.getSize(new THREE.Vector3());
+    const max2=Math.max(s.x,s.y,s.z,0.001);
+
+    const aspect=Math.max(canvas.clientWidth,1)/Math.max(canvas.clientHeight,1);
+    const viewH=max2*1.35;
+    const viewW=viewH*aspect;
+
+    camera.top=viewH/2;
+    camera.bottom=-viewH/2;
+    camera.left=-viewW/2;
+    camera.right=viewW/2;
+    camera.near=.001;
+    camera.far=Math.max(100,max2*20);
+    camera.position.set(0,0,Math.max(8,max2*4));
+    camera.lookAt(c.x,c.y,c.z);
+
+    /* Scale the complete object to fill most of the robot area. */
+    const target=1.75;
+    model.scale.setScalar(target/max2);
+    model.position.set(0,-.05,0);
+    model.updateMatrixWorld(true);
+
+    modelReady=true;
+  };
+
+  const loader=new GLTFLoader();
+  loader.load(
+    'assets/mini_robot.glb',
+    gltf=>{
+      model=gltf.scene;
+      const meshCount=brightenGLB(model);
+
+      /* The supplied model's source axes are flipped vertically; correct that here. */
+      model.rotation.x=Math.PI;
+      model.rotation.y=Math.PI;
+
+      stage.add(model);
+
+      if(gltf.animations?.length){
+        mixer=new THREE.AnimationMixer(model);
+        gltf.animations.forEach(clip=>mixer.clipAction(clip).play());
+      }
+
+      frameModel();
+
+      if(!meshCount){
+        console.warn('mini_robot.glb loaded but contains no mesh objects');
+        say('Robot model has no visible mesh 😵',3000);
+      }
+    },
+    undefined,
+    error=>{
+      console.error('mini_robot.glb failed to load:',error);
+      say('Could not load 3D robot 😵',3500);
+    }
+  );
+
+  /* Cursor interaction */
+  let tx=0,ty=0,cx=0,cy=0;
+  robot.addEventListener('pointermove',e=>{
+    const r=robot.getBoundingClientRect();
+    tx=((e.clientX-r.left)/r.width-.5)*.55;
+    ty=-((e.clientY-r.top)/r.height-.5)*.25;
+  });
+  robot.addEventListener('pointerleave',()=>{tx=0;ty=0});
+
+  /* Click interaction */
+  robot.addEventListener('click',()=>{
+    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')||!modelReady)return;
+    clicks++; clearTimeout(resetTimer);
+
+    if(clicks===1){
+      say('Hi! 👋',2400);
+      if(!waving){
+        waving=true;
+        const target=rightArm||model, original=target.rotation.z;
+        let t=0;
+        const wave=()=>{
+          t++;
+          target.rotation.z=original+Math.sin(t*.72)*.45;
+          if(t<34)requestAnimationFrame(wave);
+          else{target.rotation.z=original;waving=false}
+        };
+        wave();
+      }
+    }else if(clicks===2)say('Again? 😄',1500);
+    else if(clicks===3)say('Bro... 😂',1500);
+    else if(clicks===4)say('Okay okay! 😵',1500);
+    else{
+      say("I'll be back in 1 minute... 😵",1300);
+      robot.classList.add('knockout');
+      clearTimeout(knockoutTimer);
+      knockoutTimer=setTimeout(()=>{
+        robot.classList.remove('knockout');
+        robot.classList.add('recover');
+        clicks=0;
+        say("I'm back! ✨",1800);
+        setTimeout(()=>robot.classList.remove('recover'),1000);
+      },60000);
+      return;
+    }
+    resetTimer=setTimeout(()=>clicks=0,3500);
+  });
+
+  /* About section visibility */
   let about=document.querySelector('#about,.about-section,[data-section="about"]');
-  if(!about)about=[...document.querySelectorAll('section,main > div,.section')].find(el=>/about\s*(me|section)?/i.test((el.querySelector('h1,h2,h3')?.textContent||'')+' '+(el.id||'')));
-  const updateVisibility=()=>{if(!about){robot.classList.toggle('robot-visible',scrollY>innerHeight*.45);return}robot.classList.toggle('robot-visible',about.getBoundingClientRect().top<=innerHeight*.78)};
-  addEventListener('scroll',updateVisibility,{passive:true});addEventListener('resize',updateVisibility);updateVisibility();
+  if(!about){
+    about=[...document.querySelectorAll('section,main > div,.section')].find(el=>{
+      const h=el.querySelector('h1,h2,h3');
+      return /about\s*(me|section)?/i.test((h?.textContent||'')+' '+(el.id||''));
+    });
+  }
+  const updateVisibility=()=>{
+    if(!about){
+      robot.classList.toggle('robot-visible',scrollY>innerHeight*.45);
+      return;
+    }
+    robot.classList.toggle('robot-visible',about.getBoundingClientRect().top<=innerHeight*.78);
+  };
+  addEventListener('scroll',updateVisibility,{passive:true});
+  addEventListener('resize',()=>{frameModel();updateVisibility()});
+  updateVisibility();
+
+  /* Section hover reactions */
   const messages={experience:'👀 Experience!',education:'🎓 Learning mode!',skills:'🧠 Skills spotted!',project:'📊 Nice project!'};
-  document.querySelectorAll('.carousel-card,.timeline-card,.timeline-item,.experience-card,.education-card,a[href*="experience"],a[href*="education"],a[href*="skills"]').forEach(el=>{const t=(el.textContent||'').toLowerCase();const k=t.includes('experience')?'experience':t.includes('education')?'education':t.includes('skill')?'skills':t.includes('project')?'project':'';if(!k)return;el.addEventListener('pointerenter',()=>{if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout'))say(messages[k],1100)})});
-  const resize=()=>{const w=canvas.clientWidth||250,h=canvas.clientHeight||250;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()};addEventListener('resize',resize);resize();
-  const animate=()=>{requestAnimationFrame(animate);const dt=clock.getDelta(),t=clock.elapsedTime;cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;if(model){model.rotation.y=cx+Math.sin(t*.55)*.025;model.rotation.x=cy;model.position.y=-.12+Math.sin(t*1.35)*.045;if(head){head.rotation.y+=(cx*.65-head.rotation.y)*.05;head.rotation.x+=(cy*.35-head.rotation.x)*.05}}if(mixer)mixer.update(dt);renderer.render(scene,camera)};animate();
+  document.querySelectorAll('.carousel-card,.timeline-card,.timeline-item,.experience-card,.education-card,a[href*="experience"],a[href*="education"],a[href*="skills"]').forEach(el=>{
+    const t=(el.textContent||'').toLowerCase();
+    const k=t.includes('experience')?'experience':t.includes('education')?'education':t.includes('skill')?'skills':t.includes('project')?'project':'';
+    if(!k)return;
+    el.addEventListener('pointerenter',()=>{
+      if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout'))say(messages[k],1100);
+    });
+  });
+
+  const resize=()=>{
+    const w=canvas.clientWidth||250,h=canvas.clientHeight||250;
+    renderer.setSize(w,h,false);
+    frameModel();
+  };
+  addEventListener('resize',resize);
+  resize();
+
+  const animate=()=>{
+    requestAnimationFrame(animate);
+    const dt=clock.getDelta(),t=clock.elapsedTime;
+    cx+=(tx-cx)*.055;
+    cy+=(ty-cy)*.055;
+
+    if(modelReady){
+      /* 3/4 idle turn + cursor response. */
+      model.rotation.y=Math.PI+cx+Math.sin(t*.55)*.045;
+      model.rotation.x=Math.PI+cy;
+      model.position.y=-.05+Math.sin(t*1.35)*.045;
+
+      if(head){
+        head.rotation.y+=(cx*.65-head.rotation.y)*.05;
+        head.rotation.x+=(cy*.35-head.rotation.x)*.05;
+      }
+    }
+    if(mixer)mixer.update(dt);
+    renderer.render(scene,camera);
+  };
+  animate();
 })();
 </script>
 

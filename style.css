@@ -2148,3 +2148,46 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 #robot3DCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
 .robot-speech{z-index:5}
 @media(max-width:900px){.mini-data-robot{left:0;top:62%;width:210px;height:210px}.mini-data-robot.robot-visible{transform:translateY(-50%) scale(.86)}}
+
+/* MINI DATA ROBOT V10 — supplied GLB */
+.mini-data-robot{
+  position:fixed;left:8px;top:56%;width:270px;height:270px;z-index:9999;
+  cursor:pointer;user-select:none;-webkit-user-select:none;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateY(22px) scale(.88);transform-origin:left center;
+  transition:opacity .45s ease,transform .55s cubic-bezier(.2,.8,.2,1),visibility .45s ease;
+}
+.mini-data-robot.robot-visible{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateY(-50%) scale(.88);
+}
+.robot-3d-wrap{position:absolute;inset:0;overflow:visible}
+#robot3DCanvas{display:block;width:100%;height:100%;outline:none;touch-action:none}
+.robot-speech{
+  position:absolute;left:190px;top:20px;z-index:5;width:max-content;max-width:180px;
+  padding:9px 12px;border:1px solid rgba(87,238,220,.30);
+  border-radius:13px 13px 13px 4px;background:linear-gradient(145deg,rgba(10,22,29,.96),rgba(3,9,14,.94));
+  color:#e7fffc;font:500 10px/1.35 'JetBrains Mono',monospace;
+  box-shadow:0 14px 32px rgba(0,0,0,.38),0 0 24px rgba(45,212,191,.08);
+  opacity:0;transform:translateY(7px) scale(.95);pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.robot-speech.show{opacity:1;transform:translateY(0) scale(1)}
+.mini-data-robot.knockout{animation:robot3DKnockout 1.15s cubic-bezier(.72,-.08,.28,1) forwards}
+.mini-data-robot.recover{animation:robot3DRecover .9s ease-out}
+@keyframes robot3DKnockout{
+  0%{opacity:1;transform:translateY(-50%) scale(.88) rotate(0)}
+  70%{opacity:1}100%{opacity:0;transform:translateY(-35%) scale(.68) rotate(10deg)}
+}
+@keyframes robot3DRecover{
+  0%{opacity:0;transform:translateY(-35%) scale(.68)}
+  100%{opacity:1;transform:translateY(-50%) scale(.88)}
+}
+@media(max-width:900px){
+  .mini-data-robot{left:0;top:62%;width:205px;height:205px}
+  .mini-data-robot.robot-visible{transform:translateY(-50%) scale(.86)}
+  .robot-speech{left:142px;top:7px;max-width:155px}
+}
+@media(prefers-reduced-motion:reduce){
+  .mini-data-robot.knockout,.mini-data-robot.recover{animation:none!important}
+}
