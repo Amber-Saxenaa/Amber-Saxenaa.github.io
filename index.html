@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=39">
+<link rel="stylesheet" href="style.css?v=40">
 </head>
 <body class="page-loading">
 
@@ -711,7 +711,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   let model=null, mixer=null, head=null, rightArm=null;
   let leftLeg=null, rightLeg=null, leftFoot=null, rightFoot=null, bodyRoot=null;
-  let modelReady=false, waving=false, clicks=0, resetTimer, speechTimer, knockoutTimer;
+  let modelReady=false, waving=false, speechTimer;
   const robotParts=[];
 
   const clock=new THREE.Clock();
@@ -850,38 +850,32 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   });
   robot.addEventListener('pointerleave',()=>{tx=0;ty=0});
 
-  /* Click interaction */
+  /* Click interaction — the robot is silent until clicked.
+     Every click says only "Hi! 👋" and triggers the wave. No knockout,
+     no disappearing, no hover messages. */
   robot.addEventListener('click',()=>{
-        say('Hi! 👋',2200);
+    if(!modelReady)return;
 
-    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')||!modelReady)return;
-    clicks=1; clearTimeout(resetTimer);
+    say('Hi! 👋',2200);
 
-    if(clicks===1){
-      
-      if(!waving){
-        waving=true;
-        const target=rightArm||model, original=target.rotation.z;
-        let t=0;
-        const wave=()=>{
-          t++;
-          target.rotation.z=original+Math.sin(t*.72)*.55;
-          if(t<34)requestAnimationFrame(wave);
-          else{target.rotation.z=original;waving=false}
-        };
-        wave();
+    if(waving)return;
+    waving=true;
+
+    const target=rightArm||model;
+    const original=target.rotation.z;
+    let t=0;
+
+    const wave=()=>{
+      t++;
+      target.rotation.z=original+Math.sin(t*.72)*.55;
+      if(t<34){
+        requestAnimationFrame(wave);
+      }else{
+        target.rotation.z=original;
+        waving=false;
       }
-    }else if(clicks===2)
-    else if(clicks===3)
-    else if(clicks===4)
-    else{
-      
-      robot.classList.add('knockout');
-      
-      knockoutTimer=
-      return;
-    }
-    resetTimer=setTimeout(()=>clicks=0,3500);
+    };
+    wave();
   });
 
   /* About section visibility */
@@ -903,16 +897,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   addEventListener('resize',()=>{frameModel();updateVisibility()});
   updateVisibility();
 
-  /* Section hover reactions */
-  const messages={experience:'👀 Experience!',education:'🎓 Learning mode!',skills:'🧠 Skills spotted!',project:'📊 Nice project!'};
-  document.querySelectorAll('.carousel-card,.timeline-card,.timeline-item,.experience-card,.education-card,a[href*="experience"],a[href*="education"],a[href*="skills"]').forEach(el=>{
-    const t=(el.textContent||'').toLowerCase();
-    const k=t.includes('experience')?'experience':t.includes('education')?'education':t.includes('skill')?'skills':t.includes('project')?'project':'';
-    if(!k)return;
-    el.addEventListener('pointerenter',()=>{
-      if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout'))say(messages[k],1100);
-    });
-  });
+  /* No automatic/hover speech. */
 
   const resize=()=>{
     const w=canvas.clientWidth||250,h=canvas.clientHeight||250;

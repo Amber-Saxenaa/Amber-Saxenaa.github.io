@@ -2404,3 +2404,15 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   visibility:visible!important;
   opacity:1!important;
 }
+
+/* V24 — only the click handler may reveal the speech bubble */
+#robotSpeech.robot-speech,
+.robot-speech#robotSpeech{
+  visibility:hidden!important;
+  opacity:0!important;
+}
+#robotSpeech.robot-speech.show,
+.robot-speech#robotSpeech.show{
+  visibility:visible!important;
+  opacity:1!important;
+}
