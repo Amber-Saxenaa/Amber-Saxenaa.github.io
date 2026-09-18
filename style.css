@@ -2391,3 +2391,16 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
     font-size:11px!important;
   }
 }
+
+/* V23 — robot is silent until clicked; click says only "Hi! 👋" */
+#robotSpeech.robot-speech,
+.robot-speech#robotSpeech{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+#robotSpeech.robot-speech.show,
+.robot-speech#robotSpeech.show{
+  visibility:visible!important;
+  opacity:1!important;
+}

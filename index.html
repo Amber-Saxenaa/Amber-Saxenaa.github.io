@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=38">
+<link rel="stylesheet" href="style.css?v=39">
 </head>
 <body class="page-loading">
 
@@ -831,13 +831,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
       if(!meshCount){
         console.warn('mini_robot.glb loaded but contains no mesh objects');
-        say('Robot model has no visible mesh 😵',3000);
+        
       }
     },
     undefined,
     error=>{
       console.error('mini_robot.glb failed to load:',error);
-      say('Could not load 3D robot 😵',3500);
+      
     }
   );
 
@@ -852,11 +852,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   /* Click interaction */
   robot.addEventListener('click',()=>{
+        say('Hi! 👋',2200);
+
     if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')||!modelReady)return;
-    clicks++; clearTimeout(resetTimer);
+    clicks=1; clearTimeout(resetTimer);
 
     if(clicks===1){
-      say('Hi! 👋',2400);
+      
       if(!waving){
         waving=true;
         const target=rightArm||model, original=target.rotation.z;
@@ -869,20 +871,14 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         };
         wave();
       }
-    }else if(clicks===2)say('Again? 😄',1500);
-    else if(clicks===3)say('Bro... 😂',1500);
-    else if(clicks===4)say('Okay okay! 😵',1500);
+    }else if(clicks===2)
+    else if(clicks===3)
+    else if(clicks===4)
     else{
-      say("I'll be back in 1 minute... 😵",1300);
+      
       robot.classList.add('knockout');
-      clearTimeout(knockoutTimer);
-      knockoutTimer=setTimeout(()=>{
-        robot.classList.remove('knockout');
-        robot.classList.add('recover');
-        clicks=0;
-        say("I'm back! ✨",1800);
-        setTimeout(()=>robot.classList.remove('recover'),1000);
-      },60000);
+      
+      knockoutTimer=
       return;
     }
     resetTimer=setTimeout(()=>clicks=0,3500);
