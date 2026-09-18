@@ -643,127 +643,7 @@
 
 
 
-<script>
-/* Mini Data Robot — About-section visibility + interactions */
-(() => {
-  const robot = document.getElementById('miniDataRobot');
-  if (!robot) return;
 
-  const speech = document.getElementById('robotSpeech');
-  let clicks = 0;
-  let resetTimer;
-  let speechTimer;
-  let knockoutTimer;
-
-  const say = (text, duration = 2200) => {
-    speech.textContent = text;
-    speech.classList.add('show');
-    clearTimeout(speechTimer);
-    speechTimer = setTimeout(() => speech.classList.remove('show'), duration);
-  };
-
-  /* Find the About section by id/class or its heading text. */
-  let aboutSection =
-    document.querySelector('#about, .about-section, [data-section="about"]');
-
-  if (!aboutSection) {
-    const candidates = [...document.querySelectorAll('section, main > div, .section')];
-    aboutSection = candidates.find(el =>
-      /(^|\s)about(\s|$)/i.test(el.id || '') ||
-      /about\s*(me|section)?/i.test(el.querySelector('h1,h2,h3')?.textContent || '')
-    );
-  }
-
-  /* Show once About begins entering the viewport; hide again above About. */
-  if (aboutSection) {
-    const observer = new IntersectionObserver(entries => {
-      const entry = entries[0];
-      if (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight * 0.72) {
-        robot.classList.add('robot-visible');
-      } else if (entry.boundingClientRect.top > window.innerHeight * 0.8) {
-        robot.classList.remove('robot-visible');
-      }
-    }, {threshold:[0, .08]});
-    observer.observe(aboutSection);
-
-    const updateVisibility = () => {
-      const rect = aboutSection.getBoundingClientRect();
-      const show = rect.top <= window.innerHeight * 0.72;
-      if (show) robot.classList.add('robot-visible');
-      else robot.classList.remove('robot-visible');
-    };
-    window.addEventListener('scroll', updateVisibility, {passive:true});
-    updateVisibility();
-  } else {
-    /* Fallback: About usually follows the hero; show after modest scrolling. */
-    const fallback = () => {
-      if (window.scrollY > window.innerHeight * 0.55) robot.classList.add('robot-visible');
-      else robot.classList.remove('robot-visible');
-    };
-    window.addEventListener('scroll', fallback, {passive:true});
-    fallback();
-  }
-
-  const sectionMessages = {
-    experience: '👀 Experience!',
-    education: '🎓 Learning mode!',
-    skills: '🧠 Skills spotted!',
-    project: '📊 Nice project!'
-  };
-
-  document.querySelectorAll(
-    '.carousel-card, .timeline-card, .timeline-item, .experience-card, .education-card, ' +
-    '[data-exp], [data-edu], a[href*="experience"], a[href*="education"], a[href*="skills"]'
-  ).forEach(el => {
-    const text = (el.textContent || '').toLowerCase();
-    let key = '';
-    if (text.includes('experience')) key = 'experience';
-    else if (text.includes('education')) key = 'education';
-    else if (text.includes('skill')) key = 'skills';
-    else if (text.includes('project')) key = 'project';
-    if (!key) return;
-
-    el.addEventListener('pointerenter', () => {
-      if (!robot.classList.contains('robot-visible') || robot.classList.contains('knockout')) return;
-      say(sectionMessages[key], 1100);
-    });
-  });
-
-  robot.addEventListener('click', () => {
-    if (!robot.classList.contains('robot-visible') || robot.classList.contains('knockout')) return;
-
-    clicks++;
-    clearTimeout(resetTimer);
-
-    if (clicks === 1) {
-      robot.classList.add('wave');
-      say('Hi! 👋', 2400);
-      setTimeout(() => robot.classList.remove('wave'), 2400);
-    } else if (clicks === 2) {
-      say('Again? 😄', 1500);
-    } else if (clicks === 3) {
-      say('Bro... 😂', 1500);
-    } else if (clicks === 4) {
-      say('Okay okay! 😵', 1500);
-    } else if (clicks >= 5) {
-      robot.classList.add('knockout');
-      say('I\\'ll be back in 1 minute... 😵', 1200);
-
-      clearTimeout(knockoutTimer);
-      knockoutTimer = setTimeout(() => {
-        robot.classList.remove('knockout');
-        robot.classList.add('recover');
-        clicks = 0;
-        say('I\\'m back! ✨', 1800);
-        setTimeout(() => robot.classList.remove('recover'), 1000);
-      }, 60000);
-      return;
-    }
-
-    resetTimer = setTimeout(() => { clicks = 0; }, 3500);
-  });
-})();
-</script>
 
 
 
@@ -789,224 +669,72 @@
 
 
 <script type="module">
-/* Mini Data Robot V8 — user's supplied GLB, rendered as real 3D */
+/* Mini Data Robot V9 — supplied GLB, robustly framed and rendered as real 3D */
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
 (() => {
-  const robot = document.getElementById('miniDataRobot');
-  const canvas = document.getElementById('robot3DCanvas');
-  const speech = document.getElementById('robotSpeech');
-  if (!robot || !canvas) return;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(24, 1, .01, 100);
-  camera.position.set(0, 0.9, 6.4);
-
-  const renderer = new THREE.WebGLRenderer({
-    canvas, alpha:true, antialias:true, powerPreference:'high-performance'
-  });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
-
-  const root = new THREE.Group();
-  root.position.y = -.25;
-  scene.add(root);
-
-  // Lighting for the supplied model.
-  scene.add(new THREE.HemisphereLight(0xd8ffff, 0x090b12, 2.1));
-  const key = new THREE.DirectionalLight(0xffffff, 3.0);
-  key.position.set(3, 4, 6);
-  scene.add(key);
-  const cyan = new THREE.PointLight(0x43eadc, 9, 8);
-  cyan.position.set(-2, 1.2, 3);
-  scene.add(cyan);
-  const purple = new THREE.PointLight(0x7555e8, 10, 8);
-  purple.position.set(2, .4, 2);
-  scene.add(purple);
-
-  let model = null;
-  let modelCenter = new THREE.Vector3();
-  let modelSize = new THREE.Vector3(1,1,1);
-  let baseScale = 1;
-  let baseY = 0;
-  let rightArm = null;
-  let head = null;
-  let mixers = [];
-  let clock = new THREE.Clock();
-
-  const loader = new GLTFLoader();
-  loader.load(
-    'assets/mini_robot.glb',
-    (gltf) => {
-      model = gltf.scene;
-      model.traverse(o => {
-        if (o.isMesh) {
-          o.castShadow = true;
-          o.receiveShadow = true;
-        }
-      });
-
-      // Normalize any model dimensions so it fits the existing robot slot.
-      const box = new THREE.Box3().setFromObject(model);
-      box.getCenter(modelCenter);
-      box.getSize(modelSize);
-      const maxDim = Math.max(modelSize.x, modelSize.y, modelSize.z) || 1;
-
-      model.position.sub(modelCenter);
-      baseScale = 3.15 / maxDim;
-      model.scale.setScalar(baseScale);
-
-      // Put the model's visual center slightly above the hover point.
-      model.position.y = -.05;
-      root.add(model);
-      baseY = root.position.y;
-
-      // Preserve animations if the supplied GLB contains them.
-      if (gltf.animations && gltf.animations.length) {
-        mixers.push(new THREE.AnimationMixer(model));
-        gltf.animations.forEach(clip => mixers[0].clipAction(clip).play());
-      }
-
-      // Try to identify likely arm/head nodes for extra interaction.
-      model.traverse(o => {
-        const n = (o.name || '').toLowerCase();
-        if (!rightArm && /(right|r)[ _-]?(arm|hand|upper|fore)/.test(n)) rightArm = o;
-        if (!head && /(head|face|neck)/.test(n)) head = o;
-      });
-    },
-    undefined,
-    (error) => {
-      console.error('Could not load mini_robot.glb:', error);
-      say('Robot model failed to load 😵', 2500);
-    }
-  );
-
-  let targetX=0, targetY=0, currentX=0, currentY=0;
-  let clicks=0, resetTimer, speechTimer, knockoutTimer, waving=false;
-
-  const say=(text,duration=2200)=>{
-    speech.textContent=text;
-    speech.classList.add('show');
-    clearTimeout(speechTimer);
-    speechTimer=setTimeout(()=>speech.classList.remove('show'),duration);
-  };
-
-  robot.addEventListener('pointermove',(e)=>{
-    const r=robot.getBoundingClientRect();
-    targetX=((e.clientX-r.left)/r.width-.5)*.55;
-    targetY=-((e.clientY-r.top)/r.height-.5)*.24;
-  });
-  robot.addEventListener('pointerleave',()=>{targetX=0;targetY=0});
-
+  const robot=document.getElementById('miniDataRobot'), canvas=document.getElementById('robot3DCanvas'), speech=document.getElementById('robotSpeech');
+  if(!robot||!canvas)return;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(24,1,.01,1000);
+  camera.position.set(0,.2,7); camera.lookAt(0,0,0);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.3;
+  const stage=new THREE.Group(); scene.add(stage);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x10131d,3));
+  const key=new THREE.DirectionalLight(0xffffff,4.5); key.position.set(4,6,8); scene.add(key);
+  const cyanLight=new THREE.PointLight(0x49f3df,16,12); cyanLight.position.set(-3,1.5,4); scene.add(cyanLight);
+  const purpleLight=new THREE.PointLight(0x7659e8,14,10); purpleLight.position.set(3,0,3); scene.add(purpleLight);
+  const front=new THREE.PointLight(0xffffff,4,8); front.position.set(0,2,6); scene.add(front);
+  let model=null,head=null,rightArm=null,mixer=null,waving=false,clickCount=0,resetTimer,speechTimer,knockoutTimer;
+  const clock=new THREE.Clock();
+  const say=(text,duration=2200)=>{speech.textContent=text;speech.classList.add('show');clearTimeout(speechTimer);speechTimer=setTimeout(()=>speech.classList.remove('show'),duration)};
+  const loader=new GLTFLoader();
+  loader.load('assets/mini_robot.glb',gltf=>{
+    model=gltf.scene;
+    model.traverse(o=>{
+      if(!o.isMesh)return;
+      o.visible=true;o.frustumCulled=false;o.castShadow=true;o.receiveShadow=true;
+      if(o.material){(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{m.side=THREE.DoubleSide;m.needsUpdate=true})}
+      const n=(o.name||'').toLowerCase();
+      if(!head&&/(head|face|neck)/.test(n))head=o;
+      if(!rightArm&&/(right|r)[ _-]?(arm|hand|upper|fore)/.test(n))rightArm=o;
+    });
+    stage.add(model);
+    // Center + fit using the actual post-load bounds. This fixes models whose GLB origin is far from the mesh.
+    const raw=new THREE.Box3().setFromObject(model), center=raw.getCenter(new THREE.Vector3()), size=raw.getSize(new THREE.Vector3());
+    model.position.sub(center);
+    const maxDim=Math.max(size.x,size.y,size.z)||1;
+    model.scale.setScalar(3.25/maxDim);
+    model.position.y=-.12;
+    const fit=new THREE.Box3().setFromObject(model), sphere=fit.getBoundingSphere(new THREE.Sphere());
+    const fov=THREE.MathUtils.degToRad(camera.fov);
+    const dist=Math.max(4.2,(sphere.radius/Math.tan(fov/2))*1.22);
+    camera.position.set(0,fit.getCenter(new THREE.Vector3()).y+.05,dist);
+    camera.lookAt(0,fit.getCenter(new THREE.Vector3()).y,0);
+    if(gltf.animations?.length){mixer=new THREE.AnimationMixer(model);gltf.animations.forEach(c=>mixer.clipAction(c).play())}
+    speech.classList.remove('show');
+  },undefined,error=>{console.error(error);say('3D model failed to load 😵',3500)});
+  let tx=0,ty=0,cx=0,cy=0;
+  robot.addEventListener('pointermove',e=>{const r=robot.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5)*.55;ty=-((e.clientY-r.top)/r.height-.5)*.25});
+  robot.addEventListener('pointerleave',()=>{tx=0;ty=0});
   robot.addEventListener('click',()=>{
-    if(!robot.classList.contains('robot-visible') || robot.classList.contains('knockout') || !model) return;
-    clicks++;
-    clearTimeout(resetTimer);
-
-    if(clicks===1){
-      say('Hi! 👋',2400);
-      if(!waving){
-        waving=true;
-        const target = rightArm || model;
-        const original = target.rotation.z;
-        let t=0;
-        const wave=()=>{
-          t++;
-          target.rotation.z=original + Math.sin(t*.72)*.45;
-          if(t<34) requestAnimationFrame(wave);
-          else { target.rotation.z=original; waving=false; }
-        };
-        wave();
-      }
-    } else if(clicks===2) say('Again? 😄',1500);
-    else if(clicks===3) say('Bro... 😂',1500);
-    else if(clicks===4) say('Okay okay! 😵',1500);
-    else {
-      say("I'll be back in 1 minute... 😵",1300);
-      robot.classList.add('knockout');
-      clearTimeout(knockoutTimer);
-      knockoutTimer=setTimeout(()=>{
-        robot.classList.remove('knockout');
-        robot.classList.add('recover');
-        clicks=0;
-        say("I'm back! ✨",1800);
-        setTimeout(()=>robot.classList.remove('recover'),1000);
-      },60000);
-      return;
-    }
-    resetTimer=setTimeout(()=>clicks=0,3500);
+    if(!robot.classList.contains('robot-visible')||robot.classList.contains('knockout')||!model)return;
+    clickCount++;clearTimeout(resetTimer);
+    if(clickCount===1){say('Hi! 👋',2400);if(!waving){waving=true;const target=rightArm||model,orig=target.rotation.z;let t=0;const wave=()=>{t++;target.rotation.z=orig+Math.sin(t*.72)*.45;if(t<34)requestAnimationFrame(wave);else{target.rotation.z=orig;waving=false}};wave()}}
+    else if(clickCount===2)say('Again? 😄',1500); else if(clickCount===3)say('Bro... 😂',1500); else if(clickCount===4)say('Okay okay! 😵',1500);
+    else{say("I'll be back in 1 minute... 😵",1300);robot.classList.add('knockout');clearTimeout(knockoutTimer);knockoutTimer=setTimeout(()=>{robot.classList.remove('knockout');robot.classList.add('recover');clickCount=0;say("I'm back! ✨",1800);setTimeout(()=>robot.classList.remove('recover'),1000)},60000);return}
+    resetTimer=setTimeout(()=>clickCount=0,3500);
   });
-
-  // Show robot once About section starts.
   let about=document.querySelector('#about,.about-section,[data-section="about"]');
-  if(!about){
-    about=[...document.querySelectorAll('section,main > div,.section')].find(el=>{
-      const h=el.querySelector('h1,h2,h3');
-      return /about\s*(me|section)?/i.test((h?.textContent||'')+' '+(el.id||''));
-    });
-  }
-  const updateVisibility=()=>{
-    if(!about){robot.classList.add('robot-visible');return;}
-    robot.classList.toggle('robot-visible',about.getBoundingClientRect().top<=innerHeight*.78);
-  };
-  addEventListener('scroll',updateVisibility,{passive:true});
-  addEventListener('resize',updateVisibility);
-  updateVisibility();
-
-  const sectionMessages={
-    experience:'👀 Experience!',
-    education:'🎓 Learning mode!',
-    skills:'🧠 Skills spotted!',
-    project:'📊 Nice project!'
-  };
-  document.querySelectorAll('a,button,.card,.timeline-item,.experience-card,.education-card,.carousel-card').forEach(el=>{
-    const text=(el.textContent||'').toLowerCase();
-    let key='';
-    if(text.includes('experience'))key='experience';
-    else if(text.includes('education'))key='education';
-    else if(text.includes('skill'))key='skills';
-    else if(text.includes('project'))key='project';
-    if(!key)return;
-    el.addEventListener('pointerenter',()=>{
-      if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout')) say(sectionMessages[key],1100);
-    });
-  });
-
-  const resize=()=>{
-    const w=canvas.clientWidth||250, h=canvas.clientHeight||250;
-    renderer.setSize(w,h,false);
-    camera.aspect=w/h;
-    camera.updateProjectionMatrix();
-  };
-  addEventListener('resize',resize);
-  resize();
-
-  const animate=()=>{
-    requestAnimationFrame(animate);
-    const t=clock.getElapsedTime();
-
-    currentX+=(targetX-currentX)*.065;
-    currentY+=(targetY-currentY)*.065;
-
-    if(model){
-      // Real 3D cursor-following motion.
-      model.rotation.y=currentX;
-      model.rotation.x=currentY;
-      model.position.y=Math.sin(t*1.35)*.045;
-
-      if(head) {
-        head.rotation.y += (currentX*.65 - head.rotation.y)*.055;
-        head.rotation.x += (currentY*.35 - head.rotation.x)*.055;
-      }
-
-      if(mixers.length) mixers.forEach(m=>m.update(clock.getDelta()));
-    }
-    renderer.render(scene,camera);
-  };
-  animate();
+  if(!about)about=[...document.querySelectorAll('section,main > div,.section')].find(el=>/about\s*(me|section)?/i.test((el.querySelector('h1,h2,h3')?.textContent||'')+' '+(el.id||'')));
+  const updateVisibility=()=>{if(!about){robot.classList.toggle('robot-visible',scrollY>innerHeight*.45);return}robot.classList.toggle('robot-visible',about.getBoundingClientRect().top<=innerHeight*.78)};
+  addEventListener('scroll',updateVisibility,{passive:true});addEventListener('resize',updateVisibility);updateVisibility();
+  const messages={experience:'👀 Experience!',education:'🎓 Learning mode!',skills:'🧠 Skills spotted!',project:'📊 Nice project!'};
+  document.querySelectorAll('.carousel-card,.timeline-card,.timeline-item,.experience-card,.education-card,a[href*="experience"],a[href*="education"],a[href*="skills"]').forEach(el=>{const t=(el.textContent||'').toLowerCase();const k=t.includes('experience')?'experience':t.includes('education')?'education':t.includes('skill')?'skills':t.includes('project')?'project':'';if(!k)return;el.addEventListener('pointerenter',()=>{if(robot.classList.contains('robot-visible')&&!robot.classList.contains('knockout'))say(messages[k],1100)})});
+  const resize=()=>{const w=canvas.clientWidth||250,h=canvas.clientHeight||250;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()};addEventListener('resize',resize);resize();
+  const animate=()=>{requestAnimationFrame(animate);const dt=clock.getDelta(),t=clock.elapsedTime;cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;if(model){model.rotation.y=cx+Math.sin(t*.55)*.025;model.rotation.x=cy;model.position.y=-.12+Math.sin(t*1.35)*.045;if(head){head.rotation.y+=(cx*.65-head.rotation.y)*.05;head.rotation.x+=(cy*.35-head.rotation.x)*.05}}if(mixer)mixer.update(dt);renderer.render(scene,camera)};animate();
 })();
 </script>
 
