@@ -2630,3 +2630,7 @@ button.next{
   opacity:0 !important;
   pointer-events:none !important;
 }
+
+/* V39: picture is the dialog trigger; lower card remains the drag/swipe zone. */
+.carousel-card .carousel-thumb{cursor:pointer;}
+.carousel-card .carousel-thumb:hover{filter:brightness(1.08);}
