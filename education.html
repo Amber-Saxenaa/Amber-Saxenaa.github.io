@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=18">
+<link rel="stylesheet" href="style.css?v=lavender28">
 </head>
 <body class="page-loading">
 
@@ -295,14 +295,7 @@
 
     typeText(title, d.title, 24, 90);
     typeText(meta, d.meta, 17, 600);
-    const descriptionSpeed = 10;
-    const descriptionDelay = 980;
-    typeText(desc, d.description, descriptionSpeed, descriptionDelay);
-
-    // Start the points only AFTER the description has completely finished typing.
-    // This prevents the bullet points from appearing over/alongside the last
-    // words of the description, especially on longer descriptions or mobile.
-    const pointsStart = descriptionDelay + (d.description.length + 1) * descriptionSpeed + 320;
+    typeText(desc, d.description, 10, 980);
 
     d.points.forEach((point, i) => {
       const li = document.createElement('li');
@@ -313,7 +306,7 @@
       timers.push(setTimeout(() => {
         li.style.opacity = '1';
         li.style.transform = 'translateY(0)';
-      }, pointsStart + i * 220));
+      }, 1450 + i * 220));
     });
     setTimeout(() => back.focus(), 80);
   };
