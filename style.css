@@ -2583,3 +2583,50 @@ button.next{
   visibility:hidden !important;
   pointer-events:none !important;
 }
+
+/* =========================================================
+   V35 — FINAL HOME CAROUSEL SIZING
+   ========================================================= */
+
+/* Education + Projects use the same desktop card width as Experience. */
+#edu-track .carousel-card,
+#proj-track .carousel-card{
+  flex:0 0 calc((100% - 48px) / 3) !important;
+  width:auto !important;
+  height:275px !important;
+  min-height:275px !important;
+  box-sizing:border-box;
+}
+
+/* Same thumbnail height as the Experience cards. */
+#edu-track .carousel-thumb,
+#proj-track .carousel-thumb{
+  height:160px !important;
+  min-height:160px !important;
+}
+
+/* Keep card sizing sensible on smaller screens. */
+@media (max-width:860px){
+  #edu-track .carousel-card,
+  #proj-track .carousel-card{
+    flex:0 0 100% !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+  }
+}
+
+/* No arrow navigation — drag/swipe only. Keep this late in the cascade so
+   older cached/internal arrow styles cannot make them visible. */
+.carousel-arrow,
+.carousel-prev,
+.carousel-next,
+button.prev,
+button.next{
+  display:none !important;
+  visibility:hidden !important;
+  width:0 !important;
+  height:0 !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
