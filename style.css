@@ -2699,3 +2699,64 @@ button.next{
     max-height: calc(100vh - 28px) !important;
   }
 }
+
+/* =========================================================
+   EXPERIENCE PAGE — glowing branch trees (V43)
+   Dark trunk/branches, twinkling teal + amber orbs on the
+   branch joints and tips. Sits behind the timeline content.
+   ========================================================= */
+.timeline-section{position:relative;}   /* no overflow clip: the trees live in the page gutters */
+.timeline-section > .timeline-center,
+.timeline-section > .projects-note{position:relative; z-index:2;}
+
+.tree-scene{
+  position:absolute; top:0; bottom:0;
+  left:calc(50% - 50vw); width:100vw;   /* break out of the 1080px column */
+  z-index:0; pointer-events:none;
+  overflow:hidden;
+}
+
+.exp-tree{
+  position:absolute; top:0; bottom:0;
+  /* only ever occupy the empty gutter beside the 840px timeline column */
+  width:clamp(150px, calc((100vw - 900px) / 2), 360px);
+  height:100%;
+  opacity:.72;
+}
+.exp-tree-left{left:0;}
+.exp-tree-right{right:0; transform:scaleX(-1);}   /* mirror so they lean inward */
+
+/* trunk + branches: dark, only just readable against the background */
+.tree-branch{
+  stroke:#2b3d49;
+  stroke-linecap:round;
+  fill:none;
+}
+
+/* glowing twinkling orbs */
+.tree-orb{
+  fill:var(--accent);
+  filter:drop-shadow(0 0 4px rgba(45,212,191,.9));
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:treeTwinkle var(--dur,3.5s) ease-in-out var(--delay,0s) infinite;
+}
+.tree-orb.amber{
+  fill:var(--amber);
+  filter:drop-shadow(0 0 4px rgba(245,166,35,.9));
+}
+@keyframes treeTwinkle{
+  0%,100%{opacity:.22; transform:scale(.72);}
+  50%    {opacity:1;   transform:scale(1.18);}
+}
+
+/* keep the trees from crowding the cards on smaller screens */
+@media (max-width:1240px){
+  .exp-tree{opacity:.34;}
+}
+@media (max-width:760px){
+  .tree-scene{display:none;}
+}
+@media (prefers-reduced-motion:reduce){
+  .tree-orb{animation:none; opacity:.85;}
+}
