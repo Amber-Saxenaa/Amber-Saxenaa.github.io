@@ -2532,3 +2532,22 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
     font-size:.62rem;
   }
 }
+
+/* V33: carousel navigation is drag/swipe only — no arrow controls. */
+.carousel-arrow,
+.carousel-prev,
+.carousel-next,
+button.prev,
+button.next{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+.carousel-track{
+  overflow-x:auto !important;
+  cursor:grab;
+  touch-action:pan-y;
+  scrollbar-width:none;
+}
+.carousel-track::-webkit-scrollbar{display:none;}
+.carousel-track.is-dragging{cursor:grabbing;}
