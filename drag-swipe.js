@@ -1,4 +1,4 @@
-/* V37 — drag/swipe-only carousel */
+/* V38 — drag/swipe carousel with click-to-open cards */
 (() => {
   document.querySelectorAll('.carousel-track').forEach((track) => {
     let down = false, moved = false, startX = 0, startScroll = 0;
