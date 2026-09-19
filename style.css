@@ -2551,3 +2551,35 @@ button.next{
 }
 .carousel-track::-webkit-scrollbar{display:none;}
 .carousel-track.is-dragging{cursor:grabbing;}
+
+/* =========================================================
+   V34 — MATCH EDUCATION + PROJECTS CARD SIZE TO EXPERIENCE
+   ========================================================= */
+
+/* Experience uses 3 equal columns with a 24px gap inside the same
+   max-width container. These rules give the scrollable Education and
+   Projects cards the exact same width at desktop sizes. */
+.carousel-track:not(.carousel-track--fit) .carousel-card{
+  flex:0 0 calc((100% - 48px) / 3);
+  width:auto;
+}
+
+/* Keep the same card proportions as Experience when the layout switches
+   to one column on smaller screens. */
+@media (max-width:860px){
+  .carousel-track:not(.carousel-track--fit) .carousel-card{
+    flex:0 0 100%;
+    width:auto;
+  }
+}
+
+/* V34 safety: no carousel arrow UI anywhere. */
+.carousel-arrow,
+.carousel-prev,
+.carousel-next,
+button.prev,
+button.next{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}

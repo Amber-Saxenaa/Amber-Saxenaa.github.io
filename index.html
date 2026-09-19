@@ -539,7 +539,7 @@
     const key = card.dataset.exp || card.dataset.proj || card.dataset.edu;
     card.classList.add('portfolio-clickable');
     card.setAttribute('aria-label', `Open ${details[key]?.title || 'details'}`);
-    card.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); open(key, card); });
+    card.addEventListener('dblclick', e => { e.preventDefault(); e.stopPropagation(); open(key, card); });
     card.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -1006,6 +1006,6 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   animate();
 })();
 </script>
-  <script src="drag-swipe.js?v=32"></script>
+  <script src="drag-swipe.js?v=34"></script>
 </body>
 </html>

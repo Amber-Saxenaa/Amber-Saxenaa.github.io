@@ -1,4 +1,4 @@
-/* V33 — drag/swipe-only carousel */
+/* V34 — drag/swipe-only carousel */
 (() => {
   document.querySelectorAll('.carousel-track').forEach((track) => {
     let down = false, moved = false, startX = 0, startScroll = 0;
