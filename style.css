@@ -2714,6 +2714,8 @@ button.next{
   left:calc(50% - 50vw); width:100vw;   /* break out of the 1080px column */
   z-index:0; pointer-events:none;
   overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, black 6%, black 88%, transparent 100%);
+  mask-image:linear-gradient(to bottom, transparent 0%, black 6%, black 88%, transparent 100%);
 }
 
 .exp-tree{
@@ -2722,6 +2724,7 @@ button.next{
   width:clamp(150px, calc((100vw - 900px) / 2), 360px);
   height:100%;
   opacity:.72;
+  overflow:visible;   /* let branch tips reach into the content column instead of getting clipped at the edge */
 }
 .exp-tree-left{left:0;}
 .exp-tree-right{right:0; transform:scaleX(-1);}   /* mirror so they lean inward */
