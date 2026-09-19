@@ -2699,3 +2699,99 @@ button.next{
     max-height: calc(100vh - 28px) !important;
   }
 }
+
+/* ================================================================
+   EXPERIENCE — BIOLUMINESCENT TREE BACKDROP
+   Pure HTML/SVG/CSS: no background image.
+   ================================================================ */
+.experience-section{
+  position:relative;
+  max-width:none;
+  padding-left:24px;
+  padding-right:24px;
+  isolation:isolate;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(45,212,191,.035), transparent 36%),
+    var(--bg);
+}
+.experience-section > .timeline-center,
+.experience-section > .projects-note{
+  position:relative;
+  z-index:3;
+}
+.experience-tree-stage{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.experience-tree{
+  position:absolute;
+  top:1%;
+  bottom:0;
+  width:min(39vw,520px);
+  height:100%;
+  opacity:.95;
+  overflow:visible;
+}
+.experience-tree-left{left:-2vw;}
+.experience-tree-right{right:-2vw;transform:scaleX(-1);}
+.experience-tree .tree-trunk path{
+  fill:none;
+  stroke:#0a1117;
+  stroke-width:25;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.98;
+}
+.experience-tree .tree-branches path{
+  fill:none;
+  stroke-width:3.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.9;
+}
+.experience-tree .tree-branches.teal path{stroke:#117d79;}
+.experience-tree .tree-branches.gold path{stroke:#806128;opacity:.75;}
+.experience-tree .tree-lights circle{
+  fill:#42e5d0;
+  stroke:rgba(190,255,248,.72);
+  stroke-width:1;
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:treeTwinkle 2.8s ease-in-out infinite;
+}
+.experience-tree .tree-lights circle:nth-child(3n){
+  fill:#ffc85a;animation-delay:-.9s;
+}
+.experience-tree .tree-lights circle:nth-child(4n){
+  animation-duration:3.7s;animation-delay:-1.6s;
+}
+.experience-tree .tree-lights circle:nth-child(5n){
+  fill:#9ff8ed;animation-duration:2.2s;animation-delay:-.35s;
+}
+@keyframes treeTwinkle{
+  0%,100%{opacity:.38;transform:scale(.72);}
+  45%{opacity:1;transform:scale(1.16);}
+  60%{opacity:.72;transform:scale(.94);}
+}
+.experience-section::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 34%, rgba(5,8,11,.18) 67%, rgba(5,8,11,.55) 100%);
+}
+@media(max-width:900px){
+  .experience-tree{width:44vw;opacity:.72;}
+  .experience-tree-left{left:-12vw;}
+  .experience-tree-right{right:-12vw;}
+}
+@media(max-width:700px){
+  .experience-tree{width:58vw;opacity:.42;}
+  .experience-tree-left{left:-28vw;}
+  .experience-tree-right{right:-28vw;}
+  .experience-section{padding-left:16px;padding-right:16px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .experience-tree .tree-lights circle{animation:none;}
+}
