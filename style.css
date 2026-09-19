@@ -2670,3 +2670,32 @@ button.next{
     max-height: calc(100vh - 28px);
   }
 }
+
+/* V42 — SAME larger size for EVERY portfolio detail dialog */
+.portfolio-detail-modal .portfolio-detail-inner,
+.detail-modal .detail-modal-inner{
+  width: min(1180px, calc(100vw - 48px)) !important;
+  max-width: min(1180px, calc(100vw - 48px)) !important;
+  min-height: 700px !important;
+  max-height: calc(100vh - 48px) !important;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* Keep both dialog systems visually consistent internally. */
+.portfolio-detail-modal .portfolio-detail-inner,
+.detail-modal .detail-modal-inner{
+  border-radius: 18px;
+}
+
+/* Responsive: still use the same full-size treatment without overflowing
+   the viewport on phones. */
+@media (max-width: 760px){
+  .portfolio-detail-modal .portfolio-detail-inner,
+  .detail-modal .detail-modal-inner{
+    width: calc(100vw - 28px) !important;
+    max-width: calc(100vw - 28px) !important;
+    min-height: calc(100vh - 28px) !important;
+    max-height: calc(100vh - 28px) !important;
+  }
+}
