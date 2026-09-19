@@ -2418,3 +2418,59 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 }
 
 /* V25 — smile is actual Three.js geometry attached to the GLB head */
+
+/* =========================================================
+   V31 — CARD HOVER CLEARANCE / NO CLIPPING
+   Give Education, Projects and Skills cards enough breathing room
+   and keep the hovered card above neighboring sections.
+   ========================================================= */
+.carousel-section{
+  position:relative;
+  z-index:1;
+  overflow:visible;
+  padding-top:88px;
+  padding-bottom:88px;
+}
+
+/* The horizontal scroller must leave vertical breathing room for the
+   translated/expanded cards. The extra padding prevents the hover effect
+   from being visually cut at the top or bottom of the track. */
+.carousel-track{
+  padding-top:18px;
+  padding-bottom:24px;
+  scroll-padding-top:18px;
+  scroll-padding-bottom:24px;
+}
+
+/* Modern browsers: raise the entire section while one of its cards is
+   hovered/focused so the card cannot disappear behind the next section. */
+.carousel-section:has(.carousel-card:hover),
+.carousel-section:has(.carousel-card:focus-visible){
+  z-index:50;
+}
+
+.carousel-card{
+  position:relative;
+  z-index:1;
+}
+.carousel-card:hover,
+.carousel-card:focus-visible{
+  z-index:100;
+}
+
+/* The fitted Experience row also gets the same vertical clearance. */
+.carousel-track--fit{
+  padding-top:18px;
+  padding-bottom:24px;
+}
+
+@media (max-width:640px){
+  .carousel-section{
+    padding-top:76px;
+    padding-bottom:76px;
+  }
+  .carousel-track{
+    padding-top:14px;
+    padding-bottom:20px;
+  }
+}
