@@ -2474,3 +2474,61 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
     padding-bottom:20px;
   }
 }
+
+/* =========================================================
+   V32 — DRAG / SWIPE CAROUSELS
+   ========================================================= */
+.carousel-drag-wrap{
+  position:relative;
+}
+
+.carousel-track{
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  cursor:grab;
+  touch-action:pan-y;
+  user-select:none;
+  -webkit-user-select:none;
+  padding:18px 8px 28px;
+  margin:-18px -8px -28px;
+}
+.carousel-track::-webkit-scrollbar{display:none;}
+
+.carousel-track.is-dragging{
+  cursor:grabbing;
+  scroll-behavior:auto;
+}
+
+.carousel-track .carousel-card{
+  flex:0 0 auto;
+}
+
+.carousel-drag-hint{
+  position:absolute;
+  right:8px;
+  top:-34px;
+  z-index:4;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;
+  letter-spacing:.04em;
+  color:var(--text-dim);
+  opacity:.72;
+  pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+}
+
+.carousel-drag-wrap:hover .carousel-drag-hint{
+  opacity:1;
+  transform:translateX(-3px);
+}
+
+@media(max-width:700px){
+  .carousel-drag-hint{
+    top:-30px;
+    right:4px;
+    font-size:.62rem;
+  }
+}
