@@ -610,7 +610,7 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   padding:20px; transition:border-color .25s, transform .25s;
 }
 .carousel-card:hover{border-color:var(--accent); transform:translateY(-10px) scale(1.03); box-shadow:0 16px 32px -14px rgba(45,212,191,.35);}
-.carousel-card[data-exp], .carousel-card[data-exp]{cursor:pointer;}
+
 .carousel-card-text{flex-basis:230px; display:flex; flex-direction:column; justify-content:center; min-height:110px;}
 .carousel-card h3{font-size:1rem; margin-bottom:6px;}
 .carousel-card p{color:var(--text-dim); font-size:.85rem;}
@@ -2634,3 +2634,16 @@ button.next{
 /* V39: picture is the dialog trigger; lower card remains the drag/swipe zone. */
 .carousel-card .carousel-thumb{cursor:pointer;}
 .carousel-card .carousel-thumb:hover{filter:brightness(1.08);}
+
+/* V40 interaction zones */
+.carousel-card .carousel-thumb{
+  cursor:pointer;
+}
+.carousel-card h3,
+.carousel-card p{
+  cursor:grab;
+}
+.carousel-card h3:active,
+.carousel-card p:active{
+  cursor:grabbing;
+}
