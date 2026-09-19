@@ -2647,3 +2647,26 @@ button.next{
 .carousel-card p:active{
   cursor:grabbing;
 }
+
+/* V41 — larger portfolio detail dialogs across Experience, Education & Projects */
+.portfolio-modal .modal-card,
+.detail-modal .modal-card,
+.modal .modal-card{
+  width: min(1120px, calc(100vw - 64px));
+  max-width: min(1120px, calc(100vw - 64px));
+  min-height: 620px;
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+/* Keep the dialog comfortable on smaller screens. */
+@media (max-width: 760px){
+  .portfolio-modal .modal-card,
+  .detail-modal .modal-card,
+  .modal .modal-card{
+    width: calc(100vw - 28px);
+    max-width: calc(100vw - 28px);
+    min-height: 0;
+    max-height: calc(100vh - 28px);
+  }
+}
