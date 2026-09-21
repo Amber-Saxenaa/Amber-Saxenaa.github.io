@@ -2704,3 +2704,9 @@ button.next{
 .timeline-section{position:relative;}
 .timeline-section > .timeline-center,
 .timeline-section > .projects-note{position:relative; z-index:2;}
+
+
+/* V28 — keep the 3D mascot smooth while its small idle motion runs. */
+#robot3DCanvas{
+  will-change:transform;
+}

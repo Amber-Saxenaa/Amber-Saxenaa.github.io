@@ -723,12 +723,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   let leftLeg=null, rightLeg=null, leftFoot=null, rightFoot=null, bodyRoot=null;
   let modelReady=false, waving=false, speechTimer, smileGlowTimer;
   let smileLine=null, smileMaterial=null;
+  let cheekLeft=null, cheekRight=null;
   const robotParts=[];
 
-  /* V27 — visible 3D smile.
-     IMPORTANT: the GLB meshes are re-centered during loading, so the
-     bounding box is recomputed AFTER that operation. The smile is then
-     attached to the actual head mesh and placed just in front of its face. */
+  /* V28 — cute 3D smile + soft cheek marks.
+     The smile is generated in front of the supplied GLB head so no asset
+     editing is required. Small scale/rotation changes in the render loop
+     give it a subtle living expression without looking cartoonish. */
   const addSmileToHead=()=>{
     if(!head || smileLine)return;
 
@@ -743,35 +744,74 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     const h=b.max.y-b.min.y;
     const d=b.max.z-b.min.z;
 
-    const half=w*.16;
-    const yBase=b.min.y+h*.30;
-    const zFront=b.max.z+d*.035;
+    const half=w*.19;
+    const yBase=b.min.y+h*.31;
+    const zFront=b.max.z+d*.045;
 
-    /* U-shaped curve: ends higher, center lower = a real smile. */
+    // Rounded U-shape: slightly lifted ends, softly dipped center.
     const curve=new THREE.CatmullRomCurve3([
       new THREE.Vector3(-half,yBase,zFront),
-      new THREE.Vector3(-half*.52,yBase-h*.085,zFront),
-      new THREE.Vector3(0,yBase-h*.12,zFront),
-      new THREE.Vector3(half*.52,yBase-h*.085,zFront),
+      new THREE.Vector3(-half*.56,yBase-h*.075,zFront),
+      new THREE.Vector3(0,yBase-h*.105,zFront),
+      new THREE.Vector3(half*.56,yBase-h*.075,zFront),
       new THREE.Vector3(half,yBase,zFront)
     ]);
 
-    const thickness=Math.max(.018,Math.min(w,h)*.022);
-    const tube=new THREE.TubeGeometry(curve,32,thickness,10,false);
+    const thickness=Math.max(.018,Math.min(w,h)*.024);
 
     smileMaterial=new THREE.MeshBasicMaterial({
-      color:0x45f1df,
+      color:0x54f3df,
       transparent:true,
-      opacity:1,
+      opacity:.98,
       depthTest:false,
       depthWrite:false
     });
 
-    smileLine=new THREE.Mesh(tube,smileMaterial);
-    smileLine.name='RobotCodedSmile3D';
+    smileLine=new THREE.Mesh(
+      new THREE.TubeGeometry(curve,36,thickness,10,false),
+      smileMaterial
+    );
+    smileLine.name='RobotCuteSmile3D';
     smileLine.renderOrder=10000;
     smileLine.frustumCulled=false;
     head.add(smileLine);
+
+    // Two tiny cheek strokes make the face feel friendlier while staying
+    // inside the existing teal/amber visual language of the portfolio.
+    const cheekMaterial=new THREE.MeshBasicMaterial({
+      color:0xf5a623,
+      transparent:true,
+      opacity:.72,
+      depthTest:false,
+      depthWrite:false
+    });
+
+    const makeCheek=(side)=>{
+      const x=side*w*.295;
+      const y=b.min.y+h*.245;
+      const gap=w*.032;
+      const lift=h*.015;
+      const c=new THREE.CatmullRomCurve3([
+        new THREE.Vector3(x-gap*.75,y,zFront),
+        new THREE.Vector3(x-gap*.15,y+lift,zFront),
+        new THREE.Vector3(x+gap*.45,y+lift*.4,zFront)
+      ]);
+      const cheek=new THREE.Mesh(
+        new THREE.TubeGeometry(c,12,Math.max(.009,Math.min(w,h)*.012),6,false),
+        cheekMaterial.clone()
+      );
+      cheek.renderOrder=9999;
+      cheek.frustumCulled=false;
+      head.add(cheek);
+      return cheek;
+    };
+
+    // Mirror the right cheek so both sides curve naturally toward the smile.
+    cheekLeft=makeCheek(-1);
+    cheekRight=makeCheek(1);
+
+    if(cheekLeft) cheekLeft.rotation.z=0.08;
+    if(cheekRight) cheekRight.rotation.z=-0.08;
   };
 
   const clock=new THREE.Clock();
@@ -981,39 +1021,49 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     cy+=(ty-cy)*.055;
 
     if(modelReady){
-      /* Clearly visible idle/walk cycle for the supplied GLB.
-         The model has no baked skeletal animation, so the individual
-         Sketchfab mesh nodes are moved around their own pivots. */
-      const step=Math.sin(t*3.0);
-      const step2=Math.sin(t*3.0+Math.PI);
-      const bounce=Math.abs(Math.sin(t*3.0));
+      /* Gentle idle motion — deliberately subtle so the robot feels alive
+         without looking like it is constantly walking in place. */
+      const step=Math.sin(t*1.55);
+      const step2=Math.sin(t*1.55+Math.PI);
 
-      model.rotation.y += ((cx + Math.sin(t*.7)*.035)-model.rotation.y)*.07;
-      model.rotation.x += (cy*.28-model.rotation.x)*.07;
-      model.rotation.z = Math.sin(t*1.8)*.025;
-      model.position.y = -.05 + bounce*.045 + Math.sin(t*1.5)*.018;
+      model.rotation.y += ((cx*.55 + Math.sin(t*.52)*.035)-model.rotation.y)*.055;
+      model.rotation.x += (cy*.12-model.rotation.x)*.055;
+      model.rotation.z = Math.sin(t*.85)*.018;
+      model.position.y = -.05 + Math.sin(t*1.35)*.018;
 
-      /* Head tilt + tiny "look around" movement. */
+      /* Tiny head tilt / curious movement. */
       if(head){
-        head.rotation.y += ((cx*.20 + Math.sin(t*.55)*.035)-head.rotation.y)*.06;
-        head.rotation.x += ((cy*.12)-head.rotation.x)*.06;
-        head.rotation.z = Math.sin(t*1.25)*.075;
+        head.rotation.y += ((cx*.12 + Math.sin(t*.48)*.018)-head.rotation.y)*.05;
+        head.rotation.x += ((cy*.07)-head.rotation.x)*.05;
+        head.rotation.z = Math.sin(t*.9)*.038;
       }
 
-      /* Opposite leg swings make the lower body read as walking in place. */
+      /* Very small leg/arm motion — more like breathing/balancing than walking. */
       if(leftLeg){
-        leftLeg.rotation.x = step*.20;
-        leftLeg.rotation.z = step*.035;
+        leftLeg.rotation.x = step*.055;
+        leftLeg.rotation.z = step*.012;
       }
       if(rightLeg){
-        rightLeg.rotation.x = step2*.20;
-        rightLeg.rotation.z = step2*.035;
+        rightLeg.rotation.x = step2*.055;
+        rightLeg.rotation.z = step2*.012;
       }
 
-      /* Small arm/side movement while idle. */
       if(rightArm && !waving){
-        rightArm.rotation.z = Math.sin(t*1.8)*.055;
-        rightArm.rotation.x = Math.sin(t*1.15)*.035;
+        rightArm.rotation.z = Math.sin(t*.95)*.025;
+        rightArm.rotation.x = Math.sin(t*.7)*.018;
+      }
+
+      // Let the smile breathe very slightly so the face never feels frozen.
+      if(smileLine){
+        smileLine.rotation.z = Math.sin(t*1.15)*.018;
+        smileLine.position.y = Math.sin(t*1.3)*.003;
+        const smileScale=1 + Math.sin(t*1.15)*.018;
+        smileLine.scale.x=smileScale;
+      }
+      if(cheekLeft && cheekRight){
+        const cheekScale=1 + Math.sin(t*1.15+.45)*.035;
+        cheekLeft.scale.setScalar(cheekScale);
+        cheekRight.scale.setScalar(cheekScale);
       }
     }
     if(mixer)mixer.update(dt);
