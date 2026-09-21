@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=47">
+<link rel="stylesheet" href="style.css?v=45">
 </head>
 <body class="page-loading">
 
@@ -725,7 +725,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   let smileLine=null, smileMaterial=null;
   const robotParts=[];
 
-  /* V48 — corrected 3D smile orientation and lowered mouth placement for the supplied GLB. 
+  /* V27 — visible 3D smile.
      IMPORTANT: the GLB meshes are re-centered during loading, so the
      bounding box is recomputed AFTER that operation. The smile is then
      attached to the actual head mesh and placed just in front of its face. */
@@ -744,23 +744,15 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     const d=b.max.z-b.min.z;
 
     const half=w*.16;
-    /* The supplied GLB uses a source transform that flips its local Y/Z axes.
-       Compensate here so the coded smile is drawn on the visible front face
-       and its center curves DOWN on screen instead of becoming an upside-down frown.
-       The mouth is intentionally lowered into the lower part of the visor. */
-    /* Move the smile lower into the face/visor. The supplied GLB's local Y
-       axis is inverted relative to the screen, so increasing local Y moves
-       the smile DOWN visually. */
     const yBase=b.min.y+h*.30;
-    const zFront=b.min.z-d*.035;
+    const zFront=b.max.z+d*.035;
 
-    /* Local-space arc: center is HIGHER because the GLB flips Y on render;
-       after that transform it becomes a normal U-shaped smile on screen. */
+    /* U-shaped curve: ends higher, center lower = a real smile. */
     const curve=new THREE.CatmullRomCurve3([
       new THREE.Vector3(-half,yBase,zFront),
-      new THREE.Vector3(-half*.52,yBase+h*.045,zFront),
-      new THREE.Vector3(0,yBase+h*.065,zFront),
-      new THREE.Vector3(half*.52,yBase+h*.045,zFront),
+      new THREE.Vector3(-half*.52,yBase-h*.085,zFront),
+      new THREE.Vector3(0,yBase-h*.12,zFront),
+      new THREE.Vector3(half*.52,yBase-h*.085,zFront),
       new THREE.Vector3(half,yBase,zFront)
     ]);
 
