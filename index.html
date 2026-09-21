@@ -726,10 +726,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   let cheekLeft=null, cheekRight=null;
   const robotParts=[];
 
-  /* V28 — cute 3D smile + soft cheek marks.
-     The smile is generated in front of the supplied GLB head so no asset
-     editing is required. Small scale/rotation changes in the render loop
-     give it a subtle living expression without looking cartoonish. */
+  /* V29 — cute 3D smile + soft cheek marks.
+     The supplied GLB has its head axis flipped, so the face overlay is
+     intentionally positioned in the head's lower/front face coordinates.
+     The curve is built in the GLB's local axis so it renders as a normal
+     upward smile (not an upside-down frown) on the visitor-facing screen. */
   const addSmileToHead=()=>{
     if(!head || smileLine)return;
 
@@ -744,16 +745,21 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     const h=b.max.y-b.min.y;
     const d=b.max.z-b.min.z;
 
-    const half=w*.19;
-    const yBase=b.min.y+h*.31;
-    const zFront=b.max.z+d*.045;
+    const half=w*.17;
 
-    // Rounded U-shape: slightly lifted ends, softly dipped center.
+    /* The GLB's head uses an inverted local Y/Z orientation.
+       Positive local Y moves the expression DOWN on the visible face,
+       while the local Z minimum is the camera-facing side of the head. */
+    const yBase=b.min.y+h*.62;
+    const zFront=b.min.z-d*.045;
+
+    // Normal on-screen smile after the model's axis flip: ends sit lower
+    // in local space and the center sits slightly higher.
     const curve=new THREE.CatmullRomCurve3([
       new THREE.Vector3(-half,yBase,zFront),
-      new THREE.Vector3(-half*.56,yBase-h*.075,zFront),
-      new THREE.Vector3(0,yBase-h*.105,zFront),
-      new THREE.Vector3(half*.56,yBase-h*.075,zFront),
+      new THREE.Vector3(-half*.56,yBase+h*.07,zFront),
+      new THREE.Vector3(0,yBase+h*.105,zFront),
+      new THREE.Vector3(half*.56,yBase+h*.07,zFront),
       new THREE.Vector3(half,yBase,zFront)
     ]);
 
@@ -788,7 +794,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     const makeCheek=(side)=>{
       const x=side*w*.295;
-      const y=b.min.y+h*.245;
+      const y=b.min.y+h*.56;
       const gap=w*.032;
       const lift=h*.015;
       const c=new THREE.CatmullRomCurve3([
@@ -1055,9 +1061,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
       // Let the smile breathe very slightly so the face never feels frozen.
       if(smileLine){
-        smileLine.rotation.z = Math.sin(t*1.15)*.018;
-        smileLine.position.y = Math.sin(t*1.3)*.003;
-        const smileScale=1 + Math.sin(t*1.15)*.018;
+        // Tiny idle movement only — keep the smile anchored in the face.
+        smileLine.rotation.z = Math.sin(t*1.05)*.012;
+        smileLine.position.y = Math.sin(t*1.25)*.0018;
+        const smileScale=1 + Math.sin(t*1.05)*.012;
         smileLine.scale.x=smileScale;
       }
       if(cheekLeft && cheekRight){
