@@ -721,104 +721,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   let model=null, mixer=null, head=null, rightArm=null;
   let leftLeg=null, rightLeg=null, leftFoot=null, rightFoot=null, bodyRoot=null;
-  let modelReady=false, waving=false, speechTimer, smileGlowTimer;
-  let smileLine=null, smileMaterial=null;
-  let cheekLeft=null, cheekRight=null;
+  let modelReady=false, waving=false, speechTimer;
   const robotParts=[];
-
-  /* V29 — cute 3D smile + soft cheek marks.
-     The supplied GLB has its head axis flipped, so the face overlay is
-     intentionally positioned in the head's lower/front face coordinates.
-     The curve is built in the GLB's local axis so it renders as a normal
-     upward smile (not an upside-down frown) on the visitor-facing screen. */
-  const addSmileToHead=()=>{
-    if(!head || smileLine)return;
-
-    head.updateMatrixWorld(true);
-    if(!head.geometry)return;
-
-    head.geometry.computeBoundingBox();
-    const b=head.geometry.boundingBox;
-    if(!b)return;
-
-    const w=b.max.x-b.min.x;
-    const h=b.max.y-b.min.y;
-    const d=b.max.z-b.min.z;
-
-    const half=w*.17;
-
-    /* The GLB's head uses an inverted local Y/Z orientation.
-       Positive local Y moves the expression DOWN on the visible face,
-       while the local Z minimum is the camera-facing side of the head. */
-    const yBase=b.min.y+h*.80;
-    const zFront=b.min.z-d*.045;
-
-    // Normal on-screen smile: the ends sit slightly lower than the center
-    // so it reads as a small, friendly smile below the eyes.
-    const curve=new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-half,yBase,zFront),
-      new THREE.Vector3(-half*.56,yBase+h*.07,zFront),
-      new THREE.Vector3(0,yBase+h*.105,zFront),
-      new THREE.Vector3(half*.56,yBase+h*.07,zFront),
-      new THREE.Vector3(half,yBase,zFront)
-    ]);
-
-    const thickness=Math.max(.018,Math.min(w,h)*.024);
-
-    smileMaterial=new THREE.MeshBasicMaterial({
-      color:0x54f3df,
-      transparent:true,
-      opacity:.98,
-      depthTest:false,
-      depthWrite:false
-    });
-
-    smileLine=new THREE.Mesh(
-      new THREE.TubeGeometry(curve,36,thickness,10,false),
-      smileMaterial
-    );
-    smileLine.name='RobotCuteSmile3D';
-    smileLine.renderOrder=10000;
-    smileLine.frustumCulled=false;
-    head.add(smileLine);
-
-    // Two tiny cheek strokes make the face feel friendlier while staying
-    // inside the existing teal/amber visual language of the portfolio.
-    const cheekMaterial=new THREE.MeshBasicMaterial({
-      color:0xf5a623,
-      transparent:true,
-      opacity:.72,
-      depthTest:false,
-      depthWrite:false
-    });
-
-    const makeCheek=(side)=>{
-      const x=side*w*.295;
-      const y=b.min.y+h*.73;
-      const gap=w*.032;
-      const lift=h*.015;
-      const c=new THREE.CatmullRomCurve3([
-        new THREE.Vector3(x-gap*.75,y,zFront),
-        new THREE.Vector3(x-gap*.15,y+lift,zFront),
-        new THREE.Vector3(x+gap*.45,y+lift*.4,zFront)
-      ]);
-      const cheek=new THREE.Mesh(
-        new THREE.TubeGeometry(c,12,Math.max(.009,Math.min(w,h)*.012),6,false),
-        cheekMaterial.clone()
-      );
-      cheek.renderOrder=9999;
-      cheek.frustumCulled=false;
-      head.add(cheek);
-      return cheek;
-    };
-
-    // Mirror the right cheek so both sides curve naturally toward the smile.
-    cheekLeft=makeCheek(-1);
-    cheekRight=makeCheek(1);
-
-    if(cheekLeft) cheekLeft.rotation.z=0.08;
-    if(cheekRight) cheekRight.rotation.z=-0.08;
-  };
 
   const clock=new THREE.Clock();
   const say=(text,duration=2200)=>{
@@ -934,7 +838,6 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       }
 
       frameModel();
-      addSmileToHead();
 
       if(!meshCount){
         console.warn('mini_robot.glb loaded but contains no mesh objects');
@@ -964,12 +867,6 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     if(!modelReady)return;
 
     say('Hi! 👋',2200);
-    if(smileMaterial){
-      smileMaterial.opacity=1;
-      clearTimeout(smileGlowTimer);
-      smileGlowTimer=setTimeout(()=>{ if(smileMaterial) smileMaterial.opacity=.96; },2200);
-    }
-
     if(waving)return;
     waving=true;
 
@@ -1059,19 +956,6 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         rightArm.rotation.x = Math.sin(t*.7)*.018;
       }
 
-      // Let the smile breathe very slightly so the face never feels frozen.
-      if(smileLine){
-        // Tiny idle movement only — keep the smile anchored in the face.
-        smileLine.rotation.z = Math.sin(t*1.05)*.012;
-        smileLine.position.y = Math.sin(t*1.25)*.0018;
-        const smileScale=1 + Math.sin(t*1.05)*.012;
-        smileLine.scale.x=smileScale;
-      }
-      if(cheekLeft && cheekRight){
-        const cheekScale=1 + Math.sin(t*1.15+.45)*.035;
-        cheekLeft.scale.setScalar(cheekScale);
-        cheekRight.scale.setScalar(cheekScale);
-      }
     }
     if(mixer)mixer.update(dt);
     renderer.render(scene,camera);
