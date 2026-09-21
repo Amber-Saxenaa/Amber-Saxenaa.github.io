@@ -725,7 +725,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   let smileLine=null, smileMaterial=null;
   const robotParts=[];
 
-  /* V47 — corrected 3D smile orientation and mouth placement for the supplied GLB. 
+  /* V48 — corrected 3D smile orientation and lowered mouth placement for the supplied GLB. 
      IMPORTANT: the GLB meshes are re-centered during loading, so the
      bounding box is recomputed AFTER that operation. The smile is then
      attached to the actual head mesh and placed just in front of its face. */
@@ -748,16 +748,19 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
        Compensate here so the coded smile is drawn on the visible front face
        and its center curves DOWN on screen instead of becoming an upside-down frown.
        The mouth is intentionally lowered into the lower part of the visor. */
-    const yBase=b.min.y+h*.13;
+    /* Move the smile lower into the face/visor. The supplied GLB's local Y
+       axis is inverted relative to the screen, so increasing local Y moves
+       the smile DOWN visually. */
+    const yBase=b.min.y+h*.30;
     const zFront=b.min.z-d*.035;
 
     /* Local-space arc: center is HIGHER because the GLB flips Y on render;
        after that transform it becomes a normal U-shaped smile on screen. */
     const curve=new THREE.CatmullRomCurve3([
       new THREE.Vector3(-half,yBase,zFront),
-      new THREE.Vector3(-half*.52,yBase+h*.065,zFront),
-      new THREE.Vector3(0,yBase+h*.095,zFront),
-      new THREE.Vector3(half*.52,yBase+h*.065,zFront),
+      new THREE.Vector3(-half*.52,yBase+h*.045,zFront),
+      new THREE.Vector3(0,yBase+h*.065,zFront),
+      new THREE.Vector3(half*.52,yBase+h*.045,zFront),
       new THREE.Vector3(half,yBase,zFront)
     ]);
 
