@@ -750,11 +750,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     /* The GLB's head uses an inverted local Y/Z orientation.
        Positive local Y moves the expression DOWN on the visible face,
        while the local Z minimum is the camera-facing side of the head. */
-    const yBase=b.min.y+h*.62;
+    const yBase=b.min.y+h*.80;
     const zFront=b.min.z-d*.045;
 
-    // Normal on-screen smile after the model's axis flip: ends sit lower
-    // in local space and the center sits slightly higher.
+    // Normal on-screen smile: the ends sit slightly lower than the center
+    // so it reads as a small, friendly smile below the eyes.
     const curve=new THREE.CatmullRomCurve3([
       new THREE.Vector3(-half,yBase,zFront),
       new THREE.Vector3(-half*.56,yBase+h*.07,zFront),
@@ -794,7 +794,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     const makeCheek=(side)=>{
       const x=side*w*.295;
-      const y=b.min.y+h*.56;
+      const y=b.min.y+h*.73;
       const gap=w*.032;
       const lift=h*.015;
       const c=new THREE.CatmullRomCurve3([
