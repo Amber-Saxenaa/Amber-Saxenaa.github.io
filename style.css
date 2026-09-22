@@ -3281,3 +3281,208 @@ button, input, textarea, select {
     letter-spacing: .04em;
   }
 }
+
+
+/* =========================================================
+   V47 — MOBILE PRECISION PASS
+   Purpose: preserve the desktop composition while making the
+   phone layout deterministic at 320–860px.
+   ========================================================= */
+
+/* Never allow a child to establish a wider layout than the viewport. */
+@media (max-width: 860px){
+  html, body{width:100%; max-width:100%; overflow-x:hidden !important;}
+  body{position:relative;}
+  .nav, .section, .page-hero, .footer, .page-nav-footer,
+  .hero, .hero-split, .hero-split-inner--overlay,
+  .carousel-section, .carousel-head{max-width:100%; min-width:0;}
+
+  /* Use the phone width, not viewport-width calculations that can include
+     the browser scrollbar, for every major panel. */
+  .section{padding-left:clamp(16px,5vw,28px); padding-right:clamp(16px,5vw,28px);}
+  .page-hero{padding-left:clamp(16px,5vw,28px); padding-right:clamp(16px,5vw,28px);}
+
+  /* Header stays compact and the menu becomes a proper sheet. */
+  .nav{height:62px; padding:12px 18px;}
+  .nav-logo{font-size:1.15rem; flex:0 0 auto;}
+  .nav-toggle{width:40px; height:40px; align-items:center; justify-content:center; flex:0 0 40px;}
+  .nav-links{
+    position:fixed !important;
+    top:62px !important; right:0 !important; bottom:0 !important;
+    width:min(86vw,330px) !important;
+    height:auto !important;
+    padding:24px 20px 32px !important;
+    gap:8px !important;
+    background:rgba(15,21,28,.98) !important;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:-18px 0 45px rgba(0,0,0,.35);
+    overflow-y:auto !important;
+    transform:translate3d(100%,0,0) !important;
+    visibility:hidden;
+  }
+  .nav-links.open{
+    transform:translate3d(0,0,0) !important;
+    visibility:visible;
+  }
+  .nav-links a{
+    width:100%; padding:13px 4px; font-size:1rem; line-height:1.3;
+  }
+  .nav-links .nav-cta{width:100%; text-align:center; margin-top:8px; padding:12px 16px;}
+
+  /* Page hero: reserve enough space below the sticky nav and prevent
+     long descriptions from forcing horizontal growth. */
+  .page-hero{
+    width:100%; text-align:center;
+    padding-top:74px !important;
+    padding-bottom:22px !important;
+  }
+  .page-hero h1{font-size:clamp(2rem,10vw,3rem); max-width:100%;}
+  .page-hero-desc{max-width:42rem; margin-left:auto; margin-right:auto;}
+
+  /* Home hero is a true vertical composition on phones. */
+  .hero-split{
+    width:100%; min-height:0 !important;
+    padding:0 16px 56px !important;
+    overflow:hidden;
+  }
+  .hero-split-inner--overlay{
+    width:100%; max-width:100%; min-height:0 !important;
+    padding:0 !important; display:flex; flex-direction:column;
+  }
+  .glass-data-orb{
+    order:0; flex:0 0 auto;
+    width:min(74vw,270px) !important;
+    height:min(74vw,270px) !important;
+    margin:22px auto 18px !important;
+    position:relative !important; inset:auto !important;
+    transform:none !important;
+  }
+  .hero-text{
+    order:1; width:100%; max-width:680px; margin:0 auto;
+    padding:0 !important; text-align:center;
+  }
+  .hero-text .hero-title{
+    max-width:100%; font-size:clamp(2.15rem,11vw,3.4rem);
+    line-height:1.02; letter-spacing:-.035em;
+  }
+  .hero-role{max-width:100%; font-size:clamp(.9rem,3.8vw,1.08rem);}
+  .hero-text .hero-desc{max-width:560px; font-size:.94rem; line-height:1.65;}
+  .hero-social{justify-content:center; flex-wrap:wrap;}
+  .hero-actions{justify-content:center; flex-wrap:wrap; width:100%;}
+
+  /* Grid sections become single-column only where a two-column card would
+     become cramped. */
+  .highlight-grid, .project-grid, .skills-page, .cert-grid,
+  .contact-grid, .about-grid{width:100%; min-width:0;}
+  .highlight-card, .project-card, .cert-card, .skill-block,
+  .contact-form, .contact-info{min-width:0; max-width:100%;}
+
+  /* Stats: two columns on normal phones, one column on ultra-narrow phones. */
+  .stats-grid{width:100%; min-width:0;}
+
+  /* Timeline: keep the central line, but put every card on one side of it. */
+  .timeline-center{width:100%; max-width:100%; padding:12px 0 0;}
+  .timeline-center::before{left:9px !important; transform:none !important;}
+  .timeline-center-item,
+  .timeline-center-item.left,
+  .timeline-center-item.right{
+    width:100% !important; left:0 !important;
+    padding:0 0 42px 31px !important;
+    text-align:left !important;
+  }
+  .timeline-center-item.left .timeline-center-dot,
+  .timeline-center-item.right .timeline-center-dot{
+    left:2px !important; right:auto !important; top:6px;
+    width:14px; height:14px;
+  }
+  .timeline-center-content{width:100%; max-width:100%;}
+  .timeline-center-content h3{
+    font-size:clamp(1rem,4.4vw,1.28rem);
+    line-height:1.28; margin-bottom:5px;
+  }
+  .timeline-date-big{font-size:.78rem; margin-bottom:13px;}
+  .timeline-thumb-big{
+    width:100% !important; max-width:none !important;
+    height:clamp(145px,42vw,190px) !important;
+    margin:0 !important;
+  }
+
+  /* Home preview cards: one card per viewport, no accidental 3-column squeeze. */
+  .carousel-track:not(.carousel-track--fit){
+    width:100%; max-width:100%; min-width:0;
+  }
+  .carousel-track:not(.carousel-track--fit) .carousel-card,
+  #edu-track .carousel-card, #proj-track .carousel-card{
+    flex:0 0 100% !important; width:100% !important; max-width:100% !important;
+  }
+  .carousel-card{min-width:0; overflow:hidden;}
+  .carousel-card h3{font-size:1.05rem; line-height:1.3;}
+
+  /* Skills radar: never let its labels force the page wider. */
+  .radar-wrap{width:100%; max-width:100%; overflow:hidden;}
+  .radar-chart{display:block; width:min(88vw,330px); max-width:100%; height:auto; margin:auto;}
+
+  /* Buttons become full-width only where the row would otherwise wrap badly. */
+  .page-nav-footer{width:100%; padding-left:16px; padding-right:16px;}
+
+  /* Footer columns stack cleanly and email/long URLs can wrap. */
+  .footer{width:100%; padding-left:18px; padding-right:18px;}
+  .footer-grid{width:100%; grid-template-columns:1fr !important; gap:26px;}
+  .footer-brand, .footer-col{min-width:0;}
+
+  /* Detail modals: use a true phone sheet instead of a desktop-sized dialog. */
+  .portfolio-detail-modal, .detail-modal, .education-detail-modal{
+    padding:8px !important;
+  }
+  .portfolio-detail-modal .portfolio-detail-inner,
+  .detail-modal .detail-modal-inner,
+  .education-detail-modal .education-detail-inner{
+    width:calc(100% - 4px) !important;
+    max-width:none !important;
+    max-height:calc(100dvh - 16px) !important;
+    min-height:0 !important;
+    padding:18px !important;
+    border-radius:14px;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+  }
+  .portfolio-detail-grid, .education-detail-grid{grid-template-columns:1fr !important;}
+  .portfolio-detail-visual, .education-detail-visual{width:100%; min-width:0;}
+  .portfolio-detail-copy{min-width:0;}
+  .portfolio-detail-copy h2{font-size:clamp(1.35rem,7vw,2rem); line-height:1.15;}
+
+  /* Disable expensive desktop-only 3D transforms on touch. */
+  .tilt-el, .carousel-card, .project-card{transform-style:flat !important;}
+}
+
+@media (max-width:480px){
+  .hero-split{padding-left:14px !important; padding-right:14px !important;}
+  .glass-data-orb{width:min(72vw,245px) !important; height:min(72vw,245px) !important;}
+  .hero-text .hero-title{font-size:clamp(2rem,12vw,2.75rem);}
+  .hero-actions{flex-direction:column; align-items:stretch; gap:10px;}
+  .hero-actions .btn{width:100%; max-width:none;}
+  .stats-grid{grid-template-columns:1fr 1fr !important; gap:20px 12px;}
+  .stat-number{font-size:clamp(1.75rem,9vw,2.35rem);}
+  .section{padding-top:56px; padding-bottom:56px;}
+  .page-nav-footer{flex-direction:column; gap:10px; padding-bottom:48px;}
+  .page-nav-footer .btn{width:100%; text-align:center;}
+}
+
+@media (max-width:360px){
+  .nav{padding-left:12px; padding-right:12px;}
+  .nav-links{width:92vw !important; padding-left:18px !important; padding-right:18px !important;}
+  .page-hero{padding-left:13px !important; padding-right:13px !important;}
+  .section{padding-left:13px; padding-right:13px;}
+  .hero-split{padding-left:12px !important; padding-right:12px !important;}
+  .timeline-center-item,
+  .timeline-center-item.left,
+  .timeline-center-item.right{padding-left:27px !important;}
+  .timeline-center::before{left:7px !important;}
+  .timeline-center-item.left .timeline-center-dot,
+  .timeline-center-item.right .timeline-center-dot{left:0 !important;}
+  .glass-data-orb{width:225px !important; height:225px !important;}
+  .hero-text .hero-title{font-size:2rem;}
+  .hero-role{font-size:.88rem;}
+  .hero-text .hero-desc{font-size:.86rem;}
+}

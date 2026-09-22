@@ -71,9 +71,10 @@ if (peekingRobot) {
 }
 
 // 3D scroll companion cube — travels down the page with scroll, drifts, and rotates
+const isTouchLayout = window.matchMedia('(max-width: 860px), (pointer: coarse)').matches;
 const companionCube = document.getElementById('companionCube');
 const companionWrap = document.getElementById('scrollCompanion');
-if (companionCube && companionWrap) {
+if (companionCube && companionWrap && !isTouchLayout) {
   window.addEventListener('scroll', () => {
     const h = document.documentElement;
     const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);

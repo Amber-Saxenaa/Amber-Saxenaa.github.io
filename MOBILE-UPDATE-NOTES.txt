@@ -1,18 +1,11 @@
-MOBILE-RESPONSIVE UPDATE
+MOBILE V47 UPDATE
 
-I updated style.css with a final responsive hardening layer for Android/iPhone/tablet widths while preserving the existing desktop design.
-
-Key fixes:
-- Responsive mobile navigation
-- Hero/orb stacking on phones to prevent overlap
-- Responsive typography and text wrapping
-- Single-column mobile timelines
-- Mobile project/education cards
-- Safer modal/dialog sizing
-- Mobile forms and footer
-- Extra-small Android support
-- Reduced desktop hover transforms on touch devices
-
-The HTML files reference style.css?v=46 so browsers do not keep the previous v45 stylesheet cached.
-
-IMPORTANT: Keep your existing assets/ folder beside these files when uploading to GitHub Pages. The assets folder was not included because it was not uploaded in this chat.
+- Added a final responsive precision layer to style.css.
+- Mobile navigation is now a contained slide-in sheet.
+- Home hero/orb is stacked and sized for phones instead of overlapping.
+- Timeline, cards, radar, footer and buttons are constrained to the viewport.
+- Detail dialogs use phone-sized sheets and one-column content.
+- Extra rules cover 360px and 320px-class devices.
+- Desktop styles remain above the mobile layer and are not intentionally redesigned.
+- Updated style.css cache-busting version from v45 to v47.
+- Disabled the scroll companion JS animation on touch/phone layouts.
