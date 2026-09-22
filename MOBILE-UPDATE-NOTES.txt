@@ -1,11 +1,5 @@
-MOBILE V47 UPDATE
-
-- Added a final responsive precision layer to style.css.
-- Mobile navigation is now a contained slide-in sheet.
-- Home hero/orb is stacked and sized for phones instead of overlapping.
-- Timeline, cards, radar, footer and buttons are constrained to the viewport.
-- Detail dialogs use phone-sized sheets and one-column content.
-- Extra rules cover 360px and 320px-class devices.
-- Desktop styles remain above the mobile layer and are not intentionally redesigned.
-- Updated style.css cache-busting version from v45 to v47.
-- Disabled the scroll companion JS animation on touch/phone layouts.
+V48 mobile fixes:
+- Hero Hire Me / Download Resume buttons are compact on phones instead of full-width.
+- Mobile More/hamburger navigation is now a full-width scrollable sheet from below the header.
+- All navigation links remain inside the viewport and can be reached on short Android screens.
+- CSS cache version updated to v48.

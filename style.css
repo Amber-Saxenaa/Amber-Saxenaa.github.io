@@ -3486,3 +3486,85 @@ button, input, textarea, select {
   .hero-role{font-size:.88rem;}
   .hero-text .hero-desc{font-size:.86rem;}
 }
+
+/* =========================================================
+   V48 — MOBILE NAV + HERO BUTTON POLISH
+   ========================================================= */
+@media (max-width: 860px){
+  /* Mobile menu: full-width, fully visible sheet so every link is reachable. */
+  .nav-links{
+    left:0 !important;
+    right:0 !important;
+    top:62px !important;
+    width:100% !important;
+    max-width:none !important;
+    height:calc(100dvh - 62px) !important;
+    max-height:calc(100dvh - 62px) !important;
+    padding:20px 22px 36px !important;
+    gap:4px !important;
+    align-items:stretch !important;
+    justify-content:flex-start !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch;
+    transform:translate3d(0,-105%,0) !important;
+    visibility:hidden;
+    opacity:0;
+    transition:transform .28s ease, opacity .2s ease, visibility .28s ease !important;
+  }
+  .nav-links.open{
+    transform:translate3d(0,0,0) !important;
+    visibility:visible;
+    opacity:1;
+  }
+  .nav-links a{
+    flex:0 0 auto;
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    width:100%;
+    padding:13px 10px !important;
+    font-size:1rem !important;
+    border-bottom:1px solid rgba(34,48,60,.65);
+  }
+  .nav-links a::after{display:none !important;}
+  .nav-links .nav-cta{
+    width:100% !important;
+    justify-content:center;
+    min-height:48px;
+    margin-top:10px !important;
+    border-bottom:0 !important;
+    padding:12px 16px !important;
+  }
+}
+
+/* The hero buttons should stay compact on phones rather than becoming huge bars. */
+@media (max-width:480px){
+  .hero-actions{
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:10px !important;
+    width:100%;
+  }
+  .hero-actions .btn,
+  .hero-actions .btn-big{
+    width:auto !important;
+    max-width:none !important;
+    min-width:0 !important;
+    padding:10px 16px !important;
+    font-size:.84rem !important;
+    line-height:1.2 !important;
+    border-radius:8px !important;
+    white-space:nowrap;
+  }
+}
+
+@media (max-width:360px){
+  .hero-actions{gap:8px !important;}
+  .hero-actions .btn,
+  .hero-actions .btn-big{
+    padding:9px 12px !important;
+    font-size:.78rem !important;
+  }
+}
