@@ -1,0 +1,18 @@
+MOBILE-RESPONSIVE UPDATE
+
+I updated style.css with a final responsive hardening layer for Android/iPhone/tablet widths while preserving the existing desktop design.
+
+Key fixes:
+- Responsive mobile navigation
+- Hero/orb stacking on phones to prevent overlap
+- Responsive typography and text wrapping
+- Single-column mobile timelines
+- Mobile project/education cards
+- Safer modal/dialog sizing
+- Mobile forms and footer
+- Extra-small Android support
+- Reduced desktop hover transforms on touch devices
+
+The HTML files reference style.css?v=46 so browsers do not keep the previous v45 stylesheet cached.
+
+IMPORTANT: Keep your existing assets/ folder beside these files when uploading to GitHub Pages. The assets folder was not included because it was not uploaded in this chat.

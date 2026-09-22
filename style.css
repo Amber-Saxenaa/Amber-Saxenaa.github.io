@@ -2710,3 +2710,574 @@ button.next{
 #robot3DCanvas{
   will-change:transform;
 }
+
+
+/* =========================================================
+   MOBILE / RESPONSIVE HARDENING — September 2026
+   Keeps the desktop design intact and fixes narrow Android/iOS
+   layouts, text overflow, hero overlap, timelines, navigation,
+   cards, forms and detail dialogs.
+   ========================================================= */
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  min-width: 0;
+}
+
+*, *::before, *::after {
+  min-width: 0;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, p, a, li, span, button, label {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+button, input, textarea, select {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Do not let decorative fixed-position elements create accidental
+   horizontal overflow on touch devices. */
+@media (hover: none), (pointer: coarse) {
+  .cursor-glow,
+  .scroll-companion {
+    display: none !important;
+  }
+}
+
+/* ---------- Tablet / phone navigation ---------- */
+@media (max-width: 860px) {
+  .nav {
+    padding: 14px 20px;
+    min-height: 62px;
+  }
+
+  .nav-links {
+    top: 62px;
+    height: calc(100dvh - 62px);
+    width: min(86vw, 320px);
+    padding: 28px 24px;
+    gap: 20px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .nav-cta {
+    margin-top: 4px;
+  }
+}
+
+/* ---------- Home hero: stack instead of overlaying ---------- */
+@media (max-width: 700px) {
+  .hero-split {
+    min-height: auto;
+    display: block;
+    text-align: center;
+    padding: 0 20px 64px;
+  }
+
+  .hero-split-bg {
+    background-position: center top;
+  }
+
+  .hero-split-bg::before {
+    background:
+      linear-gradient(180deg,
+        rgba(11,15,20,.12) 0%,
+        rgba(11,15,20,.55) 25%,
+        var(--bg) 54%,
+        var(--bg) 100%);
+  }
+
+  .hero-split-inner--overlay {
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 12px;
+  }
+
+  .glass-data-orb {
+    position: relative !important;
+    order: 0;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: min(72vw, 280px) !important;
+    height: min(72vw, 280px) !important;
+    margin: 18px auto 12px;
+    transform: none !important;
+    opacity: .9;
+  }
+
+  .hero-text {
+    order: 1;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-text .hero-title {
+    font-size: clamp(2.15rem, 11vw, 3.3rem);
+    line-height: 1.02;
+  }
+
+  .hero-role {
+    font-size: clamp(.95rem, 4vw, 1.1rem);
+    line-height: 1.45;
+    margin-top: 10px;
+  }
+
+  .hero-text .hero-desc {
+    max-width: 560px;
+    margin: 18px auto 24px;
+    font-size: .94rem;
+    line-height: 1.7;
+  }
+
+  .hero-social {
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .hero-actions .btn {
+    flex: 1 1 170px;
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-split {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 52px;
+  }
+
+  .glass-data-orb {
+    width: min(70vw, 245px) !important;
+    height: min(70vw, 245px) !important;
+  }
+
+  .hero-text .hero-title {
+    font-size: clamp(2rem, 12vw, 2.7rem);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+/* ---------- General page headings ---------- */
+@media (max-width: 600px) {
+  .section {
+    padding: 64px 18px;
+  }
+
+  .page-hero {
+    padding: 86px 18px 28px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+    line-height: 1.08;
+  }
+
+  .page-hero-desc {
+    font-size: .94rem;
+    line-height: 1.65;
+  }
+
+  .section-eyebrow {
+    font-size: .7rem;
+    line-height: 1.5;
+  }
+}
+
+/* ---------- Home cards / grids ---------- */
+@media (max-width: 860px) {
+  .highlight-grid,
+  .project-grid,
+  .skills-page,
+  .cert-grid,
+  .contact-grid,
+  .about-grid {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .highlight-card,
+  .project-card,
+  .cert-card,
+  .skill-block {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .highlight-card h3,
+  .project-card h3,
+  .cert-card h4 {
+    line-height: 1.3;
+  }
+
+  .about-actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .highlight-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .about-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .about-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ---------- Stats ---------- */
+@media (max-width: 520px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px 14px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .stat-number {
+    font-size: clamp(1.9rem, 10vw, 2.5rem);
+  }
+
+  .stat-item p {
+    font-size: .78rem;
+    line-height: 1.4;
+  }
+}
+
+/* ---------- Alternating timeline becomes a single readable column ---------- */
+@media (max-width: 700px) {
+  .timeline-center {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 0;
+  }
+
+  .timeline-center::before {
+    left: 10px;
+    transform: none;
+  }
+
+  .timeline-center-item,
+  .timeline-center-item.left,
+  .timeline-center-item.right {
+    width: 100%;
+    left: 0;
+    padding: 0 0 46px 34px;
+    text-align: left;
+  }
+
+  .timeline-center-item.left .timeline-center-dot,
+  .timeline-center-item.right .timeline-center-dot {
+    left: 2px;
+    right: auto;
+    top: 5px;
+  }
+
+  .timeline-center-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .timeline-center-content h3 {
+    font-size: clamp(1rem, 4.6vw, 1.25rem);
+    line-height: 1.35;
+  }
+
+  .timeline-date-big {
+    font-size: .8rem;
+    line-height: 1.45;
+  }
+
+  .timeline-thumb-big,
+  .timeline-center-item.left .timeline-thumb-big,
+  .timeline-center-item.right .timeline-thumb-big {
+    width: 100%;
+    max-width: none;
+    height: 170px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .projects-note {
+    font-size: .76rem;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: 380px) {
+  .timeline-center-item,
+  .timeline-center-item.left,
+  .timeline-center-item.right {
+    padding-left: 30px;
+  }
+
+  .timeline-center::before {
+    left: 8px;
+  }
+
+  .timeline-center-item.left .timeline-center-dot,
+  .timeline-center-item.right .timeline-center-dot {
+    left: 0;
+  }
+}
+
+/* ---------- Home horizontal carousels ---------- */
+@media (max-width: 860px) {
+  .carousel-wrap,
+  .carousel-head {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .carousel-track--fit {
+    grid-template-columns: 1fr !important;
+  }
+
+  .carousel-track:not(.carousel-track--fit) .carousel-card,
+  #edu-track .carousel-card,
+  #proj-track .carousel-card {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-head {
+    padding-left: 18px;
+    padding-right: 18px;
+    gap: 14px;
+  }
+
+  .carousel-head h2 {
+    line-height: 1.2;
+  }
+
+  .carousel-card {
+    padding: 17px;
+  }
+
+  .carousel-thumb,
+  #edu-track .carousel-thumb,
+  #proj-track .carousel-thumb {
+    height: 150px !important;
+    min-height: 150px !important;
+  }
+}
+
+/* ---------- Skills / SVG ---------- */
+@media (max-width: 600px) {
+  .radar-wrap {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .radar-chart {
+    width: min(100%, 330px);
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .radar-caption {
+    font-size: .78rem;
+    line-height: 1.55;
+    padding: 0 8px;
+  }
+
+  .skill-block h3 {
+    font-size: 1.15rem;
+  }
+
+  .skill-bar-label {
+    gap: 10px;
+  }
+}
+
+/* ---------- Previous / next page buttons ---------- */
+@media (max-width: 520px) {
+  .page-nav-footer {
+    padding: 0 18px 56px;
+    flex-direction: column;
+  }
+
+  .page-nav-footer .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ---------- Footer ---------- */
+@media (max-width: 700px) {
+  .footer {
+    padding: 44px 18px 24px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+
+  .footer-brand p,
+  .footer-col a {
+    overflow-wrap: anywhere;
+  }
+
+  .footer-social {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- Detail dialogs: never exceed the phone viewport ---------- */
+@media (max-width: 760px) {
+  .portfolio-detail-modal,
+  .detail-modal,
+  .education-detail-modal {
+    padding: 10px !important;
+    align-items: center;
+  }
+
+  .portfolio-detail-modal .portfolio-detail-inner,
+  .detail-modal .detail-modal-inner,
+  .education-detail-modal .education-detail-inner {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 20px) !important;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px !important;
+    border-radius: 16px;
+  }
+
+  .portfolio-detail-grid,
+  .education-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .portfolio-detail-visual,
+  .education-detail-visual {
+    min-height: 145px !important;
+    max-height: 190px;
+  }
+
+  .portfolio-detail-copy h2 {
+    font-size: clamp(1.45rem, 7vw, 2rem);
+    line-height: 1.18;
+  }
+
+  .portfolio-detail-description,
+  .portfolio-detail-list li {
+    font-size: .88rem;
+    line-height: 1.6;
+  }
+
+  .detail-modal-inner {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+}
+
+/* ---------- Forms ---------- */
+@media (max-width: 600px) {
+  .contact-form--full,
+  .contact-info--full {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-form--full button {
+    align-self: stretch;
+  }
+}
+
+/* ---------- Touch devices: remove desktop hover transforms ---------- */
+@media (hover: none), (pointer: coarse) {
+  .highlight-card:hover,
+  .project-card:hover,
+  .carousel-card:hover,
+  .timeline-center-item:hover .timeline-thumb-big,
+  .timeline-center-item:hover .timeline-center-content,
+  .photo-frame:hover {
+    transform: none;
+  }
+}
+
+/* Extra-small Android devices */
+@media (max-width: 360px) {
+  .nav {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .section,
+  .page-hero {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .nav-links {
+    width: 90vw;
+  }
+
+  .section-eyebrow {
+    letter-spacing: .04em;
+  }
+}
