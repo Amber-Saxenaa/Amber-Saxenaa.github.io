@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=48">
+<link rel="stylesheet" href="style.css?v=50">
 <style>
-/* EXPERIENCE BACKGROUND PATHS — same moving background used on Experience */
+/* EXPERIENCE BACKGROUND PATHS — decorative layer above the existing theme */
 .experience-paths{
   position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
   opacity:.38;
@@ -31,7 +31,9 @@
   45%{opacity:.42;}
   100%{stroke-dashoffset:-900;opacity:.16;}
 }
-.nav, .page-hero, .section, .page-nav-footer, .footer{position:relative;z-index:1;}
+.nav, .page-hero, .timeline-section, .page-nav-footer, .footer{position:relative;z-index:1;}
+/* Keep the moving background visually behind the experience cards. */
+.timeline-thumb-big{background:linear-gradient(135deg, rgba(15,28,28,.78), rgba(27,27,20,.78)), rgba(10,15,20,.94) !important;}
 .nav{z-index:20 !important;}
 .preloader,.cursor-glow,.scroll-progress{z-index:100 !important;}
 @media (max-width:700px){
@@ -54,6 +56,8 @@
     <title>Animated background paths</title>
   </svg>
 </div>
+
+
 <div class="cursor-glow" id="cursorGlow"></div>
 <header class="nav" id="nav">
   <a href="index.html" class="nav-logo">AS<span>.</span></a>
@@ -408,13 +412,15 @@
 </script>
   <script src="drag-swipe.js?v=2"></script>
 <script>
-/* Same Background Paths animation used on the Experience section. */
+/* Background Paths — lightweight vanilla implementation of the supplied effect. */
 (() => {
   const svg = document.getElementById('experiencePathsSvg');
   if (!svg) return;
+
   const ns = 'http://www.w3.org/2000/svg';
   const makePath = (i, position) => {
     const p = document.createElementNS(ns, 'path');
+    const x = 120 + i * 28 * position;
     const y = 25 + i * 33;
     const d = `M ${-420 + i * 8 * position} ${y} C ${40 + i * 5 * position} ${y + 70}, ${330 + i * 4 * position} ${y + 120}, ${720 + i * 3 * position} ${y + 45} C ${1050 + i * 2 * position} ${y - 20}, ${1260 + i * 2 * position} ${y + 170}, ${1660 + i * position} ${y + 90}`;
     p.setAttribute('d', d);
@@ -422,6 +428,7 @@
     p.style.animationDelay = `${-(i * 0.45)}s`;
     return p;
   };
+
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < 46; i++) fragment.appendChild(makePath(i, 1));
   for (let i = 0; i < 46; i++) fragment.appendChild(makePath(i, -1));
