@@ -12,20 +12,20 @@
 /* EXPERIENCE BACKGROUND PATHS — decorative layer above the existing theme */
 .experience-paths{
   position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
-  opacity:.34;
+  opacity:.46;
 }
 .experience-paths svg{width:100%;height:100%;display:block;}
 .experience-paths path{
   fill:none;
-  stroke:rgba(45,212,191,.42);
-  stroke-width:1;
+  stroke:rgba(92,132,142,.24);
+  stroke-width:1.5;
   vector-effect:non-scaling-stroke;
   stroke-linecap:round;
-  animation:experiencePathFlow 18s linear infinite;
+  animation:experiencePathFlow 22s linear infinite;
 }
-.experience-paths path:nth-child(3n){animation-duration:24s;opacity:.65;}
-.experience-paths path:nth-child(4n){animation-duration:29s;opacity:.5;}
-.experience-paths path:nth-child(5n){animation-duration:21s;opacity:.8;}
+.experience-paths path:nth-child(3n){animation-duration:28s;opacity:.62;}
+.experience-paths path:nth-child(4n){animation-duration:33s;opacity:.48;}
+.experience-paths path:nth-child(5n){animation-duration:25s;opacity:.68;}
 @keyframes experiencePathFlow{
   0%{stroke-dashoffset:0;opacity:.18;}
   45%{opacity:.55;}
@@ -36,7 +36,7 @@
 .preloader,.cursor-glow,.scroll-progress{z-index:100 !important;}
 @media (max-width:700px){
   .experience-paths{opacity:.16;}
-  .experience-paths path{stroke-width:.8;}
+  .experience-paths path{stroke-width:1.1;}
 }
 @media (prefers-reduced-motion:reduce){
   .experience-paths path{animation:none;stroke-dashoffset:0;}
@@ -50,7 +50,7 @@
 
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="experience-paths" aria-hidden="true">
-  <svg id="experiencePathsSvg" viewBox="0 0 1440 900" preserveAspectRatio="none">
+  <svg id="experiencePathsSvg" viewBox="0 0 1440 1600" preserveAspectRatio="none">
     <title>Animated background paths</title>
   </svg>
 </div>
@@ -383,7 +383,7 @@
   const makePath = (i, position) => {
     const p = document.createElementNS(ns, 'path');
     const x = 120 + i * 28 * position;
-    const y = 80 + i * 18;
+    const y = 25 + i * 33;
     const d = `M ${-420 + i * 8 * position} ${y} C ${40 + i * 5 * position} ${y + 70}, ${330 + i * 4 * position} ${y + 120}, ${720 + i * 3 * position} ${y + 45} C ${1050 + i * 2 * position} ${y - 20}, ${1260 + i * 2 * position} ${y + 170}, ${1660 + i * position} ${y + 90}`;
     p.setAttribute('d', d);
     p.setAttribute('stroke-dasharray', `${220 + i * 7} ${320 + i * 9}`);
@@ -392,8 +392,8 @@
   };
 
   const fragment = document.createDocumentFragment();
-  for (let i = 0; i < 30; i++) fragment.appendChild(makePath(i, 1));
-  for (let i = 0; i < 30; i++) fragment.appendChild(makePath(i, -1));
+  for (let i = 0; i < 46; i++) fragment.appendChild(makePath(i, 1));
+  for (let i = 0; i < 46; i++) fragment.appendChild(makePath(i, -1));
   svg.appendChild(fragment);
 })();
 </script>
