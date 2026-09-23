@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=48">
+<link rel="stylesheet" href="style(20260923-074002).css?v=49">
 </head>
 <body class="page-loading">
 
@@ -41,6 +41,14 @@
 </section>
 
 <section class="section timeline-section">
+  <!-- Animated Background Paths: decorative layer above the themed background, below timeline content. -->
+  <div class="experience-background-paths" aria-hidden="true">
+    <svg viewBox="0 0 696 316" preserveAspectRatio="none" fill="none" focusable="false">
+      <title>Animated background paths</title>
+      <g class="experience-path-group experience-path-group-forward"></g>
+      <g class="experience-path-group experience-path-group-reverse"></g>
+    </svg>
+  </div>
 <div class="timeline-center">
     <div class="timeline-center-item left reveal" data-exp="exp1" tabindex="0" role="button">
       <div class="timeline-center-dot"></div>
@@ -329,6 +337,35 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
 })();
 
+</script>
+  
+<script>
+/* Animated Background Paths — static HTML/CSS adaptation of the supplied React component.
+   No React, Tailwind, shadcn, or external dependency is required for this portfolio. */
+(function () {
+  const section = document.querySelector('.timeline-section');
+  const groups = document.querySelectorAll('.experience-path-group');
+  if (!section || groups.length !== 2) return;
+
+  const makePath = (i, position) => {
+    const d = `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position} -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', String(0.5 + i * 0.03));
+    path.setAttribute('stroke-linecap', 'round');
+    path.style.setProperty('--path-opacity', String(Math.min(0.34, 0.08 + i * 0.007)));
+    path.style.setProperty('--path-duration', `${20 + (i % 11) * 0.9}s`);
+    path.style.setProperty('--path-delay', `${-(i * 0.55)}s`);
+    path.style.setProperty('--path-direction', position === -1 ? 'reverse' : 'normal');
+    return path;
+  };
+
+  groups.forEach((group, groupIndex) => {
+    const position = groupIndex === 0 ? 1 : -1;
+    for (let i = 0; i < 36; i += 1) group.appendChild(makePath(i, position));
+  });
+})();
 </script>
   <script src="drag-swipe.js?v=2"></script>
 </body>
