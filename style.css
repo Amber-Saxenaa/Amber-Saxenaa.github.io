@@ -3656,3 +3656,66 @@ button, input, textarea, select {
     display:none !important;
   }
 }
+
+/* =========================================================
+   FINAL — MATCH ALL HOVER CONNECTOR LINES
+   Experience / Education / Projects use the exact same line
+   ========================================================= */
+
+/* Common connector appearance */
+.timeline-center-item::after,
+.edu-timeline-item::after,
+.project-card::before{
+  content:'' !important;
+  position:absolute !important;
+  top:50% !important;
+  width:70px !important;
+  height:2px !important;
+  border-radius:2px !important;
+  background:linear-gradient(90deg, transparent, var(--accent)) !important;
+  box-shadow:0 0 8px rgba(45,212,191,.55), 0 0 16px rgba(45,212,191,.30) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:opacity .25s ease, box-shadow .25s ease !important;
+}
+
+/* Left-side cards: line extends from the card toward the timeline */
+.timeline-center-item.left::after,
+.edu-timeline-item.left::after,
+.project-card:nth-child(odd)::before{
+  left:auto !important;
+  right:-70px !important;
+  transform:none !important;
+}
+
+/* Right-side cards: same line, mirrored */
+.timeline-center-item.right::after,
+.edu-timeline-item.right::after,
+.project-card:nth-child(even)::before{
+  right:auto !important;
+  left:-70px !important;
+  transform:scaleX(-1) !important;
+}
+
+/* Show the exact same connector on hover */
+.timeline-center-item:hover::after,
+.edu-timeline-item:hover::after,
+.project-card:hover::before{
+  opacity:1 !important;
+  box-shadow:0 0 8px rgba(45,212,191,.65), 0 0 18px rgba(45,212,191,.38) !important;
+}
+
+/* Same dot glow for timeline sections */
+.timeline-center-item:hover .timeline-center-dot,
+.edu-timeline-item:hover .timeline-center-dot{
+  box-shadow:0 0 0 6px var(--accent-soft), 0 0 22px rgba(45,212,191,.75) !important;
+}
+
+/* No connector on touch/mobile layouts */
+@media (hover:none), (pointer:coarse), (max-width:700px){
+  .timeline-center-item::after,
+  .edu-timeline-item::after,
+  .project-card::before{
+    opacity:0 !important;
+  }
+}
