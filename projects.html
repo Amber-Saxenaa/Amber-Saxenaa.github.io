@@ -8,8 +8,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=48">
+
+<style id="moving-background-paths">
+.moving-bg-paths{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;background:transparent;}
+.moving-bg-paths svg{display:block;width:100%;height:100%;opacity:.72;}
+.moving-bg-paths path{fill:none;stroke:rgba(190,200,205,.22);stroke-width:2.1;stroke-linecap:round;animation:bgPathFlow 24s linear infinite;}
+.moving-bg-paths path:nth-child(3n){stroke:rgba(175,190,195,.18);}
+.moving-bg-paths path:nth-child(4n){stroke:rgba(205,212,215,.16);}
+@keyframes bgPathFlow{0%{stroke-dashoffset:0;opacity:.12;}50%{opacity:.22;}100%{stroke-dashoffset:-900;opacity:.12;}}
+.moving-bg-content{position:relative;z-index:1;}
+@media (max-width:700px){.moving-bg-paths path{stroke-width:1.45;}.moving-bg-paths svg{opacity:.58;}}
+@media (prefers-reduced-motion:reduce){.moving-bg-paths path{animation:none;opacity:.14;}}
+</style>
 </head>
 <body class="page-loading">
+<div class="moving-bg-paths" id="movingBgPaths" aria-hidden="true"><svg viewBox="0 0 1600 1100" preserveAspectRatio="none"></svg></div>
+
 
 <div class="preloader" id="preloader"><span class="preloader-logo">AS</span></div>
 <script>if(sessionStorage.getItem("as_preloader_shown")){document.getElementById("preloader").classList.add("hide");}</script>
@@ -368,5 +382,24 @@
 
 </script>
   <script src="drag-swipe.js?v=2"></script>
+
+<script id="moving-background-paths-script">
+(() => {
+  const root=document.getElementById('movingBgPaths');
+  if(!root) return;
+  const ns='http://www.w3.org/2000/svg';
+  const svg=root.querySelector('svg');
+  const count=42;
+  for(let i=0;i<count;i++){
+    const p=document.createElementNS(ns,'path');
+    const y=90+i*22;
+    const drift=(i%7)*18;
+    p.setAttribute('d',`M -120 ${y} C ${260+drift} ${y-70-(i%4)*12}, ${560-drift} ${y+70+(i%5)*14}, 880 ${y-5} S ${1420+drift} ${y-65}, 1660 ${y+20}`);
+    p.style.animationDelay=`${-(i*0.55)}s`;
+    p.style.animationDuration=`${22+(i%7)*1.8}s`;
+    svg.appendChild(p);
+  }
+})();
+</script>
 </body>
 </html>
