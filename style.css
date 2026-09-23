@@ -3568,3 +3568,8 @@ button, input, textarea, select {
     font-size:.78rem !important;
   }
 }
+
+/* Remove Education timeline connector line */
+.edu-timeline-item::after {
+  display: none !important;
+}
