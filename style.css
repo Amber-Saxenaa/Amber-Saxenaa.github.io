@@ -994,6 +994,24 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
   transform:translateY(-4px);
 }
 
+/* Glowing connector from the center line to the hovered card */
+.edu-timeline-item::after{
+  content:'';
+  position:absolute;
+  top:13px;
+  height:2px;
+  width:52px;
+  background:var(--border);
+  transition:background .25s ease, box-shadow .25s ease, width .25s ease;
+  pointer-events:none;
+}
+.edu-timeline-item.left::after{right:0;}
+.edu-timeline-item.right::after{left:0;}
+.edu-timeline-item:hover::after{
+  background:var(--accent);
+  box-shadow:0 0 12px rgba(45,212,191,.7);
+}
+
 .edu-timeline-item:hover .timeline-center-dot{
   background:#fff;
   box-shadow:0 0 0 5px var(--accent-soft), 0 0 18px rgba(45,212,191,.85);
@@ -1208,37 +1226,23 @@ h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacin
 .portfolio-clickable{cursor:pointer;}
 .portfolio-clickable:focus-visible{outline:2px solid var(--accent);outline-offset:5px;}
 
-/* Consistent blue/teal glow on timeline hover — Education + Experience */
+/* subtle line/connector response on hover */
 .timeline-center-item{position:relative;}
 .timeline-center-item.left:hover::after,
 .timeline-center-item.right:hover::after{
-  content:'';
-  position:absolute;
-  top:50%;
-  height:2px;
-  width:70px;
+  content:''; position:absolute; top:50%; height:1px; width:70px;
   background:linear-gradient(90deg, transparent, var(--accent));
-  box-shadow:0 0 8px rgba(45,212,191,.75), 0 0 18px rgba(45,212,191,.45);
+  box-shadow:0 0 12px rgba(45,212,191,.55);
   pointer-events:none;
 }
 .timeline-center-item.left:hover::after{right:-70px;}
 .timeline-center-item.right:hover::after{left:-70px;transform:scaleX(-1);}
-.timeline-center-item:hover .timeline-center-dot{
-  transform:scale(1.35);
-  box-shadow:0 0 0 6px var(--accent-soft),0 0 22px rgba(45,212,191,.65);
-}
-
-/* Consistent blue/teal glow for project cards */
-.project-card:hover{
-  border-color:var(--accent);
-  box-shadow:0 0 0 1px rgba(45,212,191,.18), 0 0 22px rgba(45,212,191,.22), 0 20px 40px -20px rgba(45,212,191,.45);
-}
+.timeline-center-item:hover .timeline-center-dot{transform:scale(1.35);box-shadow:0 0 0 6px var(--accent-soft),0 0 22px rgba(45,212,191,.65);}
 
 .carousel-card:hover,
 .timeline-center-item:hover .timeline-center-content,
 .edu-timeline-item:hover .timeline-center-content{
   border-color:var(--accent);
-  box-shadow:0 0 16px rgba(45,212,191,.16);
 }
 
 /* One consistent detail window for every portfolio box */
@@ -3565,3 +3569,99 @@ button, input, textarea, select {
   }
 }
 
+/* =========================================================
+   HOVER CONNECTOR GLOW — EXPERIENCE / EDUCATION / PROJECTS
+   ========================================================= */
+
+/* Education: invisible when idle, glowing connector on hover */
+.edu-timeline-item::after{
+  background:transparent !important;
+  box-shadow:none !important;
+  opacity:0;
+  transition:opacity .25s ease, background .25s ease, box-shadow .25s ease;
+}
+.edu-timeline-item:hover::after{
+  background:linear-gradient(90deg, transparent, var(--accent)) !important;
+  box-shadow:0 0 12px rgba(45,212,191,.7) !important;
+  opacity:1;
+}
+
+/* Experience / all centered timeline items:
+   keep the connector invisible until the item is hovered */
+.timeline-center-item::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  height:1px;
+  width:70px;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(90deg, transparent, var(--accent));
+  box-shadow:0 0 12px rgba(45,212,191,.7);
+  transition:opacity .25s ease;
+}
+.timeline-center-item.left::after{
+  right:-70px;
+}
+.timeline-center-item.right::after{
+  left:-70px;
+  transform:scaleX(-1);
+}
+.timeline-center-item:hover::after{
+  opacity:1;
+}
+
+/* Matching blue/teal glow for the Experience / Education dots */
+.timeline-center-item:hover .timeline-center-dot,
+.edu-timeline-item:hover .timeline-center-dot{
+  box-shadow:0 0 0 6px var(--accent-soft),0 0 22px rgba(45,212,191,.75);
+}
+
+/* Projects: matching glowing side accent on hover */
+.project-card{
+  position:relative;
+  overflow:visible;
+}
+.project-card::before{
+  content:'';
+  position:absolute;
+  top:22px;
+  bottom:22px;
+  width:2px;
+  border-radius:2px;
+  background:var(--accent);
+  box-shadow:0 0 12px rgba(45,212,191,.75);
+  opacity:0;
+  transition:opacity .25s ease, box-shadow .25s ease;
+  pointer-events:none;
+}
+.project-card:nth-child(odd)::before{
+  left:-1px;
+}
+.project-card:nth-child(even)::before{
+  right:-1px;
+}
+.project-card:hover::before{
+  opacity:1;
+}
+.project-card:hover{
+  border-color:var(--accent);
+  box-shadow:0 20px 40px -20px rgba(45,212,191,.3),0 0 18px rgba(45,212,191,.16);
+}
+
+/* Do not show desktop hover connector lines on touch devices */
+@media (hover:none), (pointer:coarse){
+  .timeline-center-item::after,
+  .edu-timeline-item::after,
+  .project-card::before{
+    opacity:0 !important;
+  }
+}
+
+/* Keep the timeline clean on mobile, where all items share one side */
+@media (max-width:700px){
+  .timeline-center-item::after,
+  .edu-timeline-item::after{
+    display:none !important;
+  }
+}
